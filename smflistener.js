@@ -1,6 +1,7 @@
 /*
   SMFListener
   Copyright (c) 2018 オオドラ(Oodorato2)
+  https://github.com/Oodorato2/SMFListener
   License MIT
 */
 
@@ -33,6 +34,7 @@ class SMFListener {
     };
     this.setupEventListener();
     this.player = {
+      currentTime: 0,
       timeStamp: 0,
       startTimeStamp: 0,
       pauseTime: 0,
@@ -165,15 +167,17 @@ class SMFListener {
   }
 
   setMidiNots() {
-    for (let t = 0; t < this.SMFSource.m_listTrack.length; t++) {
+    for (let t = 0, noteNum = 0; t < this.SMFSource.m_listTrack.length; t++) {
       this.MIDI.track.push([]);
       for (let i = 0, tick = 0; i < this.SMFSource.m_listTrack[t].m_listData.length; i++) {
         tick += this.SMFSource.m_listTrack[t].m_listData[i].m_nStep;
         if (this.SMFSource.m_listTrack[t].m_listData[i].m_eMMsg === 144) {
 
           let onTime = this.toTickMs(tick),
-          offTime = undefined;
+          offTime = undefined,
+          step = 0;
           for (let ii = i+1, tickI = tick; ii < this.SMFSource.m_listTrack[t].m_listData.length; ii++) {
+            step += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep;
             tickI += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep;
             if (this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === 128 && this.SMFSource.m_listTrack[t].m_listData[ii].get === undefined) {
               if (this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[1] === this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1]) {
@@ -202,9 +206,12 @@ class SMFListener {
             type: 'note',
             scale: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1],
             velocity: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2],
+            step: step,
+            noteNum: noteNum,
             act: 0,
           });
 
+          noteNum++;
         }
       }
     }
@@ -230,6 +237,16 @@ class SMFListener {
     if (i+1 >= this.MIDI.tempos.length) {
       return 1;
     } else if (this.MIDI.tempos[i+1].tick > tick) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  isNextTempoMs(i, Ms) {
+    if (i+1 >= this.MIDI.tempos.length) {
+      return 1;
+    } else if (this.MIDI.tempos[i+1].ms > Ms) {
       return 1;
     } else {
       return 0;
@@ -264,8 +281,26 @@ class SMFListener {
     }
   }
 
+  toMsStepTemop(Ms) {
+    let result = false;
+    for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
+      if (this.MIDI.tempos[i].ms <= Ms && this.isNextTempoMs(i, Ms)) {
+        for (const tempo of this.MIDI.tempos) {
+          if (tempo.ms === this.MIDI.tempos[i].ms) {
+            result = tempo;
+          }
+        }
+        return result;
+      }
+    }
+  }
+
   toTickMs(tick) {
     return (((tick - this.toTickTemopData(tick).tick) * (this.toTickStepTemop(tick) / this.MIDI.resolution))/1000) + this.toTickTemopData(tick).ms;
+  }
+
+  toMsTick(Ms) {
+    return ((Ms - this.toMsStepTemop(Ms).ms) / ((this.toMsStepTemop(Ms).data / this.MIDI.resolution)/1000)) + this.toMsStepTemop(Ms).tick;
   }
 
   actionEventListener(eventname, _arguments) {
@@ -289,20 +324,30 @@ class SMFListener {
     }
   }
 
-  NotesListener() {
-    if (this.player.status === 'play') {
-      let time = this.player.timeStamp - this.player.startTimeStamp;
-      for (const track of this.MIDI.track) {
-        for (let i = 0; i < track.length; i++) {
-          if (track[i].onTime <= time && track[i].act === 0) {
-            this.actionEventListener('NoteAll', [track[i]]);
-            track[i].act = 1;
-          } else if (track[i].onTime > time && track[i].act === 1) {
-            track[i].act = 0;
-          }
-        }
+  loopNotes(callback) {
+    for (let t = 0; t < this.MIDI.track.length; t++) {
+      for (let n = 0; n < this.MIDI.track[t].length; n++) {
+        callback(this.MIDI.track[t][n]);
       }
     }
+  }
+
+  NotesListener() {
+    let time = this.player.currentTime;
+    this.loopNotes((event) => {
+      if (event.type === 'note') {
+        if (event.onTime <= time && event.act === 0) {
+          this.actionEventListener('AllOnNote', [event]);
+          event.act = 1;
+        } else if (event.onTime > time && (event.act === 1 || event.act === 2)) {
+          this.actionEventListener('AllOffNote', [event]);
+          event.act = 0;
+        } else if (event.offTime <= time && event.act !== 2) {
+          this.actionEventListener('AllOffNote', [event]);
+          event.act = 2;
+        }
+      }
+    });
   }
 
   render(timeStamp) {
@@ -310,6 +355,9 @@ class SMFListener {
       this.player.timeStamp = this.AudioContext.currentTime * 1000;
     } else {
       this.player.timeStamp = timeStamp;
+    }
+    if (this.player.status === 'play') {
+      this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp;
     }
     this.actionEventListener('render');
     this.NotesListener();
@@ -323,6 +371,7 @@ class SMFListener {
     if (this.AudioBuffer) {this.createAudioSource();this.AudioSource.start(0);}
     this.player.status = 'play';
     this.player.startTimeStamp = this.AudioContext.currentTime * 1000;
+    this.actionEventListener('playerPlay');
   }
 
   pause() {
@@ -333,6 +382,8 @@ class SMFListener {
     if (this.AudioBuffer){this.AudioSource.stop();}
     this.player.status = 'stop';
     this.player.startTimeStamp = 0;
+    this.player.currentTime = 0;
+    this.actionEventListener('playerStop');
   }
 
   addEventListener(eventname, _function) {
