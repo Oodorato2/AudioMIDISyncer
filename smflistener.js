@@ -34,7 +34,7 @@ class SMFListener {
     };
     this.setupEventListener();
     this.player = {
-      currentTime: 0,
+      currentTime: -1,
       timeStamp: 0,
       startTimeStamp: 0,
       pauseTime: 0,
@@ -300,6 +300,7 @@ class SMFListener {
   }
 
   toMsTick(Ms) {
+    if(Ms<0){Ms=0;}
     return ((Ms - this.toMsStepTemop(Ms).ms) / ((this.toMsStepTemop(Ms).data / this.MIDI.resolution)/1000)) + this.toMsStepTemop(Ms).tick;
   }
 
@@ -367,22 +368,31 @@ class SMFListener {
   // 以下外部からのアクセス許可
 
   play() {
+    let starttime = 0;
     if (this.player.status === 'stop') {this.resetNoteAct();}
-    if (this.AudioBuffer) {this.createAudioSource();this.AudioSource.start(0);}
+    if (this.player.status === 'pause') {starttime = this.player.currentTime;}
+    if (this.AudioBuffer) {
+      this.createAudioSource();
+      this.AudioSource.start(this.AudioContext.currentTime, starttime/1000);
+    }
     this.player.status = 'play';
-    this.player.startTimeStamp = this.AudioContext.currentTime * 1000;
+    this.player.startTimeStamp = this.player.timeStamp - starttime;
     this.actionEventListener('playerPlay');
   }
 
   pause() {
-
+    if (this.player.status === 'play') {
+      if (this.AudioBuffer){this.AudioSource.stop();}
+      this.player.status = 'pause';
+      this.actionEventListener('playerPause');
+    }
   }
 
   stop() {
     if (this.AudioBuffer){this.AudioSource.stop();}
     this.player.status = 'stop';
     this.player.startTimeStamp = 0;
-    this.player.currentTime = 0;
+    this.player.currentTime = -1;
     this.actionEventListener('playerStop');
   }
 
