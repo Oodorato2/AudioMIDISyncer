@@ -33,9 +33,7 @@ instance.addEventListener('ready', function(){// ファイル読み込み完了�
 });
 
 instance.addEventListener('AllOnNote', function(event){// 音がなるタイミングで発火します。
-  if (event.type === 'note') {
-    console.log(event);// 渡される引数に情報が入っています。
-  }
+  console.log(event);// 渡される引数に情報が入っています。
 });
 ```
 
