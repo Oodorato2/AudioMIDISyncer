@@ -6,12 +6,11 @@ MIDIの発音タイミングをイベントリスナーのように扱うこと�
 MIDIパーサーには「[miz_music](https://github.com/MizunagiKB/miz_music)」、
 それに使われている「[encoding.js](https://github.com/polygonplanet/encoding.js)」を必須ライブラリとして使用しています。
 
-## 一応動くブラウザ
+## 動いてくれるはずのブラウザ
 Edge, Chrome, Firefox
-※ 草案段階のAPIを使ってるので保証はできません。
 
-## DEMOサイト(仮)
-[https://0db.me/test/](https://0db.me/test/)
+## DEMO
+[デモ1](https://sound.0db.me/midi-anime/ripple/)
 
 
 ## 簡単な使い方
@@ -50,7 +49,8 @@ instance.addEventListener(type, callback);
 イベントリスナーのタイプ
 - ready
 - render
-- NoteAll
+- AllOnNote
+- AllOffNote
 
 
 ### 再生
