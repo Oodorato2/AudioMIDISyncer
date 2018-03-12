@@ -8,12 +8,13 @@
 class SMFListener {
 
   constructor(SMF, Audio, options) {
-    this.sets(options);
-    this.loadfiles(SMF, Audio);
+    this.sets(SMF, Audio, options);
+    this.loadfiles();
   }
 
-  sets(options) {
+  sets(SMF, Audio, options) {
     this.setOptions(options);
+    this.setFiles(SMF, Audio);
     this.AudioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.requestAnimationFrame = (function() {
       return (
@@ -48,7 +49,7 @@ class SMFListener {
     };
     if (options !== undefined) {
       if (typeof(options) === 'object' && options !== null) {
-        for (const option in options) {
+        for (let option in options) {
           if (this.options[option] !== undefined) {
             this.options[option] = options[option];
           }
@@ -57,12 +58,27 @@ class SMFListener {
     }
   }
 
+  setFiles(SMF, Audio) {
+    this.setSMF(SMF);
+    this.setAudio(Audio);
+  }
+
+  setSMF(SMF) {
+    this.SMF = SMF;
+  }
+
+  setAudio(Audio) {
+    this.Audio = Audio;
+  }
+ 
   loadfiles(SMF, Audio) {
     this.loadSMF(SMF);
     this.loadAudio(Audio);
   }
 
   loadSMF(SMF) {
+    if (this.player.status === 'play'||this.player.status === 'pause') {this.stop();}
+    if (SMF === undefined) {SMF = this.SMF;}
     if (typeof(SMF) === 'string' && SMF !== '') {
       this.filePreparing();
       var xhr = new XMLHttpRequest();
@@ -78,10 +94,21 @@ class SMFListener {
         }
       };
       xhr.send(null);
+    } else if (SMF instanceof HTMLElement && SMF.type === 'file' && SMF.files.length) {
+      this.filePreparing();
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.SMFSource = music_reader(e.target.result);
+        this.setMidi();
+        this.fileReady();
+      }
+      reader.readAsArrayBuffer(SMF.files[0]); 
     }
   }
 
   loadAudio(Audio) {
+    if (this.player.status === 'play'||this.player.status === 'pause') {this.stop();}
+    if (Audio === undefined) {Audio = this.Audio;}
     if (typeof(Audio) === 'string' && Audio !== '') {
       this.filePreparing();
       var xhr = new XMLHttpRequest();
@@ -98,6 +125,16 @@ class SMFListener {
         }
       };
       xhr.send(null);
+    } else if (Audio instanceof HTMLElement && Audio.type === 'file' && Audio.files.length) {
+      this.filePreparing();
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.AudioContext.decodeAudioData(e.target.result, (buffer) => {
+          this.AudioBuffer = buffer;
+          this.fileReady();
+        });
+      }
+      reader.readAsArrayBuffer(Audio.files[0]); 
     } else {
       this.options.audioSync = false;
     }
@@ -136,7 +173,7 @@ class SMFListener {
   }
 
   setMidiTempos() {
-    for (const track of this.SMFSource.m_listTrack) {
+    for (let track of this.SMFSource.m_listTrack) {
       for (let i = 0, tick = 0, step = 0; i < track.m_listData.length; i++) {
         tick += track.m_listData[i].m_nStep;
         step += track.m_listData[i].m_nStep;
@@ -220,7 +257,7 @@ class SMFListener {
   getStartStepTempo() {
     let result = 0;
     if (this.MIDI.tempos) {
-      for (const tempo of this.MIDI.tempos) {
+      for (let tempo of this.MIDI.tempos) {
         if (tempo.tick === this.MIDI.tempos[0].tick) {
           result = tempo.data;
         }
@@ -271,7 +308,7 @@ class SMFListener {
     let result = false;
     for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
       if (this.MIDI.tempos[i].tick <= tick && this.isNextTempo(i, tick)) {
-        for (const tempo of this.MIDI.tempos) {
+        for (let tempo of this.MIDI.tempos) {
           if (tempo.tick === this.MIDI.tempos[i].tick) {
             result = tempo;
           }
@@ -285,7 +322,7 @@ class SMFListener {
     let result = false;
     for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
       if (this.MIDI.tempos[i].ms <= Ms && this.isNextTempoMs(i, Ms)) {
-        for (const tempo of this.MIDI.tempos) {
+        for (let tempo of this.MIDI.tempos) {
           if (tempo.ms === this.MIDI.tempos[i].ms) {
             result = tempo;
           }
@@ -310,7 +347,7 @@ class SMFListener {
         if (_arguments === undefined) {
           _arguments = [];
         }
-        for (const event of this.EventListeners[eventname]) {
+        for (let event of this.EventListeners[eventname]) {
           event.apply(this, _arguments);
         }
       }
@@ -318,7 +355,7 @@ class SMFListener {
   }
 
   resetNoteAct() {
-    for (const track of this.MIDI.track) {
+    for (let track of this.MIDI.track) {
       for (let i = 0; i < track.length; i++) {
         track[i].act = 0;
       }
@@ -405,7 +442,7 @@ class SMFListener {
 
   removeEventListener(eventname, _function) {
     if (this.EventListeners[eventname] !== undefined && _function !== undefined) {
-      for (const event of this.EventListeners[eventname]) {
+      for (let event of this.EventListeners[eventname]) {
         if (event === _function) {
           event = undefined;
         }
