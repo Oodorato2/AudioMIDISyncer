@@ -108,6 +108,7 @@ class SMFListener {
 
   loadAudio(Audio) {
     if (this.player.status === 'play'||this.player.status === 'pause') {this.stop();}
+    this.AudioBuffer = undefined;
     if (Audio === undefined) {Audio = this.Audio;}
     if (typeof(Audio) === 'string' && Audio !== '') {
       this.filePreparing();
@@ -208,7 +209,7 @@ class SMFListener {
       this.MIDI.track.push([]);
       for (let i = 0, tick = 0; i < this.SMFSource.m_listTrack[t].m_listData.length; i++) {
         tick += this.SMFSource.m_listTrack[t].m_listData[i].m_nStep;
-        if (this.SMFSource.m_listTrack[t].m_listData[i].m_eMMsg === 144) {
+        if (this.SMFSource.m_listTrack[t].m_listData[i].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_ON && this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2] > 0) {
 
           let onTime = this.toTickMs(tick),
           offTime = undefined,
@@ -216,23 +217,27 @@ class SMFListener {
           for (let ii = i+1, tickI = tick; ii < this.SMFSource.m_listTrack[t].m_listData.length; ii++) {
             step += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep;
             tickI += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep;
-            if (this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === 128 && this.SMFSource.m_listTrack[t].m_listData[ii].get === undefined) {
-              if (this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[1] === this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1]) {
+            if (this.SMFSource.m_listTrack[t].m_listData[ii].get === undefined && (this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_ON || this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_OF)) {
+              if ((this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[2] === 0 || this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_OF) && this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[1] === this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1]) {
                 this.SMFSource.m_listTrack[t].m_listData[ii].get = true;
                 offTime = this.toTickMs(tickI);
                 break;
               }
             }
+
           }
           if (offTime === undefined) {
             console.log({
               message: 'not find note off',
               error:{
+                track: t,
                 channel: (this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[0] & 0x0F),
                 velocity: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2],
+                key: i,
                 onTime: onTime
               }
             });
+            break;
           }
 
           this.MIDI.track[t].push({
