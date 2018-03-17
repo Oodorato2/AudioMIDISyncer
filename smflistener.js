@@ -77,8 +77,10 @@ class SMFListener {
   }
  
   loadfiles(SMF, Audio) {
+    this.filePreparing();
     this.loadSMF(SMF);
     this.loadAudio(Audio);
+    setTimeout(()=>this.fileReady(), 500);
   }
 
   loadSMF(SMF) {
@@ -172,6 +174,7 @@ class SMFListener {
   }
 
   setMidi() {
+    this.removeEventListener('render', ()=>this.NotesListener());
     this.MIDI = {
       resolution: this.SMFSource.m_nTimeDiv,
       tempos: [],
@@ -179,6 +182,7 @@ class SMFListener {
     }
     this.setMidiTempos();
     this.setMidiNots();
+    this.addEventListener('render', ()=>this.NotesListener());
   }
 
   setMidiTempos() {
@@ -361,7 +365,9 @@ class SMFListener {
           _arguments = [];
         }
         for (let event of this.EventListeners[eventname]) {
-          event.apply(this, _arguments);
+          if (event !== undefined) {
+            event.apply(this, _arguments);
+          }
         }
       }
     }
@@ -411,7 +417,6 @@ class SMFListener {
       this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp;
     }
     this.actionEventListener('render');
-    this.NotesListener();
     this.anime = this.requestAnimationFrame((timeStamp)=>this.render(timeStamp));
   }
 
@@ -455,9 +460,9 @@ class SMFListener {
 
   removeEventListener(eventname, _function) {
     if (this.EventListeners[eventname] !== undefined && _function !== undefined) {
-      for (let event of this.EventListeners[eventname]) {
-        if (event === _function) {
-          event = undefined;
+      for (let i = 0; i < this.EventListeners[eventname].length; i++) {
+        if (this.EventListeners[eventname][i] === _function) {
+          this.EventListeners[eventname][i] = undefined;
         }
       }
     } else if (this.EventListeners[eventname] !== undefined) {
