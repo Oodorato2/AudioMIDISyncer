@@ -22,11 +22,16 @@ class SMFListener {
           window.webkitRequestAnimationFrame ||
           window.mozRequestAnimationFrame    ||
           window.oRequestAnimationFrame      ||
-          window.msRequestAnimationFrame     ||
-          function(callback, time) {
-            var time = time ? time: 1000 / 60;
-            window.setTimeout(callback, time);
-          }
+          window.msRequestAnimationFrame
+      ).bind(window);
+    })();
+    this.cancelAnimationFrame = (function() {
+      return (
+          window.cancelAnimationFrame       ||
+          window.webkitCancelAnimationFrame ||
+          window.mozCancelAnimationFrame    ||
+          window.oCancelAnimationFrame      ||
+          window.msCancelAnimationFrame
       ).bind(window);
     })();
     this.fileLoadingState = {
@@ -155,6 +160,9 @@ class SMFListener {
     this.fileLoadingState.ready += 1;
     if (this.fileLoadingState.ready === this.fileLoadingState.preparing) {
       this.actionEventListener('ready');
+      if(this.anime !== undefined) {
+        this.cancelAnimationFrame(this.anime);
+      }
       this.render();
     }
   }
@@ -404,7 +412,7 @@ class SMFListener {
     }
     this.actionEventListener('render');
     this.NotesListener();
-    this.requestAnimationFrame((timeStamp)=>this.render(timeStamp));
+    this.anime = this.requestAnimationFrame((timeStamp)=>this.render(timeStamp));
   }
 
   // 以下外部からのアクセス許可
