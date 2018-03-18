@@ -398,9 +398,11 @@ class SMFListener {
           event.act = 1;
         } else if (event.onTime > time && (event.act === 1 || event.act === 2)) {
           this.actionEventListener('AllOffNote', [event]);
+          this.actionEventListener('AllOffNoteBefore', [event]);
           event.act = 0;
         } else if (event.offTime <= time && event.act !== 2) {
           this.actionEventListener('AllOffNote', [event]);
+          this.actionEventListener('AllOffNoteAfter', [event]);
           event.act = 2;
         }
       }
