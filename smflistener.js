@@ -155,6 +155,7 @@ class SMFListener {
   }
 
   filePreparing() {
+    this.removeEventListener('render', ()=>this.NotesListener());
     this.fileLoadingState.preparing += 1;
   }
 
@@ -165,6 +166,9 @@ class SMFListener {
       if(this.anime !== undefined) {
         this.cancelAnimationFrame(this.anime);
       }
+      if(this.MIDI !== undefined) {
+        this.addEventListener('render', ()=>this.NotesListener());
+      }
       this.render();
     }
   }
@@ -174,7 +178,6 @@ class SMFListener {
   }
 
   setMidi() {
-    this.removeEventListener('render', ()=>this.NotesListener());
     this.MIDI = {
       resolution: this.SMFSource.m_nTimeDiv,
       tempos: [],
@@ -182,7 +185,6 @@ class SMFListener {
     }
     this.setMidiTempos();
     this.setMidiNots();
-    this.addEventListener('render', ()=>this.NotesListener());
   }
 
   setMidiTempos() {
