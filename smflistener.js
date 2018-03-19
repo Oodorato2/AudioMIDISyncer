@@ -263,7 +263,7 @@ class SMFListener {
             scale: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1],
             velocity: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2],
             step: step,
-            noteNum: noteNum,
+            id: noteNum,
             act: 0,
           });
 
