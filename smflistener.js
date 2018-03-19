@@ -258,6 +258,7 @@ class SMFListener {
             tick: tick,
             onTime: onTime,
             offTime: offTime,
+            track: t,
             channel: (this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[0] & 0x0F),
             type: 'note',
             scale: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1],
