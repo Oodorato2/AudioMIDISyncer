@@ -180,6 +180,7 @@ class SMFListener {
   setMidi() {
     this.MIDI = {
       resolution: this.SMFSource.m_nTimeDiv,
+      endTime: 0,
       tempos: [],
       track: []
     }
@@ -267,6 +268,11 @@ class SMFListener {
             id: noteNum,
             act: 0,
           });
+
+          // 最終ノートの終了時間を取得
+          if (this.MIDI.endTime < offTime) {
+            this.MIDI.endTime = offTime;
+          }
 
           noteNum++;
         }
