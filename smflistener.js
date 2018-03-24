@@ -13,9 +13,9 @@ class SMFListener {
   }
 
   sets(SMF, Audio, options) {
-    this.setOptions(options);
+    this.inOptions = options;
+    this.setOptions(this.inOptions);
     this.setFiles(SMF, Audio);
-    this.AudioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.fileLoadingState = {
       preparing: 0,
       ready: 0,
@@ -95,45 +95,75 @@ class SMFListener {
     }
   }
 
+  loadedFileReady(event) {
+    if (this.AudioContext.readyState >= 2) {
+      this.fileReady();
+    } else {
+      this.options.audioSync = false;
+      this.fileReady();
+    }
+  }
+
   loadAudio(Audio) {
+    this.setOptions(this.inOptions);
     if (this.player.status === 'play'||this.player.status === 'pause') {this.stop();}
+    this.AudioContext = new (window.AudioContext || window.webkitAudioContext || window.Audio)();
     this.AudioBuffer = undefined;
+    if (!(this.AudioContext instanceof AudioContext)) {this.AudioContext.preload = 'none';}
     if (Audio === undefined) {Audio = this.Audio;}
     if (typeof(Audio) === 'string' && Audio !== '') {
       this.filePreparing();
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'arraybuffer';
-      xhr.open('GET', Audio, true);
-      xhr.onload = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          this.AudioContext.decodeAudioData(xhr.response, (buffer) => {
-            this.AudioBuffer = buffer;
-            this.fileReady();
-          });
-        } else {
-          this.options.audioSync = false;
+      if (this.AudioContext instanceof AudioContext) {
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = 'arraybuffer';
+        xhr.open('GET', Audio, true);
+        xhr.onload = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            this.AudioContext.decodeAudioData(xhr.response, (buffer) => {
+              this.AudioBuffer = buffer;
+              this.fileReady();
+            });
+          } else {
+            this.options.audioSync = false;
+          }
         }
-      };
-      xhr.send(null);
+        xhr.send(null);
+      } else {
+        this.AudioContext.src = Audio;
+        this.AudioContext.addEventListener('loadeddata', (event) => this.loadedFileReady(event));
+        this.AudioContext.load();
+      }
+
     } else if (Audio instanceof HTMLElement && Audio.type === 'file' && Audio.files.length) {
       this.filePreparing();
       let reader = new FileReader();
-      reader.onload = (e) => {
-        this.AudioContext.decodeAudioData(e.target.result, (buffer) => {
-          this.AudioBuffer = buffer;
-          this.fileReady();
-        });
+      if (this.AudioContext instanceof AudioContext) {
+        reader.onload = (e) => {
+          this.AudioContext.decodeAudioData(e.target.result, (buffer) => {
+            this.AudioBuffer = buffer;
+            this.fileReady();
+          });
+        }
+        reader.readAsArrayBuffer(Audio.files[0]);
+      } else {
+        reader.onload = (e) => {
+          this.AudioContext.src = e.target.result;
+          this.AudioContext.addEventListener('loadeddata', (event) => this.loadedFileReady(event));
+          this.AudioContext.load();
+        }
+        reader.readAsDataURL(Audio.files[0]); 
       }
-      reader.readAsArrayBuffer(Audio.files[0]); 
     } else {
       this.options.audioSync = false;
     }
   }
 
   createAudioSource() {
-    this.AudioSource = this.AudioContext.createBufferSource();
-    this.AudioSource.buffer = this.AudioBuffer;
-    this.AudioSource.connect(this.AudioContext.destination);
+    if (this.AudioContext instanceof AudioContext) {
+      this.AudioSource = this.AudioContext.createBufferSource();
+      this.AudioSource.buffer = this.AudioBuffer;
+      this.AudioSource.connect(this.AudioContext.destination);
+    }
   }
 
   filePreparing() {
@@ -171,14 +201,14 @@ class SMFListener {
   }
 
   setMidiTempos() {
-    for (let track of this.SMFSource.m_listTrack) {
-      for (let i = 0, tick = 0, step = 0; i < track.m_listData.length; i++) {
-        tick += track.m_listData[i].m_nStep;
-        step += track.m_listData[i].m_nStep;
-        if (track.m_listData[i].m_eMMsg === 255 && track.m_listData[i].m_eMEvt === 81) {
+    for (let p = 0; p < this.SMFSource.m_listTrack.length; p++) {
+      for (let i = 0, tick = 0, step = 0; i < this.SMFSource.m_listTrack[p].m_listData.length; i++) {
+        tick += this.SMFSource.m_listTrack[p].m_listData[i].m_nStep;
+        step += this.SMFSource.m_listTrack[p].m_listData[i].m_nStep;
+        if (this.SMFSource.m_listTrack[p].m_listData[i].m_eMMsg === 255 && this.SMFSource.m_listTrack[p].m_listData[i].m_eMEvt === 81) {
           this.MIDI.tempos.push({
-            tempo: this.toTempo(track.m_listData[i].m_numValue),
-            data: track.m_listData[i].m_numValue,
+            tempo: this.toTempo(this.SMFSource.m_listTrack[p].m_listData[i].m_numValue),
+            data: this.SMFSource.m_listTrack[p].m_listData[i].m_numValue,
             tick: tick,
             step: step,
           });
@@ -265,9 +295,9 @@ class SMFListener {
   getStartStepTempo() {
     let result = 0;
     if (this.MIDI.tempos) {
-      for (let tempo of this.MIDI.tempos) {
-        if (tempo.tick === this.MIDI.tempos[0].tick) {
-          result = tempo.data;
+      for (let i = 0; i < this.MIDI.tempos.length; i++) {
+        if (this.MIDI.tempos[i].tick === this.MIDI.tempos[0].tick) {
+          result = this.MIDI.tempos[i].data;
         }
       }
     }
@@ -316,9 +346,9 @@ class SMFListener {
     let result = false;
     for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
       if (this.MIDI.tempos[i].tick <= tick && this.isNextTempo(i, tick)) {
-        for (let tempo of this.MIDI.tempos) {
-          if (tempo.tick === this.MIDI.tempos[i].tick) {
-            result = tempo;
+        for (let p = 0; p < this.MIDI.tempos.length; p++) {
+          if (this.MIDI.tempos[p].tick === this.MIDI.tempos[i].tick) {
+            result = this.MIDI.tempos[p];
           }
         }
         return result;
@@ -330,9 +360,9 @@ class SMFListener {
     let result = false;
     for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
       if (this.MIDI.tempos[i].ms <= Ms && this.isNextTempoMs(i, Ms)) {
-        for (let tempo of this.MIDI.tempos) {
-          if (tempo.ms === this.MIDI.tempos[i].ms) {
-            result = tempo;
+        for (let p = 0; p < this.MIDI.tempos.length; p++) {
+          if (this.MIDI.tempos[p].ms === this.MIDI.tempos[i].ms) {
+            result = this.MIDI.tempos[p];
           }
         }
         return result;
@@ -355,9 +385,9 @@ class SMFListener {
         if (_arguments === undefined) {
           _arguments = [];
         }
-        for (let event of this.EventListeners[eventname]) {
-          if (event !== undefined) {
-            event.apply(this, _arguments);
+        for (let i = 0; i < this.EventListeners[eventname].length; i++) {
+          if (this.EventListeners[eventname][i] !== undefined) {
+            this.EventListeners[eventname][i].apply(this, _arguments);
           }
         }
       }
@@ -365,9 +395,9 @@ class SMFListener {
   }
 
   resetNoteAct() {
-    for (let track of this.MIDI.track) {
-      for (let i = 0; i < track.length; i++) {
-        track[i].act = 0;
+    for (let t = 0; t < this.MIDI.track.length; t++) {
+      for (let i = 0; i < this.MIDI.track[t].length; i++) {
+        this.MIDI.track[t][i].act = 0;
       }
     }
   }
@@ -419,9 +449,11 @@ class SMFListener {
     let starttime = 0;
     if (this.player.status === 'stop') {this.resetNoteAct();}
     if (this.player.status === 'pause') {starttime = this.player.currentTime;}
-    if (this.AudioBuffer) {
+    if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
       this.createAudioSource();
       this.AudioSource.start(this.AudioContext.currentTime, starttime/1000);
+    } else if (this.AudioContext.readyState >= 2) {
+      this.AudioContext.play();
     }
     this.player.status = 'play';
     this.player.startTimeStamp = this.player.timeStamp - starttime;
@@ -430,14 +462,24 @@ class SMFListener {
 
   pause() {
     if (this.player.status === 'play') {
-      if (this.AudioBuffer){this.AudioSource.stop();}
+      if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
+        this.AudioSource.stop();
+      } else if (this.AudioContext.readyState >= 2) {
+        this.AudioContext.pause();
+        this.AudioContext.currentTime = this.player.currentTime / 1000;
+      }
       this.player.status = 'pause';
       this.actionEventListener('playerPause');
     }
   }
 
   stop() {
-    if (this.AudioBuffer){this.AudioSource.stop();}
+    if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
+      this.AudioSource.stop();
+    } else if (this.AudioContext.readyState >= 2){
+      this.AudioContext.pause();
+      this.AudioContext.currentTime = 0;
+    }
     this.player.status = 'stop';
     this.player.startTimeStamp = 0;
     this.player.currentTime = -1;
