@@ -109,11 +109,11 @@ class SMFListener {
     if (this.player.status === 'play'||this.player.status === 'pause') {this.stop();}
     this.AudioContext = new (window.AudioContext || window.webkitAudioContext || window.Audio)();
     this.AudioBuffer = undefined;
-    if (!(this.AudioContext instanceof AudioContext)) {this.AudioContext.preload = 'none';}
+    if (!this.AudioContext.state) {this.AudioContext.preload = 'none';}
     if (Audio === undefined) {Audio = this.Audio;}
     if (typeof(Audio) === 'string' && Audio !== '') {
       this.filePreparing();
-      if (this.AudioContext instanceof AudioContext) {
+      if (this.AudioContext.state) {
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'arraybuffer';
         xhr.open('GET', Audio, true);
@@ -137,7 +137,7 @@ class SMFListener {
     } else if (Audio instanceof HTMLElement && Audio.type === 'file' && Audio.files.length) {
       this.filePreparing();
       let reader = new FileReader();
-      if (this.AudioContext instanceof AudioContext) {
+      if (this.AudioContext.state) {
         reader.onload = (e) => {
           this.AudioContext.decodeAudioData(e.target.result, (buffer) => {
             this.AudioBuffer = buffer;
@@ -159,7 +159,7 @@ class SMFListener {
   }
 
   createAudioSource() {
-    if (this.AudioContext instanceof AudioContext) {
+    if (this.AudioContext.state) {
       this.AudioSource = this.AudioContext.createBufferSource();
       this.AudioSource.buffer = this.AudioBuffer;
       this.AudioSource.connect(this.AudioContext.destination);
@@ -449,7 +449,7 @@ class SMFListener {
     let starttime = 0;
     if (this.player.status === 'stop') {this.resetNoteAct();}
     if (this.player.status === 'pause') {starttime = this.player.currentTime;}
-    if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
+    if (this.AudioContext.state && this.AudioBuffer) {
       this.createAudioSource();
       this.AudioSource.start(this.AudioContext.currentTime, starttime/1000);
     } else if (this.AudioContext.readyState >= 2) {
@@ -462,7 +462,7 @@ class SMFListener {
 
   pause() {
     if (this.player.status === 'play') {
-      if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
+      if (this.AudioContext.state && this.AudioBuffer) {
         this.AudioSource.stop();
       } else if (this.AudioContext.readyState >= 2) {
         this.AudioContext.pause();
@@ -474,7 +474,7 @@ class SMFListener {
   }
 
   stop() {
-    if (this.AudioContext instanceof AudioContext && this.AudioBuffer) {
+    if (this.AudioContext.state && this.AudioBuffer) {
       this.AudioSource.stop();
     } else if (this.AudioContext.readyState >= 2){
       this.AudioContext.pause();
