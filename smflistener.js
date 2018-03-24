@@ -71,8 +71,8 @@ class SMFListener {
     if (typeof(SMF) === 'string' && SMF !== '') {
       this.filePreparing();
       var xhr = new XMLHttpRequest();
-      xhr.responseType = 'arraybuffer';
       xhr.open('GET', SMF, true);
+      xhr.responseType = 'arraybuffer';
       xhr.onload = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           this.SMFSource = music_reader(xhr.response);
@@ -115,8 +115,8 @@ class SMFListener {
       this.filePreparing();
       if (this.AudioContext.state) {
         let xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer';
         xhr.open('GET', Audio, true);
+        xhr.responseType = 'arraybuffer';
         xhr.onload = () => {
           if (xhr.readyState === 4 && xhr.status === 200) {
             this.AudioContext.decodeAudioData(xhr.response, (buffer) => {
