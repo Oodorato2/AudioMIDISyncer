@@ -16,24 +16,6 @@ class SMFListener {
     this.setOptions(options);
     this.setFiles(SMF, Audio);
     this.AudioContext = new (window.AudioContext || window.webkitAudioContext)();
-    this.requestAnimationFrame = (function() {
-      return (
-          window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          window.oRequestAnimationFrame      ||
-          window.msRequestAnimationFrame
-      ).bind(window);
-    })();
-    this.cancelAnimationFrame = (function() {
-      return (
-          window.cancelAnimationFrame       ||
-          window.webkitCancelAnimationFrame ||
-          window.mozCancelAnimationFrame    ||
-          window.oCancelAnimationFrame      ||
-          window.msCancelAnimationFrame
-      ).bind(window);
-    })();
     this.fileLoadingState = {
       preparing: 0,
       ready: 0,
@@ -164,7 +146,7 @@ class SMFListener {
     if (this.fileLoadingState.ready === this.fileLoadingState.preparing) {
       this.actionEventListener('ready');
       if(this.anime !== undefined) {
-        this.cancelAnimationFrame(this.anime);
+        cancelAnimationFrame(this.anime);
       }
       if(this.MIDI !== undefined) {
         this.addEventListener('render', ()=>this.NotesListener());
@@ -428,7 +410,7 @@ class SMFListener {
       this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp;
     }
     this.actionEventListener('render');
-    this.anime = this.requestAnimationFrame((timeStamp)=>this.render(timeStamp));
+    this.anime = requestAnimationFrame((timeStamp)=>this.render(timeStamp));
   }
 
   // 以下外部からのアクセス許可
