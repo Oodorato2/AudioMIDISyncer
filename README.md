@@ -7,7 +7,8 @@ MIDIパーサーには「[miz_music](https://github.com/MizunagiKB/miz_music)」
 それに使われている「[encoding.js](https://github.com/polygonplanet/encoding.js)」を必須ライブラリとして使用しています。
 
 ## 動いてくれるはずのブラウザ
-Edge, Chrome, Firefox
+最新の
+IE, Edge, Chrome, Firefox
 
 ## DEMO
 [デモ1](https://sound.0db.me/midi-anime/ripple/)
