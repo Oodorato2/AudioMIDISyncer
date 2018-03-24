@@ -17,9 +17,7 @@ Edge, Chrome, Firefox
 ## 簡単な使い方
 
 ```html
-<script src="encoding.min.js"></script>
-<script src="miz_music.min.js"></script>
-<script src="smflistener.js"></script>
+<script src="smflistener.min.js"></script>
 ```
 
 ```js
