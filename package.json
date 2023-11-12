@@ -1,0 +1,30 @@
+{
+  "name": "audio-midi-syncer",
+  "version": "1.0.0",
+  "private": true,
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "type": "module",
+  "files": ["dist"],
+  "main": "./dist/amsync.umd.cjs",
+  "module": "./dist/amsync.js",
+  "exports": {
+    ".": {
+      "import": "./dist/amsync.js",
+      "require": "./dist/amsync.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "encoding-japanese": "^2.0.0",
+    "path": "^0.12.7"
+  }
+}
