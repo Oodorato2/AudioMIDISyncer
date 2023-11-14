@@ -1,11 +1,11 @@
 function P0(E) {
   return E && E.__esModule && Object.prototype.hasOwnProperty.call(E, "default") ? E.default : E;
 }
-var M = {}, g = {}, _0;
+var M = {}, g = {}, h0;
 function i0() {
-  if (_0)
+  if (h0)
     return g;
-  _0 = 1;
+  h0 = 1;
   var E = n0(), x = String.fromCharCode, B = Array.prototype.slice, A = Object.prototype.toString, F = Object.prototype.hasOwnProperty, C = Array.isArray, D = Object.keys;
   function t(s) {
     var n = typeof s;
@@ -41,8 +41,8 @@ function i0() {
   }
   g.createBuffer = i;
   function m(s) {
-    for (var n = s.length, u = i(16, n), h = 0; h < n; h++)
-      u[h] = s.charCodeAt(h);
+    for (var n = s.length, u = i(16, n), _ = 0; _ < n; _++)
+      u[_] = s.charCodeAt(_);
     return u;
   }
   g.stringToBuffer = m;
@@ -63,8 +63,8 @@ function i0() {
   }
   g.codeToString_fast = p;
   function N(s) {
-    for (var n = "", u = s && s.length, h = 0, f; h < u; ) {
-      if (s.subarray ? f = s.subarray(h, h + E.APPLY_BUFFER_SIZE) : f = s.slice(h, h + E.APPLY_BUFFER_SIZE), h += E.APPLY_BUFFER_SIZE, E.APPLY_BUFFER_SIZE_OK) {
+    for (var n = "", u = s && s.length, _ = 0, f; _ < u; ) {
+      if (s.subarray ? f = s.subarray(_, _ + E.APPLY_BUFFER_SIZE) : f = s.slice(_, _ + E.APPLY_BUFFER_SIZE), _ += E.APPLY_BUFFER_SIZE, E.APPLY_BUFFER_SIZE_OK) {
         n += x.apply(null, f);
         continue;
       }
@@ -81,14 +81,14 @@ function i0() {
   }
   g.codeToString_chunked = N;
   function b(s) {
-    for (var n = "", u = s && s.length, h = 0; h < u; h++)
-      n += x(s[h]);
+    for (var n = "", u = s && s.length, _ = 0; _ < u; _++)
+      n += x(s[_]);
     return n;
   }
   g.codeToString_slow = b;
   function J(s) {
-    for (var n = [], u = s && s.length, h = 0; h < u; h++)
-      n[h] = s.charCodeAt(h);
+    for (var n = [], u = s && s.length, _ = 0; _ < u; _++)
+      n[_] = s.charCodeAt(_);
     return n;
   }
   g.stringToCode = J;
@@ -97,8 +97,8 @@ function i0() {
       return new Uint16Array(s);
     if (e(s))
       return s;
-    for (var n = s && s.length, u = [], h = 0; h < n; h++)
-      u[h] = s[h];
+    for (var n = s && s.length, u = [], _ = 0; _ < n; _++)
+      u[_] = s[_];
     return u;
   }
   g.codeToBuffer = Y;
@@ -107,8 +107,8 @@ function i0() {
   }
   g.bufferToCode = v;
   function j(s) {
-    for (var n = "", u = ("" + s).toUpperCase().replace(/[^A-Z0-9]+/g, ""), h = l(E.EncodingAliases), f = h.length, c = 0, T, y, O, e0 = 0; e0 < f; e0++) {
-      if (T = h[e0], T === u) {
+    for (var n = "", u = ("" + s).toUpperCase().replace(/[^A-Z0-9]+/g, ""), _ = l(E.EncodingAliases), f = _.length, c = 0, T, y, O, e0 = 0; e0 < f; e0++) {
+      if (T = _[e0], T === u) {
         n = T;
         break;
       }
@@ -314,13 +314,13 @@ function i0() {
     -1
   ], D0 = "=".charCodeAt(0);
   function I0(s) {
-    var n, u, h, f, c, T;
-    for (h = s && s.length, u = 0, n = []; u < h; ) {
-      if (f = s[u++], u == h) {
+    var n, u, _, f, c, T;
+    for (_ = s && s.length, u = 0, n = []; u < _; ) {
+      if (f = s[u++], u == _) {
         n[n.length] = I[f >> 2], n[n.length] = I[(f & 3) << 4], n[n.length] = D0, n[n.length] = D0;
         break;
       }
-      if (c = s[u++], u == h) {
+      if (c = s[u++], u == _) {
         n[n.length] = I[f >> 2], n[n.length] = I[(f & 3) << 4 | (c & 240) >> 4], n[n.length] = I[(c & 15) << 2], n[n.length] = D0;
         break;
       }
@@ -330,7 +330,7 @@ function i0() {
   }
   g.base64encode = I0;
   function y0(s) {
-    var n, u, h, f, c, T, y;
+    var n, u, _, f, c, T, y;
     for (T = s && s.length, c = 0, y = []; c < T; ) {
       do
         n = $[s.charCodeAt(c++) & 255];
@@ -344,13 +344,13 @@ function i0() {
         break;
       y[y.length] = n << 2 | (u & 48) >> 4;
       do {
-        if (h = s.charCodeAt(c++) & 255, h == 61)
+        if (_ = s.charCodeAt(c++) & 255, _ == 61)
           return y;
-        h = $[h];
-      } while (c < T && h == -1);
-      if (h == -1)
+        _ = $[_];
+      } while (c < T && _ == -1);
+      if (_ == -1)
         break;
-      y[y.length] = (u & 15) << 4 | (h & 60) >> 2;
+      y[y.length] = (u & 15) << 4 | (_ & 60) >> 2;
       do {
         if (f = s.charCodeAt(c++) & 255, f == 61)
           return y;
@@ -358,7 +358,7 @@ function i0() {
       } while (c < T && f == -1);
       if (f == -1)
         break;
-      y[y.length] = (h & 3) << 6 | f;
+      y[y.length] = (_ & 3) << 6 | f;
     }
     return y;
   }
@@ -13833,11 +13833,11 @@ d.UTF8_TO_JIS_TABLE = U0;
 d.UTF8_TO_JISX0212_TABLE = M0;
 d.JIS_TO_UTF8_TABLE = L0;
 d.JISX0212_TO_UTF8_TABLE = k0;
-var h0;
+var _0;
 function n0() {
-  if (h0)
+  if (_0)
     return M;
-  h0 = 1;
+  _0 = 1;
   var E = i0(), x = d;
   M.FALLBACK_CHARACTER = 63;
   var B = M.HAS_TYPED = typeof Uint8Array < "u" && typeof Uint16Array < "u", A = !1, F = !1;
@@ -14448,14 +14448,14 @@ function ax(E, x) {
   return q(F0(E), x);
 }
 o.UTF16LEToJIS = ax;
-function _x(E, x) {
+function hx(E, x) {
   return x0(G(E), x);
 }
-o.EUCJPToUTF16 = _x;
-function hx(E, x) {
+o.EUCJPToUTF16 = hx;
+function _x(E, x) {
   return X(E0(E), x);
 }
-o.UTF16ToEUCJP = hx;
+o.UTF16ToEUCJP = _x;
 function ux(E) {
   return B0(G(E));
 }
@@ -14718,7 +14718,7 @@ const yx = "encoding-japanese", Px = "2.0.0", Ux = "Convert or detect character 
   devDependencies: jx,
   browserify: Hx
 };
-var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.prototype.hasOwnProperty, z = {
+var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.prototype.hasOwnProperty, z = {
   version: Vx,
   /**
    * Encoding orders
@@ -14738,9 +14738,9 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
   detect: function(E, x) {
     if (E == null || E.length === 0)
       return !1;
-    _.isObject(x) && !_.isArray(x) && (x = x.encoding), _.isString(E) && (E = _.stringToBuffer(E)), x == null ? x = z.orders : _.isString(x) && (x = x.toUpperCase(), x === "AUTO" ? x = z.orders : ~x.indexOf(",") ? x = x.split(/\s*,\s*/) : x = [x]);
+    h.isObject(x) && !h.isArray(x) && (x = x.encoding), h.isString(E) && (E = h.stringToBuffer(E)), x == null ? x = z.orders : h.isString(x) && (x = x.toUpperCase(), x === "AUTO" ? x = z.orders : ~x.indexOf(",") ? x = x.split(/\s*,\s*/) : x = [x]);
     for (var B = x.length, A, F, C, D = 0; D < B; D++)
-      if (A = x[D], F = _.canonicalizeEncodingName(A), !!F) {
+      if (A = x[D], F = h.canonicalizeEncodingName(A), !!F) {
         if (C = "is" + F, !m0.call(u0, C))
           throw new Error("Undefined encoding: " + A);
         if (u0[C](E))
@@ -14762,17 +14762,17 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   convert: function(E, x, B) {
     var A, F, C;
-    _.isObject(x) ? (C = x, B = C.from, x = C.to, C.type && (F = C.type)) : C = {}, _.isString(E) ? (F = F || "string", E = _.stringToBuffer(E)) : (E == null || E.length === 0) && (E = []);
+    h.isObject(x) ? (C = x, B = C.from, x = C.to, C.type && (F = C.type)) : C = {}, h.isString(E) ? (F = F || "string", E = h.stringToBuffer(E)) : (E == null || E.length === 0) && (E = []);
     var D;
-    B != null && _.isString(B) && B.toUpperCase() !== "AUTO" && !~B.indexOf(",") ? D = _.canonicalizeEncodingName(B) : D = z.detect(E);
-    var t = _.canonicalizeEncodingName(x), e = D + "To" + t;
+    B != null && h.isString(B) && B.toUpperCase() !== "AUTO" && !~B.indexOf(",") ? D = h.canonicalizeEncodingName(B) : D = z.detect(E);
+    var t = h.canonicalizeEncodingName(x), e = D + "To" + t;
     switch (m0.call(f0, e) ? A = f0[e](E, C) : A = E, ("" + F).toLowerCase()) {
       case "string":
-        return _.codeToString_fast(A);
+        return h.codeToString_fast(A);
       case "arraybuffer":
-        return _.codeToBuffer(A);
+        return h.codeToBuffer(A);
       default:
-        return _.bufferToCode(A);
+        return h.bufferToCode(A);
     }
   },
   /**
@@ -14782,13 +14782,13 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @return {string} The percent encoded string
    */
   urlEncode: function(E) {
-    _.isString(E) && (E = _.stringToBuffer(E));
-    for (var x = _.stringToCode("0123456789ABCDEF"), B = [], A = 0, F = E && E.length, C; A < F; A++) {
+    h.isString(E) && (E = h.stringToBuffer(E));
+    for (var x = h.stringToCode("0123456789ABCDEF"), B = [], A = 0, F = E && E.length, C; A < F; A++) {
       if (C = E[A], C > 255)
-        return encodeURIComponent(_.codeToString_fast(E));
+        return encodeURIComponent(h.codeToString_fast(E));
       C >= 97 && C <= 122 || C >= 65 && C <= 90 || C >= 48 && C <= 57 || C === 33 || C >= 39 && C <= 42 || C === 45 || C === 46 || C === 95 || C === 126 ? B[B.length] = C : (B[B.length] = 37, C < 16 ? (B[B.length] = 48, B[B.length] = x[C]) : (B[B.length] = x[C >> 4 & 15], B[B.length] = x[C & 15]));
     }
-    return _.codeToString_fast(B);
+    return h.codeToString_fast(B);
   },
   /**
    * Decode a percent encoded string to
@@ -14812,7 +14812,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @return {string} The Base64 encoded string
    */
   base64Encode: function(E) {
-    return _.isString(E) && (E = _.stringToBuffer(E)), _.base64encode(E);
+    return h.isString(E) && (E = h.stringToBuffer(E)), h.base64encode(E);
   },
   /**
    * Decode a Base64 encoded string to character code array
@@ -14821,7 +14821,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @return {Array.<number>} The decoded array
    */
   base64Decode: function(E) {
-    return _.base64decode(E);
+    return h.base64decode(E);
   },
   /**
    * Joins a character code array to string
@@ -14829,14 +14829,14 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @param {Array.<number>|TypedArray} data The data being joined
    * @return {String} The joined string
    */
-  codeToString: _.codeToString_fast,
+  codeToString: h.codeToString_fast,
   /**
    * Splits string to an array of character codes
    *
    * @param {string} string The input string
    * @return {Array.<number>} The character code array
    */
-  stringToCode: _.stringToCode,
+  stringToCode: h.stringToCode,
   /**
    * 全角英数記号文字を半角英数記号文字に変換
    *
@@ -14852,10 +14852,10 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toHankakuCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     for (var B = [], A = E && E.length, F = 0, C; F < A; )
       C = E[F++], C >= 65281 && C <= 65374 && (C -= 65248), B[B.length] = C;
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 半角英数記号文字を全角英数記号文字に変換
@@ -14872,10 +14872,10 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toZenkakuCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     for (var B = [], A = E && E.length, F = 0, C; F < A; )
       C = E[F++], C >= 33 && C <= 126 && (C += 65248), B[B.length] = C;
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 全角カタカナを全角ひらがなに変換
@@ -14891,10 +14891,10 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toHiraganaCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     for (var B = [], A = E && E.length, F = 0, C; F < A; )
       C = E[F++], C >= 12449 && C <= 12534 ? C -= 96 : C === 12535 ? (B[B.length] = 12431, C = 12443) : C === 12538 && (B[B.length] = 12434, C = 12443), B[B.length] = C;
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 全角ひらがなを全角カタカナに変換
@@ -14910,12 +14910,12 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toKatakanaCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     for (var B = [], A = E && E.length, F = 0, C; F < A; )
       C = E[F++], C >= 12353 && C <= 12438 && ((C === 12431 || // 「わ」 + 「゛」 => 「ワ゛」
       C === 12434) && // 「を」 + 「゛」 => 「ヲ゛」
       F < A && E[F] === 12443 ? (C = C === 12431 ? 12535 : 12538, F++) : C += 96), B[B.length] = C;
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 全角カタカナを半角ｶﾀｶﾅに変換
@@ -14931,7 +14931,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toHankanaCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     for (var B = [], A = E && E.length, F = 0, C, D, t; F < A; ) {
       if (C = E[F++], C >= 12289 && C <= 12540 && (t = w.HANKANA_TABLE[C], t !== void 0)) {
         B[B.length] = t;
@@ -14939,7 +14939,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
       }
       C === 12532 || C === 12535 || C === 12538 ? (B[B.length] = w.HANKANA_SONANTS[C], B[B.length] = 65438) : C >= 12459 && C <= 12489 ? (B[B.length] = w.HANKANA_TABLE[C - 1], B[B.length] = 65438) : C >= 12495 && C <= 12509 ? (D = C % 3, B[B.length] = w.HANKANA_TABLE[C - D], B[B.length] = w.HANKANA_MARKS[D - 1]) : B[B.length] = C;
     }
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 半角ｶﾀｶﾅを全角カタカナに変換 (濁音含む)
@@ -14955,11 +14955,11 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    */
   toZenkanaCase: function(E) {
     var x = !1;
-    _.isString(E) && (x = !0, E = _.stringToBuffer(E));
+    h.isString(E) && (x = !0, E = h.stringToBuffer(E));
     var B = [], A = E && E.length, F = 0, C, D, t;
     for (F = 0; F < A; F++)
       C = E[F], C > 65376 && C < 65440 && (D = w.ZENKANA_TABLE[C - 65377], F + 1 < A && (t = E[F + 1], t === 65438 && C === 65395 ? (D = 12532, F++) : t === 65438 && C === 65436 ? (D = 12535, F++) : t === 65438 && C === 65382 ? (D = 12538, F++) : t === 65438 && (C > 65397 && C < 65413 || C > 65417 && C < 65423) ? (D++, F++) : t === 65439 && C > 65417 && C < 65423 && (D += 2, F++)), C = D), B[B.length] = C;
-    return x ? _.codeToString_fast(B) : B;
+    return x ? h.codeToString_fast(B) : B;
   },
   /**
    * 全角スペースを半角スペースに変換
@@ -14970,7 +14970,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @return {Array.<number>|string} The conveted data
    */
   toHankakuSpace: function(E) {
-    if (_.isString(E))
+    if (h.isString(E))
       return E.replace(/\u3000/g, " ");
     for (var x = [], B = E && E.length, A = 0, F; A < B; )
       F = E[A++], F === 12288 && (F = 32), x[x.length] = F;
@@ -14985,7 +14985,7 @@ var Kx = n0(), _ = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
    * @return {Array.<number>|string} The conveted data
    */
   toZenkakuSpace: function(E) {
-    if (_.isString(E))
+    if (h.isString(E))
       return E.replace(/\u0020/g, "　");
     for (var x = [], B = E && E.length, A = 0, F; A < B; )
       F = E[A++], F === 32 && (F = 12288), x[x.length] = F;
@@ -15639,6 +15639,9 @@ class BE {
   render(x) {
     this.options.audioSync ? this.player.timeStamp = this.AudioContext.currentTime * 1e3 : this.player.timeStamp = x, this.player.status === "play" && (this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp + this.options.renderTimeShift), this.actionEventListener("render", [x]), this.anime = requestAnimationFrame((B) => this.render(B));
   }
+  getUniqueStr(x = 1e3) {
+    return (/* @__PURE__ */ new Date()).getTime().toString(16) + Math.floor(x * Math.random()).toString(16);
+  }
   // 以下外部からのアクセス許可
   play() {
     let x = 0;
@@ -15651,7 +15654,7 @@ class BE {
     this.AudioContext.state && this.AudioBuffer ? this.AudioSource.stop() : this.AudioContext.readyState >= 2 && (this.AudioContext.pause(), this.AudioContext.currentTime = 0), this.player.status = "stop", this.player.startTimeStamp = 0, this.player.currentTime = -1, this.actionEventListener("playerStop");
   }
   addEventListener(x, B, A) {
-    return this.EventListeners[x] === void 0 && (this.EventListeners[x] = []), A || (A = crypto.randomUUID()), this.EventListeners[x].push({
+    return this.EventListeners[x] === void 0 && (this.EventListeners[x] = []), A || (A = this.getUniqueStr()), this.EventListeners[x].push({
       name: A,
       func: B
     }), A;

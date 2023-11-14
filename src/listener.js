@@ -514,6 +514,11 @@ export class Listener
         this.anime = requestAnimationFrame((timeStamp) => this.render(timeStamp))
     }
 
+    getUniqueStr (strong = 1000)
+    {
+        return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16)
+    }
+
     // 以下外部からのアクセス許可
 
     play ()
@@ -567,7 +572,7 @@ export class Listener
             this.EventListeners[eventname] = []
         }
         if (!funcName) {
-            funcName = crypto.randomUUID()
+            funcName = this.getUniqueStr()
         }
         this.EventListeners[eventname].push({
             name: funcName,
