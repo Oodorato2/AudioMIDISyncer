@@ -1,4 +1,4 @@
-import { miz, music_reader } from './lib/miz_music.min.js'
+import { AMC } from './amc'
 
 export class Listener
 {
@@ -59,6 +59,12 @@ export class Listener
     {
         this.Audio = Audio
     }
+
+    async setAMC (arrayBuffer)
+    {
+        this.AMC = new AMC()
+        await this.AMC.setup(arrayBuffer)
+    }
  
     async loadfiles (SMF, Audio)
     {
@@ -97,8 +103,11 @@ export class Listener
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
-                this.SMFSource =  music_reader(await response.arrayBuffer())
-                this.setMidi()
+                try {
+                    await this.setAMC(await response.arrayBuffer())
+                } catch (error) {
+                    console.error(error)
+                }
                 this.fileReady()
             }
         } catch (error) {
@@ -185,7 +194,7 @@ export class Listener
             if(this.anime !== undefined) {
                 cancelAnimationFrame(this.anime)
             }
-            if(this.MIDI !== undefined) {
+            if(this.AMC !== undefined) {
                 this.addEventListener('render', () => this.NotesListener(), '_this_NotesListener')
             }
             this.anime = requestAnimationFrame((timeStamp) => this.render(timeStamp))
@@ -195,234 +204,6 @@ export class Listener
     setupEventListener ()
     {
         this.EventListeners = {}
-    }
-
-    setMidi ()
-    {
-        this.MIDI = {
-            resolution: this.SMFSource.m_nTimeDiv,
-            endTime: 0,
-            tempos: [],
-            track: []
-        }
-        this.setMidiTempos()
-        this.setMidiNots()
-    }
-
-    setMidiTempos ()
-    {
-        for (let p = 0; p < this.SMFSource.m_listTrack.length; p++) {
-            for (let i = 0, tick = 0, step = 0; i < this.SMFSource.m_listTrack[p].m_listData.length; i++) {
-                tick += this.SMFSource.m_listTrack[p].m_listData[i].m_nStep
-                step += this.SMFSource.m_listTrack[p].m_listData[i].m_nStep
-                if (this.SMFSource.m_listTrack[p].m_listData[i].m_eMMsg === 255 && this.SMFSource.m_listTrack[p].m_listData[i].m_eMEvt === 81) {
-                    this.MIDI.tempos.push({
-                        tempo: this.toTempo(this.SMFSource.m_listTrack[p].m_listData[i].m_numValue),
-                        data: this.SMFSource.m_listTrack[p].m_listData[i].m_numValue,
-                        tick: tick,
-                        step: step,
-                    })
-                    step = 0
-                }
-            }
-        }
-        this.MIDI.tempos.sort((a, b) => {
-            if (a.tick < b.tick) {
-                return -1
-            }
-            if (a.tick > b.tick) {
-                return 1
-            }
-            return 0
-        })
-        for (let i = 0; i < this.MIDI.tempos.length; i++) {
-            if (i === 0) {
-                this.MIDI.tempos[i].ms = 0
-            }
-            if (i+1 < this.MIDI.tempos.length) {
-                this.MIDI.tempos[i+1].ms = (((this.MIDI.tempos[i+1].step) * (this.MIDI.tempos[i].data / this.MIDI.resolution))/1000) + this.MIDI.tempos[i].ms
-            }
-        }
-    }
-
-    setMidiNots ()
-    {
-        for (let t = 0, noteNum = 0; t < this.SMFSource.m_listTrack.length; t++) {
-            this.MIDI.track.push([])
-            for (let i = 0, tick = 0; i < this.SMFSource.m_listTrack[t].m_listData.length; i++) {
-                tick += this.SMFSource.m_listTrack[t].m_listData[i].m_nStep
-                if (
-                    this.SMFSource.m_listTrack[t].m_listData[i].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_ON
-                    && this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2] > 0
-                ) {
-
-                    let
-                        onTime = this.toTickMs(tick),
-                        offTime = undefined,
-                        step = 0
-                    
-                    for (let ii = i+1, tickI = tick; ii < this.SMFSource.m_listTrack[t].m_listData.length; ii++) {
-                        step += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep
-                        tickI += this.SMFSource.m_listTrack[t].m_listData[ii].m_nStep
-                        if (
-                            this.SMFSource.m_listTrack[t].m_listData[ii].get === undefined
-                            && (
-                                this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_ON
-                                || this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_OF
-                            )
-                        ) {
-                            if (
-                                (
-                                    this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[2] === 0
-                                    || this.SMFSource.m_listTrack[t].m_listData[ii].m_eMMsg === miz.music.E_MIDI_MSG.NOTE_OF
-                                )
-                                && this.SMFSource.m_listTrack[t].m_listData[ii].m_aryValue[1] === this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1]
-                            ) {
-                                this.SMFSource.m_listTrack[t].m_listData[ii].get = true
-                                offTime = this.toTickMs(tickI)
-                                break
-                            }
-                        }
-
-                    }
-
-                    if (offTime === undefined) {
-                        console.log({
-                            message: 'not find note off',
-                            error:{
-                                track: t,
-                                channel: (this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[0] & 0x0F),
-                                velocity: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2],
-                                key: i,
-                                onTime: onTime,
-                            }
-                        })
-                        break
-                    }
-
-                    this.MIDI.track[t].push({
-                        tick: tick,
-                        onTime: onTime,
-                        offTime: offTime,
-                        track: t,
-                        channel: (this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[0] & 0x0F),
-                        type: 'note',
-                        scale: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[1],
-                        velocity: this.SMFSource.m_listTrack[t].m_listData[i].m_aryValue[2],
-                        step: step,
-                        id: noteNum,
-                        act: -1,// 音符の状態(0 = 鳴る前, 1 = 鳴っている最中, 2 = 鳴り終わった)
-                    })
-
-                    // 最終ノートの終了時間を取得
-                    if (this.MIDI.endTime < offTime) {
-                        this.MIDI.endTime = offTime
-                    }
-
-                    noteNum++
-                }
-            }
-        }
-    }
-
-    getStartStepTempo ()
-    {
-        let result = 0
-        if (this.MIDI.tempos) {
-            for (let i = 0; i < this.MIDI.tempos.length; i++) {
-                if (this.MIDI.tempos[i].tick === this.MIDI.tempos[0].tick) {
-                    result = this.MIDI.tempos[i].data
-                }
-            }
-        }
-        return result
-    }
-
-    getStartTempo ()
-    {
-        return this.toTempo(this.getStartStepTempo())
-    }
-
-    isNextTempo (i, tick)
-    {
-        if (i+1 >= this.MIDI.tempos.length) {
-            return 1
-        } else if (this.MIDI.tempos[i+1].tick > tick) {
-            return 1
-        } else {
-            return 0
-        }
-    }
-
-    isNextTempoMs (i, Ms)
-    {
-        if (i+1 >= this.MIDI.tempos.length) {
-            return 1
-        } else if (this.MIDI.tempos[i+1].ms > Ms) {
-            return 1
-        } else {
-            return 0
-        }
-    }
-
-    toTempo (StepTemop)
-    {
-        let _pow = Math.pow( 10 , 3 )
-        return Math.round(((60 * 1000 * 1000) / StepTemop) * _pow) / _pow
-    }
-
-    // tickからその時のステップテンポを取得
-    toTickStepTemop (tick)
-    {
-        return this.toTickTemopData(tick).data
-    }
-
-    toTickTemop (tick)
-    {
-        return this.toTempo(this.toTickStepTemop(tick))
-    }
-
-    toTickTemopData (tick)
-    {
-        let result = false
-        for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
-            if (this.MIDI.tempos[i].tick <= tick && this.isNextTempo(i, tick)) {
-                for (let p = 0; p < this.MIDI.tempos.length; p++) {
-                    if (this.MIDI.tempos[p].tick === this.MIDI.tempos[i].tick) {
-                        result = this.MIDI.tempos[p]
-                    }
-                }
-                return result
-            }
-        }
-    }
-
-    toMsStepTemop (Ms)
-    {
-        let result = false
-        for (let i = 0, ftstep = 0; i < this.MIDI.tempos.length; i++) {
-            if (this.MIDI.tempos[i].ms <= Ms && this.isNextTempoMs(i, Ms)) {
-                for (let p = 0; p < this.MIDI.tempos.length; p++) {
-                    if (this.MIDI.tempos[p].ms === this.MIDI.tempos[i].ms) {
-                        result = this.MIDI.tempos[p]
-                    }
-                }
-                return result
-            }
-        }
-    }
-
-    toTickMs (tick)
-    {
-        return (((tick - this.toTickTemopData(tick).tick) * (this.toTickStepTemop(tick) / this.MIDI.resolution))/1000) + this.toTickTemopData(tick).ms
-    }
-
-    toMsTick (Ms)
-    {
-        if (Ms < 0) {
-            Ms = 0
-        }
-        return ((Ms - this.toMsStepTemop(Ms).ms) / ((this.toMsStepTemop(Ms).data / this.MIDI.resolution)/1000)) + this.toMsStepTemop(Ms).tick
     }
 
     actionEventListener (eventname, _arguments)
@@ -443,10 +224,8 @@ export class Listener
 
     loopNotes (callback)
     {
-        for (let t = 0; t < this.MIDI.track.length; t++) {
-            for (let n = 0; n < this.MIDI.track[t].length; n++) {
-                callback(this.MIDI.track[t][n])
-            }
+        for (let i = 0; i < this.AMC.notes.length; i++) {
+            callback(this.AMC.notes[i])
         }
     }
 

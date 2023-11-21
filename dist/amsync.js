@@ -1,21 +1,24 @@
-function P0(E) {
+var U0 = Object.defineProperty;
+var M0 = (E, x, B) => x in E ? U0(E, x, { enumerable: !0, configurable: !0, writable: !0, value: B }) : E[x] = B;
+var k = (E, x, B) => (M0(E, typeof x != "symbol" ? x + "" : x, B), B);
+function b0(E) {
   return E && E.__esModule && Object.prototype.hasOwnProperty.call(E, "default") ? E.default : E;
 }
-var M = {}, g = {}, h0;
-function i0() {
-  if (h0)
+var b = {}, g = {}, u0;
+function n0() {
+  if (u0)
     return g;
-  h0 = 1;
-  var E = n0(), x = String.fromCharCode, B = Array.prototype.slice, A = Object.prototype.toString, F = Object.prototype.hasOwnProperty, C = Array.isArray, D = Object.keys;
-  function t(s) {
+  u0 = 1;
+  var E = s0(), x = String.fromCharCode, B = Array.prototype.slice, A = Object.prototype.toString, F = Object.prototype.hasOwnProperty, C = Array.isArray, D = Object.keys;
+  function e(s) {
     var n = typeof s;
     return n === "function" || n === "object" && !!s;
   }
-  g.isObject = t;
-  function e(s) {
+  g.isObject = e;
+  function t(s) {
     return C ? C(s) : A.call(s) === "[object Array]";
   }
-  g.isArray = e;
+  g.isArray = t;
   function r(s) {
     return typeof s == "string" || A.call(s) === "[object String]";
   }
@@ -24,8 +27,8 @@ function i0() {
     if (D)
       return D(s);
     var n = [];
-    for (var u in s)
-      F.call(s, u) && (n[n.length] = u);
+    for (var _ in s)
+      F.call(s, _) && (n[n.length] = _);
     return n;
   }
   g.objectKeys = l;
@@ -40,12 +43,12 @@ function i0() {
     return new Array(n);
   }
   g.createBuffer = i;
-  function m(s) {
-    for (var n = s.length, u = i(16, n), _ = 0; _ < n; _++)
-      u[_] = s.charCodeAt(_);
-    return u;
+  function f(s) {
+    for (var n = s.length, _ = i(16, n), u = 0; u < n; u++)
+      _[u] = s.charCodeAt(u);
+    return _;
   }
-  g.stringToBuffer = m;
+  g.stringToBuffer = f;
   function p(s) {
     if (E.CAN_CHARCODE_APPLY && E.CAN_CHARCODE_APPLY_TYPED) {
       var n = s && s.length;
@@ -53,72 +56,72 @@ function i0() {
         return x.apply(null, s);
       if (E.APPLY_BUFFER_SIZE_OK === null)
         try {
-          var u = x.apply(null, s);
-          return n > E.APPLY_BUFFER_SIZE && (E.APPLY_BUFFER_SIZE_OK = !0), u;
+          var _ = x.apply(null, s);
+          return n > E.APPLY_BUFFER_SIZE && (E.APPLY_BUFFER_SIZE_OK = !0), _;
         } catch {
           E.APPLY_BUFFER_SIZE_OK = !1;
         }
     }
-    return N(s);
+    return M(s);
   }
   g.codeToString_fast = p;
-  function N(s) {
-    for (var n = "", u = s && s.length, _ = 0, f; _ < u; ) {
-      if (s.subarray ? f = s.subarray(_, _ + E.APPLY_BUFFER_SIZE) : f = s.slice(_, _ + E.APPLY_BUFFER_SIZE), _ += E.APPLY_BUFFER_SIZE, E.APPLY_BUFFER_SIZE_OK) {
-        n += x.apply(null, f);
+  function M(s) {
+    for (var n = "", _ = s && s.length, u = 0, c; u < _; ) {
+      if (s.subarray ? c = s.subarray(u, u + E.APPLY_BUFFER_SIZE) : c = s.slice(u, u + E.APPLY_BUFFER_SIZE), u += E.APPLY_BUFFER_SIZE, E.APPLY_BUFFER_SIZE_OK) {
+        n += x.apply(null, c);
         continue;
       }
       if (E.APPLY_BUFFER_SIZE_OK === null)
         try {
-          n += x.apply(null, f), f.length > E.APPLY_BUFFER_SIZE && (E.APPLY_BUFFER_SIZE_OK = !0);
+          n += x.apply(null, c), c.length > E.APPLY_BUFFER_SIZE && (E.APPLY_BUFFER_SIZE_OK = !0);
           continue;
         } catch {
           E.APPLY_BUFFER_SIZE_OK = !1;
         }
-      return b(s);
+      return L(s);
     }
     return n;
   }
-  g.codeToString_chunked = N;
-  function b(s) {
-    for (var n = "", u = s && s.length, _ = 0; _ < u; _++)
-      n += x(s[_]);
+  g.codeToString_chunked = M;
+  function L(s) {
+    for (var n = "", _ = s && s.length, u = 0; u < _; u++)
+      n += x(s[u]);
     return n;
   }
-  g.codeToString_slow = b;
+  g.codeToString_slow = L;
   function J(s) {
-    for (var n = [], u = s && s.length, _ = 0; _ < u; _++)
-      n[_] = s.charCodeAt(_);
+    for (var n = [], _ = s && s.length, u = 0; u < _; u++)
+      n[u] = s.charCodeAt(u);
     return n;
   }
   g.stringToCode = J;
-  function Y(s) {
+  function H(s) {
     if (E.HAS_TYPED)
       return new Uint16Array(s);
-    if (e(s))
+    if (t(s))
       return s;
-    for (var n = s && s.length, u = [], _ = 0; _ < n; _++)
-      u[_] = s[_];
-    return u;
+    for (var n = s && s.length, _ = [], u = 0; u < n; u++)
+      _[u] = s[u];
+    return _;
   }
-  g.codeToBuffer = Y;
-  function v(s) {
-    return e(s) ? s : B.call(s);
+  g.codeToBuffer = H;
+  function S(s) {
+    return t(s) ? s : B.call(s);
   }
-  g.bufferToCode = v;
-  function j(s) {
-    for (var n = "", u = ("" + s).toUpperCase().replace(/[^A-Z0-9]+/g, ""), _ = l(E.EncodingAliases), f = _.length, c = 0, T, y, O, e0 = 0; e0 < f; e0++) {
-      if (T = _[e0], T === u) {
+  g.bufferToCode = S;
+  function G(s) {
+    for (var n = "", _ = ("" + s).toUpperCase().replace(/[^A-Z0-9]+/g, ""), u = l(E.EncodingAliases), c = u.length, m = 0, T, I, N, t0 = 0; t0 < c; t0++) {
+      if (T = u[t0], T === _) {
         n = T;
         break;
       }
-      for (y = T.length, O = c; O < y; O++)
-        (T.slice(0, O) === u.slice(0, O) || T.slice(-O) === u.slice(-O)) && (n = T, c = O);
+      for (I = T.length, N = m; N < I; N++)
+        (T.slice(0, N) === _.slice(0, N) || T.slice(-N) === _.slice(-N)) && (n = T, m = N);
     }
     return F.call(E.EncodingAliases, n) ? E.EncodingAliases[n] : n;
   }
-  g.canonicalizeEncodingName = j;
-  var I = [
+  g.canonicalizeEncodingName = G;
+  var y = [
     65,
     66,
     67,
@@ -183,7 +186,7 @@ function i0() {
     57,
     43,
     47
-  ], $ = [
+  ], z = [
     -1,
     -1,
     -1,
@@ -312,59 +315,59 @@ function i0() {
     -1,
     -1,
     -1
-  ], D0 = "=".charCodeAt(0);
+  ], e0 = "=".charCodeAt(0);
   function I0(s) {
-    var n, u, _, f, c, T;
-    for (_ = s && s.length, u = 0, n = []; u < _; ) {
-      if (f = s[u++], u == _) {
-        n[n.length] = I[f >> 2], n[n.length] = I[(f & 3) << 4], n[n.length] = D0, n[n.length] = D0;
+    var n, _, u, c, m, T;
+    for (u = s && s.length, _ = 0, n = []; _ < u; ) {
+      if (c = s[_++], _ == u) {
+        n[n.length] = y[c >> 2], n[n.length] = y[(c & 3) << 4], n[n.length] = e0, n[n.length] = e0;
         break;
       }
-      if (c = s[u++], u == _) {
-        n[n.length] = I[f >> 2], n[n.length] = I[(f & 3) << 4 | (c & 240) >> 4], n[n.length] = I[(c & 15) << 2], n[n.length] = D0;
+      if (m = s[_++], _ == u) {
+        n[n.length] = y[c >> 2], n[n.length] = y[(c & 3) << 4 | (m & 240) >> 4], n[n.length] = y[(m & 15) << 2], n[n.length] = e0;
         break;
       }
-      T = s[u++], n[n.length] = I[f >> 2], n[n.length] = I[(f & 3) << 4 | (c & 240) >> 4], n[n.length] = I[(c & 15) << 2 | (T & 192) >> 6], n[n.length] = I[T & 63];
+      T = s[_++], n[n.length] = y[c >> 2], n[n.length] = y[(c & 3) << 4 | (m & 240) >> 4], n[n.length] = y[(m & 15) << 2 | (T & 192) >> 6], n[n.length] = y[T & 63];
     }
     return p(n);
   }
   g.base64encode = I0;
-  function y0(s) {
-    var n, u, _, f, c, T, y;
-    for (T = s && s.length, c = 0, y = []; c < T; ) {
+  function P0(s) {
+    var n, _, u, c, m, T, I;
+    for (T = s && s.length, m = 0, I = []; m < T; ) {
       do
-        n = $[s.charCodeAt(c++) & 255];
-      while (c < T && n == -1);
+        n = z[s.charCodeAt(m++) & 255];
+      while (m < T && n == -1);
       if (n == -1)
         break;
       do
-        u = $[s.charCodeAt(c++) & 255];
-      while (c < T && u == -1);
-      if (u == -1)
-        break;
-      y[y.length] = n << 2 | (u & 48) >> 4;
-      do {
-        if (_ = s.charCodeAt(c++) & 255, _ == 61)
-          return y;
-        _ = $[_];
-      } while (c < T && _ == -1);
+        _ = z[s.charCodeAt(m++) & 255];
+      while (m < T && _ == -1);
       if (_ == -1)
         break;
-      y[y.length] = (u & 15) << 4 | (_ & 60) >> 2;
+      I[I.length] = n << 2 | (_ & 48) >> 4;
       do {
-        if (f = s.charCodeAt(c++) & 255, f == 61)
-          return y;
-        f = $[f];
-      } while (c < T && f == -1);
-      if (f == -1)
+        if (u = s.charCodeAt(m++) & 255, u == 61)
+          return I;
+        u = z[u];
+      } while (m < T && u == -1);
+      if (u == -1)
         break;
-      y[y.length] = (_ & 3) << 6 | f;
+      I[I.length] = (_ & 15) << 4 | (u & 60) >> 2;
+      do {
+        if (c = s.charCodeAt(m++) & 255, c == 61)
+          return I;
+        c = z[c];
+      } while (m < T && c == -1);
+      if (c == -1)
+        break;
+      I[I.length] = (u & 3) << 6 | c;
     }
-    return y;
+    return I;
   }
-  return g.base64decode = y0, g;
+  return g.base64decode = P0, g;
 }
-var d = {}, U0 = {
+var Y = {}, L0 = {
   15711649: 33,
   15711650: 34,
   15711651: 35,
@@ -7758,7 +7761,7 @@ var d = {}, U0 = {
   14846117: 8514,
   15712162: 8780,
   14846098: 74077
-}, M0 = {
+}, k0 = {
   52120: 8751,
   52103: 8752,
   49848: 8753,
@@ -13828,19 +13831,19 @@ var d = {}, U0 = {
   15318693: 28003,
   //FIXME: mojibake
   14909596: 8513
-}, b0 = null, L0 = b0, O0 = null, k0 = O0;
-d.UTF8_TO_JIS_TABLE = U0;
-d.UTF8_TO_JISX0212_TABLE = M0;
-d.JIS_TO_UTF8_TABLE = L0;
-d.JISX0212_TO_UTF8_TABLE = k0;
+}, O0 = null, N0 = O0, R0 = null, w0 = R0;
+Y.UTF8_TO_JIS_TABLE = L0;
+Y.UTF8_TO_JISX0212_TABLE = k0;
+Y.JIS_TO_UTF8_TABLE = N0;
+Y.JISX0212_TO_UTF8_TABLE = w0;
 var _0;
-function n0() {
+function s0() {
   if (_0)
-    return M;
+    return b;
   _0 = 1;
-  var E = i0(), x = d;
-  M.FALLBACK_CHARACTER = 63;
-  var B = M.HAS_TYPED = typeof Uint8Array < "u" && typeof Uint16Array < "u", A = !1, F = !1;
+  var E = n0(), x = Y;
+  b.FALLBACK_CHARACTER = 63;
+  var B = b.HAS_TYPED = typeof Uint8Array < "u" && typeof Uint16Array < "u", A = !1, F = !1;
   try {
     String.fromCharCode.apply(null, [97]) === "a" && (A = !0);
   } catch {
@@ -13850,8 +13853,8 @@ function n0() {
       String.fromCharCode.apply(null, new Uint8Array([97])) === "a" && (F = !0);
     } catch {
     }
-  M.CAN_CHARCODE_APPLY = A, M.CAN_CHARCODE_APPLY_TYPED = F, M.APPLY_BUFFER_SIZE = 65533, M.APPLY_BUFFER_SIZE_OK = null;
-  var C = M.EncodingNames = {
+  b.CAN_CHARCODE_APPLY = A, b.CAN_CHARCODE_APPLY_TYPED = F, b.APPLY_BUFFER_SIZE = 65533, b.APPLY_BUFFER_SIZE_OK = null;
+  var C = b.EncodingNames = {
     UTF32: {
       order: 0
     },
@@ -13891,28 +13894,28 @@ function n0() {
       order: 8
     }
   }, D = {};
-  M.EncodingAliases = D, M.EncodingOrders = function() {
-    for (var e = D, r = E.objectKeys(C), l = [], i, m, p, N, b = 0, J = r.length; b < J; b++)
-      if (i = r[b], e[i] = i, m = C[i], m != null && (m.order != null && (l[l.length] = i), m.alias))
-        for (p = 0, N = m.alias.length; p < N; p++)
-          e[m.alias[p]] = i;
-    return l.sort(function(Y, v) {
-      return C[Y].order - C[v].order;
+  b.EncodingAliases = D, b.EncodingOrders = function() {
+    for (var t = D, r = E.objectKeys(C), l = [], i, f, p, M, L = 0, J = r.length; L < J; L++)
+      if (i = r[L], t[i] = i, f = C[i], f != null && (f.order != null && (l[l.length] = i), f.alias))
+        for (p = 0, M = f.alias.length; p < M; p++)
+          t[f.alias[p]] = i;
+    return l.sort(function(H, S) {
+      return C[H].order - C[S].order;
     }), l;
   }();
-  function t() {
+  function e() {
     if (x.JIS_TO_UTF8_TABLE === null) {
       x.JIS_TO_UTF8_TABLE = {};
-      for (var e = E.objectKeys(x.UTF8_TO_JIS_TABLE), r = 0, l = e.length, i, m; r < l; r++)
-        i = e[r], m = x.UTF8_TO_JIS_TABLE[i], m > 95 && (x.JIS_TO_UTF8_TABLE[m] = i | 0);
-      for (x.JISX0212_TO_UTF8_TABLE = {}, e = E.objectKeys(x.UTF8_TO_JISX0212_TABLE), l = e.length, r = 0; r < l; r++)
-        i = e[r], m = x.UTF8_TO_JISX0212_TABLE[i], x.JISX0212_TO_UTF8_TABLE[m] = i | 0;
+      for (var t = E.objectKeys(x.UTF8_TO_JIS_TABLE), r = 0, l = t.length, i, f; r < l; r++)
+        i = t[r], f = x.UTF8_TO_JIS_TABLE[i], f > 95 && (x.JIS_TO_UTF8_TABLE[f] = i | 0);
+      for (x.JISX0212_TO_UTF8_TABLE = {}, t = E.objectKeys(x.UTF8_TO_JISX0212_TABLE), l = t.length, r = 0; r < l; r++)
+        i = t[r], f = x.UTF8_TO_JISX0212_TABLE[i], x.JISX0212_TO_UTF8_TABLE[f] = i | 0;
     }
   }
-  return M.init_JIS_TO_UTF8_TABLE = t, M;
+  return b.init_JIS_TO_UTF8_TABLE = e, b;
 }
 var U = {};
-function N0(E) {
+function J0(E) {
   for (var x = 0, B = E && E.length, A; x < B; x++) {
     if (A = E[x], A > 255)
       return !1;
@@ -13921,15 +13924,15 @@ function N0(E) {
   }
   return !1;
 }
-U.isBINARY = N0;
-function R0(E) {
+U.isBINARY = J0;
+function d0(E) {
   for (var x = 0, B = E && E.length, A; x < B; x++)
     if (A = E[x], A > 255 || A >= 128 && A <= 255 || A === 27)
       return !1;
   return !0;
 }
-U.isASCII = R0;
-function J0(E) {
+U.isASCII = d0;
+function Y0(E) {
   for (var x = 0, B = E && E.length, A, F, C; x < B; x++) {
     if (A = E[x], A > 255 || A >= 128 && A <= 255)
       return !1;
@@ -13954,8 +13957,8 @@ function J0(E) {
   }
   return !1;
 }
-U.isJIS = J0;
-function w0(E) {
+U.isJIS = Y0;
+function H0(E) {
   for (var x = 0, B = E && E.length, A; x < B; x++)
     if (A = E[x], !(A < 128)) {
       if (A > 255 || A < 142)
@@ -13974,8 +13977,8 @@ function w0(E) {
     }
   return !0;
 }
-U.isEUCJP = w0;
-function d0(E) {
+U.isEUCJP = H0;
+function G0(E) {
   for (var x = 0, B = E && E.length, A; x < B && E[x] > 128; )
     if (E[x++] > 255)
       return !1;
@@ -13984,8 +13987,8 @@ function d0(E) {
       return !1;
   return !0;
 }
-U.isSJIS = d0;
-function Y0(E) {
+U.isSJIS = G0;
+function j0(E) {
   for (var x = 0, B = E && E.length, A; x < B; x++) {
     if (A = E[x], A > 255)
       return !1;
@@ -14023,9 +14026,9 @@ function Y0(E) {
   }
   return !0;
 }
-U.isUTF8 = Y0;
-function j0(E) {
-  var x = 0, B = E && E.length, A = null, F, C, D, t;
+U.isUTF8 = j0;
+function K0(E) {
+  var x = 0, B = E && E.length, A = null, F, C, D, e;
   if (B < 2) {
     if (E[0] > 255)
       return !1;
@@ -14042,13 +14045,13 @@ function j0(E) {
         return !1;
     if (A === null)
       return !1;
-    if (D = E[A + 1], D !== void 0 && D > 0 && D < 128 || (t = E[A - 1], t !== void 0 && t > 0 && t < 128))
+    if (D = E[A + 1], D !== void 0 && D > 0 && D < 128 || (e = E[A - 1], e !== void 0 && e > 0 && e < 128))
       return !0;
   }
   return !1;
 }
-U.isUTF16 = j0;
-function H0(E) {
+U.isUTF16 = K0;
+function V0(E) {
   var x = 0, B = E && E.length, A = null, F, C;
   if (B < 2) {
     if (E[0] > 255)
@@ -14070,8 +14073,8 @@ function H0(E) {
   }
   return !1;
 }
-U.isUTF16BE = H0;
-function G0(E) {
+U.isUTF16BE = V0;
+function X0(E) {
   var x = 0, B = E && E.length, A = null, F, C;
   if (B < 2) {
     if (E[0] > 255)
@@ -14093,17 +14096,17 @@ function G0(E) {
   }
   return !1;
 }
-U.isUTF16LE = G0;
-function K0(E) {
-  var x = 0, B = E && E.length, A = null, F, C, D, t, e, r;
+U.isUTF16LE = X0;
+function q0(E) {
+  var x = 0, B = E && E.length, A = null, F, C, D, e, t, r;
   if (B < 4) {
     for (; x < B; x++)
       if (E[x] > 255)
         return !1;
   } else {
-    if (F = E[0], C = E[1], D = E[2], t = E[3], F === 0 && C === 0 && // BOM (big-endian)
-    D === 254 && t === 255 || F === 255 && C === 254 && // BOM (little-endian)
-    D === 0 && t === 0)
+    if (F = E[0], C = E[1], D = E[2], e = E[3], F === 0 && C === 0 && // BOM (big-endian)
+    D === 254 && e === 255 || F === 255 && C === 254 && // BOM (little-endian)
+    D === 0 && e === 0)
       return !0;
     for (; x < B; x++)
       if (E[x] === 0 && E[x + 1] === 0 && E[x + 2] === 0) {
@@ -14113,23 +14116,23 @@ function K0(E) {
         return !1;
     if (A === null)
       return !1;
-    if (e = E[A + 3], e !== void 0 && e > 0 && e <= 127)
+    if (t = E[A + 3], t !== void 0 && t > 0 && t <= 127)
       return E[A + 2] === 0 && E[A + 1] === 0;
     if (r = E[A - 1], r !== void 0 && r > 0 && r <= 127)
       return E[A + 1] === 0 && E[A + 2] === 0;
   }
   return !1;
 }
-U.isUTF32 = K0;
-function V0(E) {
+U.isUTF32 = q0;
+function Z0(E) {
   for (var x = 0, B = E && E.length, A; x < B; x++)
     if (A = E[x], A < 0 || A > 1114111)
       return !1;
   return !0;
 }
-U.isUNICODE = V0;
-var o = {}, P = n0(), s0 = i0(), o0 = U, L = d;
-function X0(E) {
+U.isUNICODE = Z0;
+var o = {}, P = s0(), o0 = n0(), l0 = U, O = Y;
+function $0(E) {
   for (var x = [], B = 0, A = 0, F = E && E.length, C, D; A < F; A++) {
     for (; E[A] === 27; )
       if (E[A + 1] === 36 && E[A + 2] === 66 || E[A + 1] === 36 && E[A + 2] === 64 ? B = 1 : E[A + 1] === 40 && E[A + 2] === 73 ? B = 2 : E[A + 1] === 36 && E[A + 2] === 40 && E[A + 3] === 68 ? (B = 3, A++) : B = 0, A += 3, E[A] === void 0)
@@ -14138,8 +14141,8 @@ function X0(E) {
   }
   return x;
 }
-o.JISToSJIS = X0;
-function q0(E) {
+o.JISToSJIS = $0;
+function z0(E) {
   for (var x = [], B = 0, A = E && E.length, F = 0; F < A; F++) {
     for (; E[F] === 27; )
       if (E[F + 1] === 36 && E[F + 2] === 66 || E[F + 1] === 36 && E[F + 2] === 64 ? B = 1 : E[F + 1] === 40 && E[F + 2] === 73 ? B = 2 : E[F + 1] === 36 && E[F + 2] === 40 && E[F + 3] === 68 ? (B = 3, F++) : B = 0, F += 3, E[F] === void 0)
@@ -14148,9 +14151,9 @@ function q0(E) {
   }
   return x;
 }
-o.JISToEUCJP = q0;
-function Z0(E) {
-  for (var x = [], B = 0, A = E && E.length, F = 0, C, D, t = [
+o.JISToEUCJP = z0;
+function Q0(E) {
+  for (var x = [], B = 0, A = E && E.length, F = 0, C, D, e = [
     27,
     40,
     66,
@@ -14161,17 +14164,17 @@ function Z0(E) {
     40,
     73
   ]; F < A; F++)
-    C = E[F], C >= 161 && C <= 223 ? (B !== 2 && (B = 2, x[x.length] = t[6], x[x.length] = t[7], x[x.length] = t[8]), x[x.length] = C - 128 & 255) : C >= 128 ? (B !== 1 && (B = 1, x[x.length] = t[3], x[x.length] = t[4], x[x.length] = t[5]), C <<= 1, D = E[++F], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), x[x.length] = C & 255, x[x.length] = D & 255) : (B !== 0 && (B = 0, x[x.length] = t[0], x[x.length] = t[1], x[x.length] = t[2]), x[x.length] = C & 255);
-  return B !== 0 && (x[x.length] = t[0], x[x.length] = t[1], x[x.length] = t[2]), x;
+    C = E[F], C >= 161 && C <= 223 ? (B !== 2 && (B = 2, x[x.length] = e[6], x[x.length] = e[7], x[x.length] = e[8]), x[x.length] = C - 128 & 255) : C >= 128 ? (B !== 1 && (B = 1, x[x.length] = e[3], x[x.length] = e[4], x[x.length] = e[5]), C <<= 1, D = E[++F], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), x[x.length] = C & 255, x[x.length] = D & 255) : (B !== 0 && (B = 0, x[x.length] = e[0], x[x.length] = e[1], x[x.length] = e[2]), x[x.length] = C & 255);
+  return B !== 0 && (x[x.length] = e[0], x[x.length] = e[1], x[x.length] = e[2]), x;
 }
-o.SJISToJIS = Z0;
-function $0(E) {
+o.SJISToJIS = Q0;
+function W0(E) {
   for (var x = [], B = E && E.length, A = 0, F, C; A < B; A++)
     F = E[A], F >= 161 && F <= 223 ? (x[x.length] = 142, x[x.length] = F) : F >= 129 ? (C = E[++A], F <<= 1, C < 159 ? (F < 319 ? F -= 97 : F -= 225, C > 126 ? C += 96 : C += 97) : (F < 319 ? F -= 96 : F -= 224, C += 2), x[x.length] = F & 255, x[x.length] = C & 255) : x[x.length] = F & 255;
   return x;
 }
-o.SJISToEUCJP = $0;
-function z0(E) {
+o.SJISToEUCJP = W0;
+function xx(E) {
   for (var x = [], B = 0, A = E && E.length, F = 0, C, D = [
     27,
     40,
@@ -14190,52 +14193,52 @@ function z0(E) {
     C = E[F], C === 142 ? (B !== 2 && (B = 2, x[x.length] = D[6], x[x.length] = D[7], x[x.length] = D[8]), x[x.length] = E[++F] - 128 & 255) : C === 143 ? (B !== 3 && (B = 3, x[x.length] = D[9], x[x.length] = D[10], x[x.length] = D[11], x[x.length] = D[12]), x[x.length] = E[++F] - 128 & 255, x[x.length] = E[++F] - 128 & 255) : C > 142 ? (B !== 1 && (B = 1, x[x.length] = D[3], x[x.length] = D[4], x[x.length] = D[5]), x[x.length] = C - 128 & 255, x[x.length] = E[++F] - 128 & 255) : (B !== 0 && (B = 0, x[x.length] = D[0], x[x.length] = D[1], x[x.length] = D[2]), x[x.length] = C & 255);
   return B !== 0 && (x[x.length] = D[0], x[x.length] = D[1], x[x.length] = D[2]), x;
 }
-o.EUCJPToJIS = z0;
-function Q0(E) {
+o.EUCJPToJIS = xx;
+function Ex(E) {
   for (var x = [], B = E && E.length, A = 0, F, C; A < B; A++)
     F = E[A], F === 143 ? (x[x.length] = P.FALLBACK_CHARACTER, A += 2) : F > 142 ? (C = E[++A], F & 1 ? (F >>= 1, F < 111 ? F += 49 : F += 113, C > 223 ? C -= 96 : C -= 97) : (F >>= 1, F <= 111 ? F += 48 : F += 112, C -= 2), x[x.length] = F & 255, x[x.length] = C & 255) : F === 142 ? x[x.length] = E[++A] & 255 : x[x.length] = F & 255;
   return x;
 }
-o.EUCJPToSJIS = Q0;
-function H(E) {
+o.EUCJPToSJIS = Ex;
+function j(E) {
   P.init_JIS_TO_UTF8_TABLE();
-  for (var x = [], B = 0, A = E && E.length, F, C, D, t, e, r, l; B < A; B++)
-    F = E[B], F >= 161 && F <= 223 ? (D = F - 64, t = 188 | D >> 6 & 3, e = 128 | D & 63, x[x.length] = 239, x[x.length] = t & 255, x[x.length] = e & 255) : F >= 128 ? (C = F << 1, D = E[++B], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), C &= 255, r = (C << 8) + D, l = L.JIS_TO_UTF8_TABLE[r], l === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : l < 65535 ? (x[x.length] = l >> 8 & 255, x[x.length] = l & 255) : (x[x.length] = l >> 16 & 255, x[x.length] = l >> 8 & 255, x[x.length] = l & 255)) : x[x.length] = E[B] & 255;
+  for (var x = [], B = 0, A = E && E.length, F, C, D, e, t, r, l; B < A; B++)
+    F = E[B], F >= 161 && F <= 223 ? (D = F - 64, e = 188 | D >> 6 & 3, t = 128 | D & 63, x[x.length] = 239, x[x.length] = e & 255, x[x.length] = t & 255) : F >= 128 ? (C = F << 1, D = E[++B], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), C &= 255, r = (C << 8) + D, l = O.JIS_TO_UTF8_TABLE[r], l === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : l < 65535 ? (x[x.length] = l >> 8 & 255, x[x.length] = l & 255) : (x[x.length] = l >> 16 & 255, x[x.length] = l >> 8 & 255, x[x.length] = l & 255)) : x[x.length] = E[B] & 255;
   return x;
 }
-o.SJISToUTF8 = H;
-function G(E) {
-  P.init_JIS_TO_UTF8_TABLE();
-  for (var x = [], B = 0, A = E && E.length, F, C, D, t, e, r, l, i; B < A; B++)
-    F = E[B], F === 142 ? (C = E[++B] - 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : F === 143 ? (e = E[++B] - 128, r = E[++B] - 128, l = (e << 8) + r, i = L.JISX0212_TO_UTF8_TABLE[l], i === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : i < 65535 ? (x[x.length] = i >> 8 & 255, x[x.length] = i & 255) : (x[x.length] = i >> 16 & 255, x[x.length] = i >> 8 & 255, x[x.length] = i & 255)) : F >= 128 ? (l = (F - 128 << 8) + (E[++B] - 128), i = L.JIS_TO_UTF8_TABLE[l], i === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : i < 65535 ? (x[x.length] = i >> 8 & 255, x[x.length] = i & 255) : (x[x.length] = i >> 16 & 255, x[x.length] = i >> 8 & 255, x[x.length] = i & 255)) : x[x.length] = E[B] & 255;
-  return x;
-}
-o.EUCJPToUTF8 = G;
+o.SJISToUTF8 = j;
 function K(E) {
   P.init_JIS_TO_UTF8_TABLE();
-  for (var x = [], B = 0, A = 0, F = E && E.length, C, D, t, e, r; A < F; A++) {
+  for (var x = [], B = 0, A = E && E.length, F, C, D, e, t, r, l, i; B < A; B++)
+    F = E[B], F === 142 ? (C = E[++B] - 64, D = 188 | C >> 6 & 3, e = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = e & 255) : F === 143 ? (t = E[++B] - 128, r = E[++B] - 128, l = (t << 8) + r, i = O.JISX0212_TO_UTF8_TABLE[l], i === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : i < 65535 ? (x[x.length] = i >> 8 & 255, x[x.length] = i & 255) : (x[x.length] = i >> 16 & 255, x[x.length] = i >> 8 & 255, x[x.length] = i & 255)) : F >= 128 ? (l = (F - 128 << 8) + (E[++B] - 128), i = O.JIS_TO_UTF8_TABLE[l], i === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : i < 65535 ? (x[x.length] = i >> 8 & 255, x[x.length] = i & 255) : (x[x.length] = i >> 16 & 255, x[x.length] = i >> 8 & 255, x[x.length] = i & 255)) : x[x.length] = E[B] & 255;
+  return x;
+}
+o.EUCJPToUTF8 = K;
+function V(E) {
+  P.init_JIS_TO_UTF8_TABLE();
+  for (var x = [], B = 0, A = 0, F = E && E.length, C, D, e, t, r; A < F; A++) {
     for (; E[A] === 27; )
       if (E[A + 1] === 36 && E[A + 2] === 66 || E[A + 1] === 36 && E[A + 2] === 64 ? B = 1 : E[A + 1] === 40 && E[A + 2] === 73 ? B = 2 : E[A + 1] === 36 && E[A + 2] === 40 && E[A + 3] === 68 ? (B = 3, A++) : B = 0, A += 3, E[A] === void 0)
         return x;
-    B === 1 ? (e = (E[A] << 8) + E[++A], r = L.JIS_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : B === 2 ? (C = E[A] + 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : B === 3 ? (e = (E[A] << 8) + E[++A], r = L.JISX0212_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : x[x.length] = E[A] & 255;
+    B === 1 ? (t = (E[A] << 8) + E[++A], r = O.JIS_TO_UTF8_TABLE[t], r === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : B === 2 ? (C = E[A] + 64, D = 188 | C >> 6 & 3, e = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = e & 255) : B === 3 ? (t = (E[A] << 8) + E[++A], r = O.JISX0212_TO_UTF8_TABLE[t], r === void 0 ? x[x.length] = P.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : x[x.length] = E[A] & 255;
   }
   return x;
 }
-o.JISToUTF8 = K;
-function V(E, x) {
-  for (var B = [], A = 0, F = E && E.length, C, D, t, e, r, l, i = x && x.fallback; A < F; A++)
-    C = E[A], C >= 128 ? (C <= 223 ? (e = [C, E[A + 1]], r = (C << 8) + E[++A]) : C <= 239 ? (e = [C, E[A + 1], E[A + 2]], r = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (e = [C, E[A + 1], E[A + 2], E[A + 3]], r = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), l = L.UTF8_TO_JIS_TABLE[r], l == null ? i ? a0(B, e, i) : B[B.length] = P.FALLBACK_CHARACTER : l < 255 ? B[B.length] = l + 128 : (l > 65536 && (l -= 65536), D = l >> 8, t = l & 255, D & 1 ? (D >>= 1, D < 47 ? D += 113 : D -= 79, t > 95 ? t += 32 : t += 31) : (D >>= 1, D <= 47 ? D += 112 : D -= 80, t += 126), B[B.length] = D & 255, B[B.length] = t & 255)) : B[B.length] = E[A] & 255;
-  return B;
-}
-o.UTF8ToSJIS = V;
+o.JISToUTF8 = V;
 function X(E, x) {
-  for (var B = [], A = 0, F = E && E.length, C, D, t, e, r = x && x.fallback; A < F; A++)
-    C = E[A], C >= 128 ? (C <= 223 ? (D = [C, E[A + 1]], t = (C << 8) + E[++A]) : C <= 239 ? (D = [C, E[A + 1], E[A + 2]], t = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (D = [C, E[A + 1], E[A + 2], E[A + 3]], t = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), e = L.UTF8_TO_JIS_TABLE[t], e == null ? (e = L.UTF8_TO_JISX0212_TABLE[t], e == null ? r ? a0(B, D, r) : B[B.length] = P.FALLBACK_CHARACTER : (B[B.length] = 143, B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255)) : (e > 65536 && (e -= 65536), e < 255 ? (B[B.length] = 142, B[B.length] = e - 128 & 255) : (B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255))) : B[B.length] = E[A] & 255;
+  for (var B = [], A = 0, F = E && E.length, C, D, e, t, r, l, i = x && x.fallback; A < F; A++)
+    C = E[A], C >= 128 ? (C <= 223 ? (t = [C, E[A + 1]], r = (C << 8) + E[++A]) : C <= 239 ? (t = [C, E[A + 1], E[A + 2]], r = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (t = [C, E[A + 1], E[A + 2], E[A + 3]], r = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), l = O.UTF8_TO_JIS_TABLE[r], l == null ? i ? h0(B, t, i) : B[B.length] = P.FALLBACK_CHARACTER : l < 255 ? B[B.length] = l + 128 : (l > 65536 && (l -= 65536), D = l >> 8, e = l & 255, D & 1 ? (D >>= 1, D < 47 ? D += 113 : D -= 79, e > 95 ? e += 32 : e += 31) : (D >>= 1, D <= 47 ? D += 112 : D -= 80, e += 126), B[B.length] = D & 255, B[B.length] = e & 255)) : B[B.length] = E[A] & 255;
   return B;
 }
-o.UTF8ToEUCJP = X;
+o.UTF8ToSJIS = X;
 function q(E, x) {
-  for (var B = [], A = 0, F = E && E.length, C = 0, D, t, e, r, l = x && x.fallback, i = [
+  for (var B = [], A = 0, F = E && E.length, C, D, e, t, r = x && x.fallback; A < F; A++)
+    C = E[A], C >= 128 ? (C <= 223 ? (D = [C, E[A + 1]], e = (C << 8) + E[++A]) : C <= 239 ? (D = [C, E[A + 1], E[A + 2]], e = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (D = [C, E[A + 1], E[A + 2], E[A + 3]], e = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), t = O.UTF8_TO_JIS_TABLE[e], t == null ? (t = O.UTF8_TO_JISX0212_TABLE[e], t == null ? r ? h0(B, D, r) : B[B.length] = P.FALLBACK_CHARACTER : (B[B.length] = 143, B[B.length] = (t >> 8) - 128 & 255, B[B.length] = (t & 255) - 128 & 255)) : (t > 65536 && (t -= 65536), t < 255 ? (B[B.length] = 142, B[B.length] = t - 128 & 255) : (B[B.length] = (t >> 8) - 128 & 255, B[B.length] = (t & 255) - 128 & 255))) : B[B.length] = E[A] & 255;
+  return B;
+}
+o.UTF8ToEUCJP = q;
+function Z(E, x) {
+  for (var B = [], A = 0, F = E && E.length, C = 0, D, e, t, r, l = x && x.fallback, i = [
     27,
     40,
     66,
@@ -14250,269 +14253,269 @@ function q(E, x) {
     40,
     68
   ]; C < F; C++)
-    D = E[C], D < 128 ? (A !== 0 && (A = 0, B[B.length] = i[0], B[B.length] = i[1], B[B.length] = i[2]), B[B.length] = D & 255) : (D <= 223 ? (t = [D, E[C + 1]], e = (D << 8) + E[++C]) : D <= 239 ? (t = [D, E[C + 1], E[C + 2]], e = (D << 16) + (E[++C] << 8) + (E[++C] & 255)) : (t = [D, E[C + 1], E[C + 2], E[C + 3]], e = (D << 24) + (E[++C] << 16) + (E[++C] << 8) + (E[++C] & 255)), r = L.UTF8_TO_JIS_TABLE[e], r == null ? (r = L.UTF8_TO_JISX0212_TABLE[e], r == null ? (A !== 0 && (A = 0, B[B.length] = i[0], B[B.length] = i[1], B[B.length] = i[2]), l ? a0(B, t, l) : B[B.length] = P.FALLBACK_CHARACTER) : (A !== 3 && (A = 3, B[B.length] = i[9], B[B.length] = i[10], B[B.length] = i[11], B[B.length] = i[12]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)) : (r > 65536 && (r -= 65536), r < 255 ? (A !== 2 && (A = 2, B[B.length] = i[6], B[B.length] = i[7], B[B.length] = i[8]), B[B.length] = r & 255) : (A !== 1 && (A = 1, B[B.length] = i[3], B[B.length] = i[4], B[B.length] = i[5]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)));
+    D = E[C], D < 128 ? (A !== 0 && (A = 0, B[B.length] = i[0], B[B.length] = i[1], B[B.length] = i[2]), B[B.length] = D & 255) : (D <= 223 ? (e = [D, E[C + 1]], t = (D << 8) + E[++C]) : D <= 239 ? (e = [D, E[C + 1], E[C + 2]], t = (D << 16) + (E[++C] << 8) + (E[++C] & 255)) : (e = [D, E[C + 1], E[C + 2], E[C + 3]], t = (D << 24) + (E[++C] << 16) + (E[++C] << 8) + (E[++C] & 255)), r = O.UTF8_TO_JIS_TABLE[t], r == null ? (r = O.UTF8_TO_JISX0212_TABLE[t], r == null ? (A !== 0 && (A = 0, B[B.length] = i[0], B[B.length] = i[1], B[B.length] = i[2]), l ? h0(B, e, l) : B[B.length] = P.FALLBACK_CHARACTER) : (A !== 3 && (A = 3, B[B.length] = i[9], B[B.length] = i[10], B[B.length] = i[11], B[B.length] = i[12]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)) : (r > 65536 && (r -= 65536), r < 255 ? (A !== 2 && (A = 2, B[B.length] = i[6], B[B.length] = i[7], B[B.length] = i[8]), B[B.length] = r & 255) : (A !== 1 && (A = 1, B[B.length] = i[3], B[B.length] = i[4], B[B.length] = i[5]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)));
   return A !== 0 && (B[B.length] = i[0], B[B.length] = i[1], B[B.length] = i[2]), B;
 }
-o.UTF8ToJIS = q;
-function R(E) {
+o.UTF8ToJIS = Z;
+function w(E) {
   for (var x = [], B = 0, A = E && E.length, F, C; B < A; B++)
     F = E[B], F >= 55296 && F <= 56319 && B + 1 < A && (C = E[B + 1], C >= 56320 && C <= 57343 && (F = (F - 55296) * 1024 + C - 56320 + 65536, B++)), F < 128 ? x[x.length] = F : F < 2048 ? (x[x.length] = 192 | F >> 6 & 31, x[x.length] = 128 | F & 63) : F < 65536 ? (x[x.length] = 224 | F >> 12 & 15, x[x.length] = 128 | F >> 6 & 63, x[x.length] = 128 | F & 63) : F < 2097152 && (x[x.length] = 240 | F >> 18 & 15, x[x.length] = 128 | F >> 12 & 63, x[x.length] = 128 | F >> 6 & 63, x[x.length] = 128 | F & 63);
   return x;
 }
-o.UNICODEToUTF8 = R;
-function k(E, x) {
-  for (var B = [], A = 0, F = E && E.length, C, D, t, e, r, l, i = x && x.ignoreSurrogatePair; A < F; )
-    D = E[A++], C = D >> 4, C >= 0 && C <= 7 ? l = D : C === 12 || C === 13 ? (t = E[A++], l = (D & 31) << 6 | t & 63) : C === 14 ? (t = E[A++], e = E[A++], l = (D & 15) << 12 | (t & 63) << 6 | e & 63) : C === 15 && (t = E[A++], e = E[A++], r = E[A++], l = (D & 7) << 18 | (t & 63) << 12 | (e & 63) << 6 | r & 63), l <= 65535 || i ? B[B.length] = l : (l -= 65536, B[B.length] = (l >> 10) + 55296, B[B.length] = l % 1024 + 56320);
+o.UNICODEToUTF8 = w;
+function R(E, x) {
+  for (var B = [], A = 0, F = E && E.length, C, D, e, t, r, l, i = x && x.ignoreSurrogatePair; A < F; )
+    D = E[A++], C = D >> 4, C >= 0 && C <= 7 ? l = D : C === 12 || C === 13 ? (e = E[A++], l = (D & 31) << 6 | e & 63) : C === 14 ? (e = E[A++], t = E[A++], l = (D & 15) << 12 | (e & 63) << 6 | t & 63) : C === 15 && (e = E[A++], t = E[A++], r = E[A++], l = (D & 7) << 18 | (e & 63) << 12 | (t & 63) << 6 | r & 63), l <= 65535 || i ? B[B.length] = l : (l -= 65536, B[B.length] = (l >> 10) + 55296, B[B.length] = l % 1024 + 56320);
   return B;
 }
-o.UTF8ToUNICODE = k;
-function T0(E, x) {
+o.UTF8ToUNICODE = R;
+function g0(E, x) {
   var B;
   if (x && x.bom) {
     var A = x.bom;
-    s0.isString(A) || (A = "BE");
+    o0.isString(A) || (A = "BE");
     var F, C;
-    A.charAt(0).toUpperCase() === "B" ? (F = [254, 255], C = W(E)) : (F = [255, 254], C = l0(E)), B = [], B[0] = F[0], B[1] = F[1];
-    for (var D = 0, t = C.length; D < t; D++)
+    A.charAt(0).toUpperCase() === "B" ? (F = [254, 255], C = x0(E)) : (F = [255, 254], C = a0(E)), B = [], B[0] = F[0], B[1] = F[1];
+    for (var D = 0, e = C.length; D < e; D++)
       B[B.length] = C[D];
   } else
-    B = W(E);
+    B = x0(E);
   return B;
 }
-o.UNICODEToUTF16 = T0;
-function W(E) {
+o.UNICODEToUTF16 = g0;
+function x0(E) {
   for (var x = [], B = 0, A = E && E.length, F; B < A; )
     F = E[B++], F <= 255 ? (x[x.length] = 0, x[x.length] = F) : F <= 65535 && (x[x.length] = F >> 8 & 255, x[x.length] = F & 255);
   return x;
 }
-o.UNICODEToUTF16BE = W;
-function l0(E) {
+o.UNICODEToUTF16BE = x0;
+function a0(E) {
   for (var x = [], B = 0, A = E && E.length, F; B < A; )
     F = E[B++], F <= 255 ? (x[x.length] = F, x[x.length] = 0) : F <= 65535 && (x[x.length] = F & 255, x[x.length] = F >> 8 & 255);
   return x;
 }
-o.UNICODEToUTF16LE = l0;
-function g0(E) {
+o.UNICODEToUTF16LE = a0;
+function p0(E) {
   var x = [], B = 0, A = E && E.length, F, C;
   for (A >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (B = 2); B < A; )
     F = E[B++], C = E[B++], F === 0 ? x[x.length] = C : x[x.length] = (F & 255) << 8 | C & 255;
   return x;
 }
-o.UTF16BEToUNICODE = g0;
-function S0(E) {
+o.UTF16BEToUNICODE = p0;
+function v0(E) {
   var x = [], B = 0, A = E && E.length, F, C;
   for (A >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (B = 2); B < A; )
     F = E[B++], C = E[B++], C === 0 ? x[x.length] = F : x[x.length] = (C & 255) << 8 | F & 255;
   return x;
 }
-o.UTF16LEToUNICODE = S0;
-function p0(E) {
-  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, t; B < A; ) {
-    if (D = E[B++], t = E[B++], C && B === 2) {
-      C = !1, D === 254 && t === 255 ? F = !1 : D === 255 && t === 254 ? F = !0 : (F = o0.isUTF16LE(E), B = 0);
+o.UTF16LEToUNICODE = v0;
+function S0(E) {
+  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, e; B < A; ) {
+    if (D = E[B++], e = E[B++], C && B === 2) {
+      C = !1, D === 254 && e === 255 ? F = !1 : D === 255 && e === 254 ? F = !0 : (F = l0.isUTF16LE(E), B = 0);
       continue;
     }
-    F ? t === 0 ? x[x.length] = D : x[x.length] = (t & 255) << 8 | D & 255 : D === 0 ? x[x.length] = t : x[x.length] = (D & 255) << 8 | t & 255;
+    F ? e === 0 ? x[x.length] = D : x[x.length] = (e & 255) << 8 | D & 255 : D === 0 ? x[x.length] = e : x[x.length] = (D & 255) << 8 | e & 255;
   }
   return x;
 }
-o.UTF16ToUNICODE = p0;
-function W0(E) {
-  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, t; B < A; ) {
-    if (D = E[B++], t = E[B++], C && B === 2) {
-      C = !1, D === 254 && t === 255 ? F = !1 : D === 255 && t === 254 ? F = !0 : (F = o0.isUTF16LE(E), B = 0);
+o.UTF16ToUNICODE = S0;
+function Bx(E) {
+  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, e; B < A; ) {
+    if (D = E[B++], e = E[B++], C && B === 2) {
+      C = !1, D === 254 && e === 255 ? F = !1 : D === 255 && e === 254 ? F = !0 : (F = l0.isUTF16LE(E), B = 0);
       continue;
     }
-    F ? (x[x.length] = t, x[x.length] = D) : (x[x.length] = D, x[x.length] = t);
+    F ? (x[x.length] = e, x[x.length] = D) : (x[x.length] = D, x[x.length] = e);
   }
   return x;
 }
-o.UTF16ToUTF16BE = W0;
-function xx(E, x) {
+o.UTF16ToUTF16BE = Bx;
+function Ax(E, x) {
   var B = !1, A;
   if (x && x.bom) {
     var F = x.bom;
-    s0.isString(F) || (F = "BE"), F.charAt(0).toUpperCase() === "B" ? A = [254, 255] : (A = [255, 254], B = !0);
+    o0.isString(F) || (F = "BE"), F.charAt(0).toUpperCase() === "B" ? A = [254, 255] : (A = [255, 254], B = !0);
   }
-  var C = [], D = E && E.length, t = 0;
-  D >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (t = 2), A && (C[0] = A[0], C[1] = A[1]);
-  for (var e, r; t < D; )
-    e = E[t++], r = E[t++], B ? (C[C.length] = r, C[C.length] = e) : (C[C.length] = e, C[C.length] = r);
+  var C = [], D = E && E.length, e = 0;
+  D >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (e = 2), A && (C[0] = A[0], C[1] = A[1]);
+  for (var t, r; e < D; )
+    t = E[e++], r = E[e++], B ? (C[C.length] = r, C[C.length] = t) : (C[C.length] = t, C[C.length] = r);
   return C;
 }
-o.UTF16BEToUTF16 = xx;
-function Ex(E) {
-  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, t; B < A; ) {
-    if (D = E[B++], t = E[B++], C && B === 2) {
-      C = !1, D === 254 && t === 255 ? F = !1 : D === 255 && t === 254 ? F = !0 : (F = o0.isUTF16LE(E), B = 0);
+o.UTF16BEToUTF16 = Ax;
+function Cx(E) {
+  for (var x = [], B = 0, A = E && E.length, F = !1, C = !0, D, e; B < A; ) {
+    if (D = E[B++], e = E[B++], C && B === 2) {
+      C = !1, D === 254 && e === 255 ? F = !1 : D === 255 && e === 254 ? F = !0 : (F = l0.isUTF16LE(E), B = 0);
       continue;
     }
-    F ? (x[x.length] = D, x[x.length] = t) : (x[x.length] = t, x[x.length] = D);
+    F ? (x[x.length] = D, x[x.length] = e) : (x[x.length] = e, x[x.length] = D);
   }
   return x;
 }
-o.UTF16ToUTF16LE = Ex;
-function Bx(E, x) {
+o.UTF16ToUTF16LE = Cx;
+function Fx(E, x) {
   var B = !1, A;
   if (x && x.bom) {
     var F = x.bom;
-    s0.isString(F) || (F = "BE"), F.charAt(0).toUpperCase() === "B" ? A = [254, 255] : (A = [255, 254], B = !0);
+    o0.isString(F) || (F = "BE"), F.charAt(0).toUpperCase() === "B" ? A = [254, 255] : (A = [255, 254], B = !0);
   }
-  var C = [], D = E && E.length, t = 0;
-  D >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (t = 2), A && (C[0] = A[0], C[1] = A[1]);
-  for (var e, r; t < D; )
-    e = E[t++], r = E[t++], B ? (C[C.length] = e, C[C.length] = r) : (C[C.length] = r, C[C.length] = e);
+  var C = [], D = E && E.length, e = 0;
+  D >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (e = 2), A && (C[0] = A[0], C[1] = A[1]);
+  for (var t, r; e < D; )
+    t = E[e++], r = E[e++], B ? (C[C.length] = t, C[C.length] = r) : (C[C.length] = r, C[C.length] = t);
   return C;
 }
-o.UTF16LEToUTF16 = Bx;
-function v0(E) {
+o.UTF16LEToUTF16 = Fx;
+function y0(E) {
   var x = [], B = 0, A = E && E.length, F, C;
   for (A >= 2 && (E[0] === 254 && E[1] === 255 || E[0] === 255 && E[1] === 254) && (B = 2); B < A; )
     F = E[B++], C = E[B++], x[x.length] = C, x[x.length] = F;
   return x;
 }
-o.UTF16BEToUTF16LE = v0;
-function Ax(E) {
-  return v0(E);
+o.UTF16BEToUTF16LE = y0;
+function Dx(E) {
+  return y0(E);
 }
-o.UTF16LEToUTF16BE = Ax;
-function Cx(E, x) {
-  return q(R(E), x);
+o.UTF16LEToUTF16BE = Dx;
+function ex(E, x) {
+  return Z(w(E), x);
 }
-o.UNICODEToJIS = Cx;
-function Fx(E) {
-  return k(K(E));
+o.UNICODEToJIS = ex;
+function tx(E) {
+  return R(V(E));
 }
-o.JISToUNICODE = Fx;
-function Dx(E, x) {
-  return X(R(E), x);
+o.JISToUNICODE = tx;
+function rx(E, x) {
+  return q(w(E), x);
 }
-o.UNICODEToEUCJP = Dx;
-function ex(E) {
-  return k(G(E));
+o.UNICODEToEUCJP = rx;
+function ix(E) {
+  return R(K(E));
 }
-o.EUCJPToUNICODE = ex;
-function tx(E, x) {
-  return V(R(E), x);
-}
-o.UNICODEToSJIS = tx;
-function rx(E) {
-  return k(H(E));
-}
-o.SJISToUNICODE = rx;
-function x0(E, x) {
-  return T0(k(E), x);
-}
-o.UTF8ToUTF16 = x0;
-function E0(E) {
-  return R(p0(E));
-}
-o.UTF16ToUTF8 = E0;
-function B0(E) {
-  return W(k(E));
-}
-o.UTF8ToUTF16BE = B0;
-function A0(E) {
-  return R(g0(E));
-}
-o.UTF16BEToUTF8 = A0;
-function C0(E) {
-  return l0(k(E));
-}
-o.UTF8ToUTF16LE = C0;
-function F0(E) {
-  return R(S0(E));
-}
-o.UTF16LEToUTF8 = F0;
-function ix(E, x) {
-  return x0(K(E), x);
-}
-o.JISToUTF16 = ix;
+o.EUCJPToUNICODE = ix;
 function nx(E, x) {
-  return q(E0(E), x);
+  return X(w(E), x);
 }
-o.UTF16ToJIS = nx;
+o.UNICODEToSJIS = nx;
 function sx(E) {
-  return B0(K(E));
+  return R(j(E));
 }
-o.JISToUTF16BE = sx;
+o.SJISToUNICODE = sx;
+function E0(E, x) {
+  return g0(R(E), x);
+}
+o.UTF8ToUTF16 = E0;
+function B0(E) {
+  return w(S0(E));
+}
+o.UTF16ToUTF8 = B0;
+function A0(E) {
+  return x0(R(E));
+}
+o.UTF8ToUTF16BE = A0;
+function C0(E) {
+  return w(p0(E));
+}
+o.UTF16BEToUTF8 = C0;
+function F0(E) {
+  return a0(R(E));
+}
+o.UTF8ToUTF16LE = F0;
+function D0(E) {
+  return w(v0(E));
+}
+o.UTF16LEToUTF8 = D0;
 function ox(E, x) {
-  return q(A0(E), x);
+  return E0(V(E), x);
 }
-o.UTF16BEToJIS = ox;
-function lx(E) {
-  return C0(K(E));
+o.JISToUTF16 = ox;
+function lx(E, x) {
+  return Z(B0(E), x);
 }
-o.JISToUTF16LE = lx;
-function ax(E, x) {
-  return q(F0(E), x);
+o.UTF16ToJIS = lx;
+function ax(E) {
+  return A0(V(E));
 }
-o.UTF16LEToJIS = ax;
+o.JISToUTF16BE = ax;
 function hx(E, x) {
-  return x0(G(E), x);
+  return Z(C0(E), x);
 }
-o.EUCJPToUTF16 = hx;
-function _x(E, x) {
-  return X(E0(E), x);
-}
-o.UTF16ToEUCJP = _x;
+o.UTF16BEToJIS = hx;
 function ux(E) {
-  return B0(G(E));
+  return F0(V(E));
 }
-o.EUCJPToUTF16BE = ux;
+o.JISToUTF16LE = ux;
+function _x(E, x) {
+  return Z(D0(E), x);
+}
+o.UTF16LEToJIS = _x;
 function fx(E, x) {
-  return X(A0(E), x);
+  return E0(K(E), x);
 }
-o.UTF16BEToEUCJP = fx;
-function mx(E) {
-  return C0(G(E));
-}
-o.EUCJPToUTF16LE = mx;
+o.EUCJPToUTF16 = fx;
 function cx(E, x) {
-  return X(F0(E), x);
+  return q(B0(E), x);
 }
-o.UTF16LEToEUCJP = cx;
+o.UTF16ToEUCJP = cx;
+function mx(E) {
+  return A0(K(E));
+}
+o.EUCJPToUTF16BE = mx;
 function Tx(E, x) {
-  return x0(H(E), x);
+  return q(C0(E), x);
 }
-o.SJISToUTF16 = Tx;
-function gx(E, x) {
-  return V(E0(E), x);
+o.UTF16BEToEUCJP = Tx;
+function gx(E) {
+  return F0(K(E));
 }
-o.UTF16ToSJIS = gx;
-function Sx(E) {
-  return B0(H(E));
-}
-o.SJISToUTF16BE = Sx;
+o.EUCJPToUTF16LE = gx;
 function px(E, x) {
-  return V(A0(E), x);
+  return q(D0(E), x);
 }
-o.UTF16BEToSJIS = px;
-function vx(E) {
-  return C0(H(E));
+o.UTF16LEToEUCJP = px;
+function vx(E, x) {
+  return E0(j(E), x);
 }
-o.SJISToUTF16LE = vx;
+o.SJISToUTF16 = vx;
+function Sx(E, x) {
+  return X(B0(E), x);
+}
+o.UTF16ToSJIS = Sx;
+function yx(E) {
+  return A0(j(E));
+}
+o.SJISToUTF16BE = yx;
 function Ix(E, x) {
-  return V(F0(E), x);
+  return X(C0(E), x);
 }
-o.UTF16LEToSJIS = Ix;
-function a0(E, x, B) {
+o.UTF16BEToSJIS = Ix;
+function Px(E) {
+  return F0(j(E));
+}
+o.SJISToUTF16LE = Px;
+function Ux(E, x) {
+  return X(D0(E), x);
+}
+o.UTF16LEToSJIS = Ux;
+function h0(E, x, B) {
   switch (B) {
     case "html-entity":
     case "html-entity-hex":
-      var A = k(x, { ignoreSurrogatePair: !0 })[0];
+      var A = R(x, { ignoreSurrogatePair: !0 })[0];
       if (A) {
         E[E.length] = 38, E[E.length] = 35;
         var F = B.slice(-3) === "hex" ? 16 : 10;
         F === 16 && (E[E.length] = 120);
-        for (var C = A.toString(F), D = 0, t = C.length; D < t; D++)
+        for (var C = A.toString(F), D = 0, e = C.length; D < e; D++)
           E[E.length] = C.charCodeAt(D);
         E[E.length] = 59;
       }
   }
 }
-var Z = {};
-Z.HANKANA_TABLE = {
+var $ = {};
+$.HANKANA_TABLE = {
   12289: 65380,
   12290: 65377,
   12300: 65378,
@@ -14577,13 +14580,13 @@ Z.HANKANA_TABLE = {
   12539: 65381,
   12540: 65392
 };
-Z.HANKANA_SONANTS = {
+$.HANKANA_SONANTS = {
   12532: 65395,
   12535: 65436,
   12538: 65382
 };
-Z.HANKANA_MARKS = [65438, 65439];
-Z.ZENKANA_TABLE = [
+$.HANKANA_MARKS = [65438, 65439];
+$.ZENKANA_TABLE = [
   12290,
   12300,
   12301,
@@ -14648,25 +14651,25 @@ Z.ZENKANA_TABLE = [
   12443,
   12444
 ];
-const yx = "encoding-japanese", Px = "2.0.0", Ux = "Convert or detect character encoding in JavaScript", Mx = "src/index.js", bx = [
+const Mx = "encoding-japanese", bx = "2.0.0", Lx = "Convert or detect character encoding in JavaScript", kx = "src/index.js", Ox = [
   "encoding.js",
   "encoding.min.js",
   "encoding.min.js.map",
   "src/*"
-], Lx = {
+], Nx = {
   build: "npm run compile && npm run minify",
   compile: "browserify src/index.js -o encoding.js -s Encoding -p [ bannerify --file src/banner.js ] --no-bundle-external --bare",
   minify: `uglifyjs encoding.js -o encoding.min.js --source-map "url='encoding.min.js.map'" --comments -c -m -b ascii_only=true,beautify=false`,
   test: "./node_modules/.bin/eslint . && npm run build && mocha tests/test",
   watch: "watchify src/index.js -o encoding.js -s Encoding -p [ bannerify --file src/banner.js ] --no-bundle-external --bare --poll=300 -v"
-}, Ox = {
+}, Rx = {
   node: ">=8.10.0"
-}, kx = {
+}, wx = {
   type: "git",
   url: "https://github.com/polygonplanet/encoding.js.git"
-}, Nx = "polygonplanet <polygon.planet.aqua@gmail.com>", Rx = "MIT", Jx = {
+}, Jx = "polygonplanet <polygon.planet.aqua@gmail.com>", dx = "MIT", Yx = {
   url: "https://github.com/polygonplanet/encoding.js/issues"
-}, wx = "https://github.com/polygonplanet/encoding.js", dx = [
+}, Hx = "https://github.com/polygonplanet/encoding.js", Gx = [
   "base64",
   "charset",
   "convert",
@@ -14686,7 +14689,7 @@ const yx = "encoding-japanese", Px = "2.0.0", Ux = "Convert or detect character 
   "utf-16",
   "utf-32",
   "utf-8"
-], Yx = {}, jx = {
+], jx = {}, Kx = {
   bannerify: "^1.0.1",
   browserify: "^17.0.0",
   eslint: "^8.12.0",
@@ -14696,34 +14699,34 @@ const yx = "encoding-japanese", Px = "2.0.0", Ux = "Convert or detect character 
   "uglify-js": "^3.15.3",
   uglifyify: "^5.0.2",
   watchify: "^4.0.0"
-}, Hx = {
+}, Vx = {
   transform: [
     "package-json-versionify"
   ]
-}, Gx = {
-  name: yx,
-  version: Px,
-  description: Ux,
-  main: Mx,
-  files: bx,
-  scripts: Lx,
-  engines: Ox,
-  repository: kx,
-  author: Nx,
-  license: Rx,
-  bugs: Jx,
-  homepage: wx,
-  keywords: dx,
-  dependencies: Yx,
-  devDependencies: jx,
-  browserify: Hx
+}, Xx = {
+  name: Mx,
+  version: bx,
+  description: Lx,
+  main: kx,
+  files: Ox,
+  scripts: Nx,
+  engines: Rx,
+  repository: wx,
+  author: Jx,
+  license: dx,
+  bugs: Yx,
+  homepage: Hx,
+  keywords: Gx,
+  dependencies: jx,
+  devDependencies: Kx,
+  browserify: Vx
 };
-var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.prototype.hasOwnProperty, z = {
-  version: Vx,
+var qx = s0(), h = n0(), f0 = U, c0 = o, d = $, Zx = Xx.version, m0 = Object.prototype.hasOwnProperty, Q = {
+  version: Zx,
   /**
    * Encoding orders
    */
-  orders: Kx.EncodingOrders,
+  orders: qx.EncodingOrders,
   /**
    * Detects character encoding
    *
@@ -14738,12 +14741,12 @@ var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
   detect: function(E, x) {
     if (E == null || E.length === 0)
       return !1;
-    h.isObject(x) && !h.isArray(x) && (x = x.encoding), h.isString(E) && (E = h.stringToBuffer(E)), x == null ? x = z.orders : h.isString(x) && (x = x.toUpperCase(), x === "AUTO" ? x = z.orders : ~x.indexOf(",") ? x = x.split(/\s*,\s*/) : x = [x]);
+    h.isObject(x) && !h.isArray(x) && (x = x.encoding), h.isString(E) && (E = h.stringToBuffer(E)), x == null ? x = Q.orders : h.isString(x) && (x = x.toUpperCase(), x === "AUTO" ? x = Q.orders : ~x.indexOf(",") ? x = x.split(/\s*,\s*/) : x = [x]);
     for (var B = x.length, A, F, C, D = 0; D < B; D++)
       if (A = x[D], F = h.canonicalizeEncodingName(A), !!F) {
-        if (C = "is" + F, !m0.call(u0, C))
+        if (C = "is" + F, !m0.call(f0, C))
           throw new Error("Undefined encoding: " + A);
-        if (u0[C](E))
+        if (f0[C](E))
           return F;
       }
     return !1;
@@ -14764,9 +14767,9 @@ var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
     var A, F, C;
     h.isObject(x) ? (C = x, B = C.from, x = C.to, C.type && (F = C.type)) : C = {}, h.isString(E) ? (F = F || "string", E = h.stringToBuffer(E)) : (E == null || E.length === 0) && (E = []);
     var D;
-    B != null && h.isString(B) && B.toUpperCase() !== "AUTO" && !~B.indexOf(",") ? D = h.canonicalizeEncodingName(B) : D = z.detect(E);
-    var t = h.canonicalizeEncodingName(x), e = D + "To" + t;
-    switch (m0.call(f0, e) ? A = f0[e](E, C) : A = E, ("" + F).toLowerCase()) {
+    B != null && h.isString(B) && B.toUpperCase() !== "AUTO" && !~B.indexOf(",") ? D = h.canonicalizeEncodingName(B) : D = Q.detect(E);
+    var e = h.canonicalizeEncodingName(x), t = D + "To" + e;
+    switch (m0.call(c0, t) ? A = c0[t](E, C) : A = E, ("" + F).toLowerCase()) {
       case "string":
         return h.codeToString_fast(A);
       case "arraybuffer":
@@ -14932,12 +14935,12 @@ var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
   toHankanaCase: function(E) {
     var x = !1;
     h.isString(E) && (x = !0, E = h.stringToBuffer(E));
-    for (var B = [], A = E && E.length, F = 0, C, D, t; F < A; ) {
-      if (C = E[F++], C >= 12289 && C <= 12540 && (t = w.HANKANA_TABLE[C], t !== void 0)) {
-        B[B.length] = t;
+    for (var B = [], A = E && E.length, F = 0, C, D, e; F < A; ) {
+      if (C = E[F++], C >= 12289 && C <= 12540 && (e = d.HANKANA_TABLE[C], e !== void 0)) {
+        B[B.length] = e;
         continue;
       }
-      C === 12532 || C === 12535 || C === 12538 ? (B[B.length] = w.HANKANA_SONANTS[C], B[B.length] = 65438) : C >= 12459 && C <= 12489 ? (B[B.length] = w.HANKANA_TABLE[C - 1], B[B.length] = 65438) : C >= 12495 && C <= 12509 ? (D = C % 3, B[B.length] = w.HANKANA_TABLE[C - D], B[B.length] = w.HANKANA_MARKS[D - 1]) : B[B.length] = C;
+      C === 12532 || C === 12535 || C === 12538 ? (B[B.length] = d.HANKANA_SONANTS[C], B[B.length] = 65438) : C >= 12459 && C <= 12489 ? (B[B.length] = d.HANKANA_TABLE[C - 1], B[B.length] = 65438) : C >= 12495 && C <= 12509 ? (D = C % 3, B[B.length] = d.HANKANA_TABLE[C - D], B[B.length] = d.HANKANA_MARKS[D - 1]) : B[B.length] = C;
     }
     return x ? h.codeToString_fast(B) : B;
   },
@@ -14956,9 +14959,9 @@ var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
   toZenkanaCase: function(E) {
     var x = !1;
     h.isString(E) && (x = !0, E = h.stringToBuffer(E));
-    var B = [], A = E && E.length, F = 0, C, D, t;
+    var B = [], A = E && E.length, F = 0, C, D, e;
     for (F = 0; F < A; F++)
-      C = E[F], C > 65376 && C < 65440 && (D = w.ZENKANA_TABLE[C - 65377], F + 1 < A && (t = E[F + 1], t === 65438 && C === 65395 ? (D = 12532, F++) : t === 65438 && C === 65436 ? (D = 12535, F++) : t === 65438 && C === 65382 ? (D = 12538, F++) : t === 65438 && (C > 65397 && C < 65413 || C > 65417 && C < 65423) ? (D++, F++) : t === 65439 && C > 65417 && C < 65423 && (D += 2, F++)), C = D), B[B.length] = C;
+      C = E[F], C > 65376 && C < 65440 && (D = d.ZENKANA_TABLE[C - 65377], F + 1 < A && (e = E[F + 1], e === 65438 && C === 65395 ? (D = 12532, F++) : e === 65438 && C === 65436 ? (D = 12535, F++) : e === 65438 && C === 65382 ? (D = 12538, F++) : e === 65438 && (C > 65397 && C < 65413 || C > 65417 && C < 65423) ? (D++, F++) : e === 65439 && C > 65417 && C < 65423 && (D += 2, F++)), C = D), B[B.length] = C;
     return x ? h.codeToString_fast(B) : B;
   },
   /**
@@ -14991,8 +14994,8 @@ var Kx = n0(), h = i0(), u0 = U, f0 = o, w = Z, Vx = Gx.version, m0 = Object.pro
       F = E[A++], F === 32 && (F = 12288), x[x.length] = F;
     return x;
   }
-}, Xx = z;
-const t0 = /* @__PURE__ */ P0(Xx);
+}, $x = Q;
+const r0 = /* @__PURE__ */ b0($x);
 /*!
  * miz_music
  * Copyright (c) 2015 MizunagiKB
@@ -15027,26 +15030,26 @@ let a;
     x.CMIDIMusic = F;
   })(E.music || (E.music = {}));
 })(a || (a = {}));
-let S;
+let v;
 (function(E) {
   E[E.E_EXTRACT_TYPE_I16_LE = 0] = "E_EXTRACT_TYPE_I16_LE", E[E.E_EXTRACT_TYPE_U16_LE = 1] = "E_EXTRACT_TYPE_U16_LE", E[E.E_EXTRACT_TYPE_I16 = 2] = "E_EXTRACT_TYPE_I16", E[E.E_EXTRACT_TYPE_U16 = 3] = "E_EXTRACT_TYPE_U16", E[E.E_EXTRACT_TYPE_I32 = 4] = "E_EXTRACT_TYPE_I32";
-})(S || (S = {}));
-var qx = function() {
+})(v || (v = {}));
+var zx = function() {
   function E(x) {
     this.m_aryData = new Uint8Array(x);
   }
   return E.prototype.extract_number = function(x, B) {
     var A = 0;
     switch (x) {
-      case S.E_EXTRACT_TYPE_I16_LE:
-      case S.E_EXTRACT_TYPE_U16_LE:
-        A |= this.m_aryData[B + 0], A |= this.m_aryData[B + 1] << 8, x == S.E_EXTRACT_TYPE_I16_LE && 4096 & A && (A -= 65536);
+      case v.E_EXTRACT_TYPE_I16_LE:
+      case v.E_EXTRACT_TYPE_U16_LE:
+        A |= this.m_aryData[B + 0], A |= this.m_aryData[B + 1] << 8, x == v.E_EXTRACT_TYPE_I16_LE && 4096 & A && (A -= 65536);
         break;
-      case S.E_EXTRACT_TYPE_I16:
-      case S.E_EXTRACT_TYPE_U16:
-        A |= this.m_aryData[B + 0] << 8, A |= this.m_aryData[B + 1], x == S.E_EXTRACT_TYPE_I16 && 4096 & A && (A -= 65536);
+      case v.E_EXTRACT_TYPE_I16:
+      case v.E_EXTRACT_TYPE_U16:
+        A |= this.m_aryData[B + 0] << 8, A |= this.m_aryData[B + 1], x == v.E_EXTRACT_TYPE_I16 && 4096 & A && (A -= 65536);
         break;
-      case S.E_EXTRACT_TYPE_I32:
+      case v.E_EXTRACT_TYPE_I32:
         A |= this.m_aryData[B + 0] << 24, A |= this.m_aryData[B + 1] << 16, A |= this.m_aryData[B + 2] << 8, A |= this.m_aryData[B + 3];
     }
     return A;
@@ -15057,14 +15060,14 @@ var qx = function() {
     return A;
   }, E;
 }();
-let Zx = globalThis && globalThis.__extends || function(E, x) {
+let Qx = globalThis && globalThis.__extends || function(E, x) {
   for (var B in x)
     x.hasOwnProperty(B) && (E[B] = x[B]);
   function A() {
     this.constructor = E;
   }
   E.prototype = x === null ? Object.create(x) : (A.prototype = x.prototype, new A());
-}, r0 = function() {
+}, i0 = function() {
   function E(x, B, A) {
     x === void 0 && (x = null), B === void 0 && (B = 0), A === void 0 && (A = 0), this.m_oRCPStep = null, this.m_aryData = [], this.m_nStep = 0, this.m_nSequence = 0, this.m_nCh = 0, this.m_nGate = 0, this.m_nVelo = 0, this.set_param(x, B, A);
   }
@@ -15097,16 +15100,16 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
           B.push(C), x += C;
       }
     }
-    return (A = new Q()).m_nStep = this.m_nStep, A.m_nSequence = this.m_nSequence, A.m_oCMIDIData = new a.music.CMIDIData(), A.m_oCMIDIData.m_eMMsg = a.music.E_MIDI_MSG.SYS_EX_F0, A.m_oCMIDIData.m_eMEvt = 0, A.m_oCMIDIData.m_aryValue = B, A;
+    return (A = new W()).m_nStep = this.m_nStep, A.m_nSequence = this.m_nSequence, A.m_oCMIDIData = new a.music.CMIDIData(), A.m_oCMIDIData.m_eMMsg = a.music.E_MIDI_MSG.SYS_EX_F0, A.m_oCMIDIData.m_eMEvt = 0, A.m_oCMIDIData.m_aryValue = B, A;
   }, E;
-}(), $x = function(E) {
+}(), Wx = function(E) {
   function x() {
     E.apply(this, arguments), this.m_nDevice = 0, this.m_nModel = 0, this.m_nBaseAddr1 = 0, this.m_nBaseAddr2 = 0, this.m_nOffset = 0, this.m_nParam = 0;
   }
-  return Zx(x, E), x.prototype.build = function() {
+  return Qx(x, E), x.prototype.build = function() {
     return this.m_aryData = [], this.m_aryData.push(65), this.m_aryData.push(this.m_nDevice), this.m_aryData.push(this.m_nModel), this.m_aryData.push(18), this.m_aryData.push(131), this.m_aryData.push(this.m_nBaseAddr1), this.m_aryData.push(this.m_nBaseAddr2), this.m_aryData.push(this.m_nOffset), this.m_aryData.push(this.m_nParam), this.m_aryData.push(132), this.m_aryData.push(247), E.prototype.build.call(this);
   }, x;
-}(r0), zx = function() {
+}(i0), xE = function() {
   function E() {
     this.m_nCh = 0, this.m_nTrackSize = 0, this.m_nTrackAddr = 0, this.m_nStepTotal = 0, this.m_nStepBreak = 0, this.m_nSequence = 0, this.m_nPos = 0;
   }
@@ -15114,7 +15117,7 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
     var x = new E();
     return x.m_nCh = this.m_nCh, x.m_nTrackSize = this.m_nTrackSize, x.m_nTrackAddr = this.m_nTrackAddr, x.m_nStepTotal = this.m_nStepTotal, x.m_nStepBreak = this.m_nStepBreak, x.m_nSequence = this.m_nSequence, x.m_nPos = this.m_nPos, x;
   }, E;
-}(), Q = function() {
+}(), W = function() {
   function E() {
     this.m_nStep = 0, this.m_nSequence = 0, this.m_oCMIDIData = null;
   }
@@ -15122,11 +15125,11 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
     for (var x = 0; x < this.m_oCMIDIData.m_aryValue.length; x++)
       "" + this.m_oCMIDIData.m_aryValue[x].toString(16);
   }, E;
-}(), Qx = function() {
+}(), EE = function() {
   return function() {
     this.m_nPos = 0, this.m_nCount = 0;
   };
-}(), Wx = function() {
+}(), BE = function() {
   function E(x) {
     this.m_listCExc = [], this.m_nPos = 0, this.m_oCParser = x, this.m_nPos = 0;
   }
@@ -15137,21 +15140,21 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
       var D = x[C];
       switch (D.m_oCMIDIData.m_eMMsg) {
         case a.music.E_MIDI_MSG.NOTE_ON:
-          var t = D.m_oCMIDIData.m_aryValue[1];
-          D.m_oCMIDIData.m_aryValue[2] == 0 ? (F[t] == 1 && ((e = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(e), D.m_nStep > A && (A = D.m_nStep)), F[t] -= 1) : (F[t] == 0 && ((e = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(e), D.m_nStep > A && (A = D.m_nStep)), F[t] += 1);
+          var e = D.m_oCMIDIData.m_aryValue[1];
+          D.m_oCMIDIData.m_aryValue[2] == 0 ? (F[e] == 1 && ((t = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(t), D.m_nStep > A && (A = D.m_nStep)), F[e] -= 1) : (F[e] == 0 && ((t = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(t), D.m_nStep > A && (A = D.m_nStep)), F[e] += 1);
           break;
         default:
-          var e;
-          (e = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(e), D.m_nStep > A && (A = D.m_nStep);
+          var t;
+          (t = D.m_oCMIDIData).m_nStep = D.m_nStep - A, B.m_listData.push(t), D.m_nStep > A && (A = D.m_nStep);
       }
     }
     return B;
   }, E.prototype.build_num = function(x, B, A, F) {
     var C = null, D = null;
-    return (D = new a.music.CMIDIData()).m_nStep = 0, D.m_eMMsg = B, D.m_eMEvt = A, D.m_numValue = F, (C = new Q()).m_nStep = x.m_nStepTotal, C.m_nSequence = x.m_nSequence, C.m_oCMIDIData = D, x.m_nSequence++, C;
+    return (D = new a.music.CMIDIData()).m_nStep = 0, D.m_eMMsg = B, D.m_eMEvt = A, D.m_numValue = F, (C = new W()).m_nStep = x.m_nStepTotal, C.m_nSequence = x.m_nSequence, C.m_oCMIDIData = D, x.m_nSequence++, C;
   }, E.prototype.build_array = function(x, B, A, F) {
     var C = null, D = null;
-    return (D = new a.music.CMIDIData()).m_nStep = 0, D.m_eMMsg = B, D.m_eMEvt = A, D.m_aryValue = F, (C = new Q()).m_nStep = x.m_nStepTotal, C.m_nSequence = x.m_nSequence, C.m_oCMIDIData = D, x.m_nSequence++, C;
+    return (D = new a.music.CMIDIData()).m_nStep = 0, D.m_eMMsg = B, D.m_eMEvt = A, D.m_aryValue = F, (C = new W()).m_nStep = x.m_nStepTotal, C.m_nSequence = x.m_nSequence, C.m_oCMIDIData = D, x.m_nSequence++, C;
   }, E.prototype.build_note = function(x, B, A, F) {
     var C = [];
     if (A > 0) {
@@ -15163,10 +15166,10 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
     var F, C = x.create_copy();
     return C.m_nPos = A - 44, C.m_nStepBreak = C.m_nStepTotal + this.m_nStepBlock, F = this.make_event(C, !0), x.m_nStepTotal = C.m_nStepTotal, x.m_nSequence = C.m_nSequence, F;
   }, E.prototype.make_event = function(x, B) {
-    for (var A = [], F = [], C = x.m_nPos, D = !1, t = null; C < x.m_nTrackSize; ) {
-      var e = C + x.m_nTrackAddr, r = 0, l = this.m_oCParser.m_aryData[e + 0];
+    for (var A = [], F = [], C = x.m_nPos, D = !1, e = null; C < x.m_nTrackSize; ) {
+      var t = C + x.m_nTrackAddr, r = 0, l = this.m_oCParser.m_aryData[t + 0];
       if (l < 128)
-        c0(A, this.build_note(x, this.m_oCParser.m_aryData[e + 0], this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3])), r = this.m_oCParser.m_aryData[e + 1];
+        T0(A, this.build_note(x, this.m_oCParser.m_aryData[t + 0], this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3])), r = this.m_oCParser.m_aryData[t + 1];
       else
         switch (l) {
           case 144:
@@ -15177,77 +15180,77 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
           case 149:
           case 150:
           case 151:
-            (i = this.m_listCExc[l - 144]).set_param(x, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]), A.push(i.build()), r = this.m_oCParser.m_aryData[e + 1];
+            (i = this.m_listCExc[l - 144]).set_param(x, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]), A.push(i.build()), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 152:
-            t = new r0(x, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]), r = this.m_oCParser.m_aryData[e + 1];
+            e = new i0(x, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 153:
             r = 0;
             break;
           case 221:
-            var i = t;
-            console.assert(t != null), i.m_nBaseAddr1 = this.m_oCParser.m_aryData[e + 2], i.m_nBaseAddr2 = this.m_oCParser.m_aryData[e + 3], r = this.m_oCParser.m_aryData[e + 1];
+            var i = e;
+            console.assert(e != null), i.m_nBaseAddr1 = this.m_oCParser.m_aryData[t + 2], i.m_nBaseAddr2 = this.m_oCParser.m_aryData[t + 3], r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 222:
-            i = t, console.assert(t != null), i.m_nOffset = this.m_oCParser.m_aryData[e + 2], i.m_nParam = this.m_oCParser.m_aryData[e + 3], i.set_param(x, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]), A.push(i.build()), r = this.m_oCParser.m_aryData[e + 1];
+            i = e, console.assert(e != null), i.m_nOffset = this.m_oCParser.m_aryData[t + 2], i.m_nParam = this.m_oCParser.m_aryData[t + 3], i.set_param(x, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]), A.push(i.build()), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 223:
-            (i = new $x(x, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3])).m_nDevice = this.m_oCParser.m_aryData[e + 2], i.m_nModel = this.m_oCParser.m_aryData[e + 3], t = i, r = this.m_oCParser.m_aryData[e + 1];
+            (i = new Wx(x, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3])).m_nDevice = this.m_oCParser.m_aryData[t + 2], i.m_nModel = this.m_oCParser.m_aryData[t + 3], e = i, r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 226:
-            var m = null, p = null;
-            A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, 0, this.m_oCParser.m_aryData[e + 3]])), A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, 32, 0])), A.push(this.build_array(x, a.music.E_MIDI_MSG.PROGRAM_CHANGE, 0, [192 + x.m_nCh, this.m_oCParser.m_aryData[e + 2]])), r = this.m_oCParser.m_aryData[e + 1];
+            var f = null, p = null;
+            A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, 0, this.m_oCParser.m_aryData[t + 3]])), A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, 32, 0])), A.push(this.build_array(x, a.music.E_MIDI_MSG.PROGRAM_CHANGE, 0, [192 + x.m_nCh, this.m_oCParser.m_aryData[t + 2]])), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 231:
-            var N = this.m_nTempo * this.m_oCParser.m_aryData[e + 2] / 64;
-            A.push(this.build_num(x, a.music.E_MIDI_MSG.META_EVT, a.music.E_META_EVT.TEMPO, Math.floor(6e7 / N))), r = this.m_oCParser.m_aryData[e + 1];
+            var M = this.m_nTempo * this.m_oCParser.m_aryData[t + 2] / 64;
+            A.push(this.build_num(x, a.music.E_MIDI_MSG.META_EVT, a.music.E_META_EVT.TEMPO, Math.floor(6e7 / M))), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 234:
-            A.push(this.build_array(x, a.music.E_MIDI_MSG.C_AFTER_TOUCH, 0, [208 + x.m_nCh, this.m_oCParser.m_aryData[e + 2]])), r = this.m_oCParser.m_aryData[e + 1];
+            A.push(this.build_array(x, a.music.E_MIDI_MSG.C_AFTER_TOUCH, 0, [208 + x.m_nCh, this.m_oCParser.m_aryData[t + 2]])), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 235:
-            A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]])), r = this.m_oCParser.m_aryData[e + 1];
+            A.push(this.build_array(x, a.music.E_MIDI_MSG.CONTROL_CHANGE, 0, [176 + x.m_nCh, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]])), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 236:
-            A.push(this.build_array(x, a.music.E_MIDI_MSG.PROGRAM_CHANGE, 0, [192 + x.m_nCh, this.m_oCParser.m_aryData[e + 2]])), r = this.m_oCParser.m_aryData[e + 1];
+            A.push(this.build_array(x, a.music.E_MIDI_MSG.PROGRAM_CHANGE, 0, [192 + x.m_nCh, this.m_oCParser.m_aryData[t + 2]])), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 237:
-            A.push(this.build_array(x, a.music.E_MIDI_MSG.P_AFTER_TOUCH, 0, [160 + x.m_nCh, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]])), r = this.m_oCParser.m_aryData[e + 1];
+            A.push(this.build_array(x, a.music.E_MIDI_MSG.P_AFTER_TOUCH, 0, [160 + x.m_nCh, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]])), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 238:
-            m = null, p = null, (m = new a.music.CMIDIData()).m_nStep = 0, m.m_eMMsg = a.music.E_MIDI_MSG.PITCH, m.m_aryValue = [224 + x.m_nCh, this.m_oCParser.m_aryData[e + 2], this.m_oCParser.m_aryData[e + 3]], (p = new Q()).m_nStep = x.m_nStepTotal, p.m_nSequence = x.m_nSequence, p.m_oCMIDIData = m, x.m_nSequence++, A.push(p), r = this.m_oCParser.m_aryData[e + 1];
+            f = null, p = null, (f = new a.music.CMIDIData()).m_nStep = 0, f.m_eMMsg = a.music.E_MIDI_MSG.PITCH, f.m_aryValue = [224 + x.m_nCh, this.m_oCParser.m_aryData[t + 2], this.m_oCParser.m_aryData[t + 3]], (p = new W()).m_nStep = x.m_nStepTotal, p.m_nSequence = x.m_nSequence, p.m_oCMIDIData = f, x.m_nSequence++, A.push(p), r = this.m_oCParser.m_aryData[t + 1];
             break;
           case 245:
           case 246:
             r = 0;
             break;
           case 247:
-            if (t != null)
-              for (var b = 2; b < 4; b++) {
-                var J = this.m_oCParser.m_aryData[e + b];
-                if (t.m_aryData.push(J), J == 247) {
-                  A.push(t.build()), t = null;
+            if (e != null)
+              for (var L = 2; L < 4; L++) {
+                var J = this.m_oCParser.m_aryData[t + L];
+                if (e.m_aryData.push(J), J == 247) {
+                  A.push(e.build()), e = null;
                   break;
                 }
               }
             r = 0;
             break;
           case 248:
-            if ((v = F.pop()).m_nCount == null) {
-              var Y = this.m_oCParser.m_aryData[e + 1];
-              v.m_nCount = Y == 0 ? 2 : this.m_oCParser.m_aryData[e + 1];
+            if ((S = F.pop()).m_nCount == null) {
+              var H = this.m_oCParser.m_aryData[t + 1];
+              S.m_nCount = H == 0 ? 2 : this.m_oCParser.m_aryData[t + 1];
             } else
-              v.m_nCount -= 1;
-            v.m_nCount > 1 && (C = v.m_nPos, F.push(v)), r = 0;
+              S.m_nCount -= 1;
+            S.m_nCount > 1 && (C = S.m_nPos, F.push(S)), r = 0;
             break;
           case 249:
-            var v;
-            (v = new Qx()).m_nPos = C, v.m_nCount = null, F.push(v), r = 0;
+            var S;
+            (S = new EE()).m_nPos = C, S.m_nCount = null, F.push(S), r = 0;
             break;
           case 252:
-            var j = 0, I = 0;
-            j |= this.m_oCParser.m_aryData[e + 1], j |= (3 & this.m_oCParser.m_aryData[e + 2]) << 8, I |= this.m_oCParser.m_aryData[e + 3] << 8, I |= 252 & this.m_oCParser.m_aryData[e + 2], A = c0(A, this.copy_event(x, j, I)), r = 0;
+            var G = 0, y = 0;
+            G |= this.m_oCParser.m_aryData[t + 1], G |= (3 & this.m_oCParser.m_aryData[t + 2]) << 8, y |= this.m_oCParser.m_aryData[t + 3] << 8, y |= 252 & this.m_oCParser.m_aryData[t + 2], A = T0(A, this.copy_event(x, G, y)), r = 0;
             break;
           case 253:
             D = !0, r = 0;
@@ -15256,16 +15259,16 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
             r = 0;
             break;
           default:
-            r = this.m_oCParser.m_aryData[e + 1];
+            r = this.m_oCParser.m_aryData[t + 1];
         }
       if (C += 4, x.m_nStepTotal += r, B == 1 && D == 1)
         break;
     }
     return A;
   }, E.prototype.parse_track = function(x, B, A) {
-    var F = null, C = [], D = new zx();
-    return D.m_nCh = x, D.m_nTrackSize = A, D.m_nStepTotal = B, D.m_nSequence = 256, D.m_nTrackAddr = this.m_nPos, D.m_nPos = 0, C = this.make_event(D, !1), (F = this.build_num(D, a.music.E_MIDI_MSG.META_EVT, a.music.E_META_EVT.TEMPO, Math.floor(6e7 / this.m_nTempo))).m_nStep = 0, F.m_nSequence = 0, C.unshift(F), C.sort(function(t, e) {
-      return t.m_nStep == e.m_nStep ? t.m_nSequence - e.m_nSequence : t.m_nStep - e.m_nStep;
+    var F = null, C = [], D = new xE();
+    return D.m_nCh = x, D.m_nTrackSize = A, D.m_nStepTotal = B, D.m_nSequence = 256, D.m_nTrackAddr = this.m_nPos, D.m_nPos = 0, C = this.make_event(D, !1), (F = this.build_num(D, a.music.E_MIDI_MSG.META_EVT, a.music.E_META_EVT.TEMPO, Math.floor(6e7 / this.m_nTempo))).m_nStep = 0, F.m_nSequence = 0, C.unshift(F), C.sort(function(e, t) {
+      return e.m_nStep == t.m_nStep ? e.m_nSequence - t.m_nSequence : e.m_nStep - t.m_nStep;
     }), this.convert_track(C);
   }, E.prototype.parse_head = function() {
     var x = !1;
@@ -15274,10 +15277,10 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
         x = !0;
     }
     if (x == 1) {
-      this.m_nTimeDiv = 0, this.m_nTimeDiv |= this.m_oCParser.m_aryData[448] << 0, this.m_nTimeDiv |= this.m_oCParser.m_aryData[487] << 8, this.m_nTempo = this.m_oCParser.m_aryData[449], this.m_nBeat_Nume = this.m_oCParser.m_aryData[450], this.m_nBeat_Deno = this.m_oCParser.m_aryData[451], this.m_nStepBlock = this.m_nBeat_Nume * this.m_nTimeDiv, this.m_nKey = this.m_oCParser.m_aryData[452], this.m_nBias = this.m_oCParser.m_aryData[453], this.m_nTrk = this.m_oCParser.m_aryData[486], this.m_nTrk == 0 && (this.m_nTrk = 36), this.m_strTitle = t0.convert(this.m_oCParser.extract_string(32, 64), { to: "UNICODE", type: "string" });
+      this.m_nTimeDiv = 0, this.m_nTimeDiv |= this.m_oCParser.m_aryData[448] << 0, this.m_nTimeDiv |= this.m_oCParser.m_aryData[487] << 8, this.m_nTempo = this.m_oCParser.m_aryData[449], this.m_nBeat_Nume = this.m_oCParser.m_aryData[450], this.m_nBeat_Deno = this.m_oCParser.m_aryData[451], this.m_nStepBlock = this.m_nBeat_Nume * this.m_nTimeDiv, this.m_nKey = this.m_oCParser.m_aryData[452], this.m_nBias = this.m_oCParser.m_aryData[453], this.m_nTrk = this.m_oCParser.m_aryData[486], this.m_nTrk == 0 && (this.m_nTrk = 36), this.m_strTitle = r0.convert(this.m_oCParser.extract_string(32, 64), { to: "UNICODE", type: "string" });
       for (var B = 0; B < 8; B++) {
-        t0.convert(this.m_oCParser.extract_string(1030 + 48 * B, 24), { to: "UNICODE", type: "string" });
-        for (var A = new r0(), F = 0; F < 24; F++)
+        r0.convert(this.m_oCParser.extract_string(1030 + 48 * B, 24), { to: "UNICODE", type: "string" });
+        for (var A = new i0(), F = 0; F < 24; F++)
           A.m_aryData.push(this.m_oCParser.m_aryData[1030 + 48 * B + 24 + F]);
         A.m_aryData.push(247), this.m_listCExc.push(A);
       }
@@ -15288,8 +15291,8 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
     if (this.parse_head() == 1) {
       this.m_nPos = 1414, x = new a.music.CMIDIMusic();
       for (var B = 0; B < this.m_nTrk; B++) {
-        var A = this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_U16_LE, this.m_nPos + 0), F = (this.m_oCParser.m_aryData[this.m_nPos + 2], this.m_oCParser.m_aryData[this.m_nPos + 3], this.m_oCParser.m_aryData[this.m_nPos + 4]), C = (this.m_oCParser.m_aryData[this.m_nPos + 5], this.m_oCParser.m_aryData[this.m_nPos + 6]), D = this.m_oCParser.m_aryData[this.m_nPos + 7], t = this.m_nPos + A;
-        if (this.m_nPos += 44, D == 0 && F < 16 && x.m_listTrack.push(this.parse_track(F, C, A - 44)), this.m_nPos = t, !(this.m_nPos < this.m_oCParser.m_aryData.length))
+        var A = this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_U16_LE, this.m_nPos + 0), F = (this.m_oCParser.m_aryData[this.m_nPos + 2], this.m_oCParser.m_aryData[this.m_nPos + 3], this.m_oCParser.m_aryData[this.m_nPos + 4]), C = (this.m_oCParser.m_aryData[this.m_nPos + 5], this.m_oCParser.m_aryData[this.m_nPos + 6]), D = this.m_oCParser.m_aryData[this.m_nPos + 7], e = this.m_nPos + A;
+        if (this.m_nPos += 44, D == 0 && F < 16 && x.m_listTrack.push(this.parse_track(F, C, A - 44)), this.m_nPos = e, !(this.m_nPos < this.m_oCParser.m_aryData.length))
           break;
       }
       x.m_nTimeDiv = this.m_nTimeDiv, x.m_strTitle = this.m_strTitle;
@@ -15297,12 +15300,12 @@ let Zx = globalThis && globalThis.__extends || function(E, x) {
     return x;
   }, E;
 }();
-function c0(E, x) {
+function T0(E, x) {
   for (var B = 0; B < x.length; B++)
     E.push(x[B]);
   return E;
 }
-let xE = function() {
+let AE = function() {
   function E(x) {
     this.m_oCParser = x, this.m_nPos = 0;
   }
@@ -15356,14 +15359,14 @@ let xE = function() {
           case 6:
           case 7:
             var D = this.m_oCParser.m_aryData.subarray(this.m_nPos, this.m_nPos + A);
-            (B = new a.music.CMIDIData()).m_nStep = this.m_nStep, B.m_eMMsg = x, B.m_eMEvt = C, B.m_strValue = t0.convert(D, { to: "UNICODE", type: "string" }), C == a.music.E_META_EVT.TRACK_NAME && this.m_strTitle == "" && (this.m_strTitle = B.m_strValue), this.m_nPos += A;
+            (B = new a.music.CMIDIData()).m_nStep = this.m_nStep, B.m_eMMsg = x, B.m_eMEvt = C, B.m_strValue = r0.convert(D, { to: "UNICODE", type: "string" }), C == a.music.E_META_EVT.TRACK_NAME && this.m_strTitle == "" && (this.m_strTitle = B.m_strValue), this.m_nPos += A;
             break;
           case a.music.E_META_EVT.END_OF_TRACK:
             this.m_nPos += A;
             break;
           case a.music.E_META_EVT.TEMPO:
-            var t = 0;
-            t |= this.m_oCParser.m_aryData[this.m_nPos + 0] << 16, t |= this.m_oCParser.m_aryData[this.m_nPos + 1] << 8, t |= this.m_oCParser.m_aryData[this.m_nPos + 2], this.m_nPos += A, (B = new a.music.CMIDIData()).m_nStep = this.m_nStep, B.m_eMMsg = x, B.m_eMEvt = C, B.m_numValue = t;
+            var e = 0;
+            e |= this.m_oCParser.m_aryData[this.m_nPos + 0] << 16, e |= this.m_oCParser.m_aryData[this.m_nPos + 1] << 8, e |= this.m_oCParser.m_aryData[this.m_nPos + 2], this.m_nPos += A, (B = new a.music.CMIDIData()).m_nStep = this.m_nStep, B.m_eMMsg = x, B.m_eMEvt = C, B.m_numValue = e;
             break;
           default:
             this.m_nPos += A, (B = new a.music.CMIDIData()).m_nStep = this.m_nStep, B.m_eMMsg = x, B.m_eMEvt = C;
@@ -15378,11 +15381,11 @@ let xE = function() {
     return x < 128 ? B = this.m_nCurrentEv < 240 ? this.decode_message_ev_std(this.m_nCurrentEv) : this.decode_message_ev_met(this.m_nCurrentEv) : x < 240 ? (this.m_nPos += 1, this.m_nCurrentEv = x, B = this.decode_message_ev_std(this.m_nCurrentEv)) : (this.m_nPos += 1, B = this.decode_message_ev_met(x)), B;
   }, E.prototype.parse_MThd = function() {
     var x = !1;
-    return this.m_oCParser.extract_string(0, 4) == "MThd" && (this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_I32, 4), this.m_nFmt = this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_U16, 8), this.m_nTrk = this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_U16, 10), this.m_nTimeDiv = this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_U16, 12), this.m_strTitle = "", x = !0), x;
+    return this.m_oCParser.extract_string(0, 4) == "MThd" && (this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_I32, 4), this.m_nFmt = this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_U16, 8), this.m_nTrk = this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_U16, 10), this.m_nTimeDiv = this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_U16, 12), this.m_strTitle = "", x = !0), x;
   }, E.prototype.parse_MTrk = function() {
     var x = new a.music.CMIDITrack(), B = null;
     this.m_oCParser.extract_string(this.m_nPos, 4), this.m_nPos += 4;
-    var A = this.m_oCParser.extract_number(S.E_EXTRACT_TYPE_I32, this.m_nPos);
+    var A = this.m_oCParser.extract_number(v.E_EXTRACT_TYPE_I32, this.m_nPos);
     this.m_nPos += 4;
     var F = this.m_nPos;
     for (this.m_nStep = 0; this.m_nStep = this.decode_dvalue(), (B = this.decode_message()) != null; )
@@ -15399,11 +15402,232 @@ let xE = function() {
     return x;
   }, E;
 }();
-function EE(E) {
-  var x = new qx(E), B = new xE(x), A = new Wx(x), F = null;
+function CE(E) {
+  var x = new zx(E), B = new AE(x), A = new BE(x), F = null;
   return (F = B.parse()) == null && (F = A.parse()), F;
 }
-class BE {
+class FE {
+  constructor() {
+    k(this, "SMFArrayBuffer", null);
+    k(this, "parsedSMF", null);
+    k(this, "resolution", 0);
+    k(this, "tempos", []);
+    k(this, "notes", []);
+    k(this, "pitchs", []);
+    k(this, "finishNoteOffTime", 0);
+    k(this, "endTime", 0);
+    /**
+     * @type {EventObj}
+     */
+    k(this, "eventDfo", {
+      evt: 0,
+      // MIDIイベント値
+      msg: 0,
+      // MIDIイベントメッセージ
+      step: 0,
+      // 前のMIDIイベントからの空白値
+      value: 0,
+      // MIDIイベントのデータ
+      aryValue: [0, 0, 0],
+      // MIDIイベントの生データ
+      track: 0,
+      // トラック
+      trackDataIndex: 0,
+      // トラック内のMIDIイベントのインデックス
+      channel: 0,
+      // チャンネル
+      eventId: 0,
+      // MIDIイベントの独自ユニークID(連番)
+      trackCurrentTick: 0
+      // トラック内のMIDIイベント絶対値tick
+    });
+  }
+  async setup(x) {
+    await this.setSMFArrayBuffer(x), await this.setParsedSMF(this.SMFArrayBuffer), await this.setResolution(this.parsedSMF.m_nTimeDiv), await this.setTempos(), await this.setNotes(), await this.setPitchs(), await this.setEndTime();
+  }
+  async setSMFArrayBuffer(x) {
+    this.SMFArrayBuffer = x;
+  }
+  async setParsedSMF(x) {
+    this.parsedSMF = CE(x);
+  }
+  async setResolution(x) {
+    this.resolution = x;
+  }
+  /**
+   * MIDIイベントをすべて参照していき、callbackの引数に渡します。
+   * 
+   * @param {Function} callback 条件を指定した関数 return は boolean型 にします。trueを返すと、MIDIイベントオブジェクトを返します。
+   * @param {EventObj} dataObj MIDIイベントオブジェクトの初期値を指定します。
+   * @param {Boolean} currentTrackOnly そのトラックのみの参照とするか。 true とすると次のtrackへは進みません。
+   * 
+   * @return {*} false または EventObj
+   */
+  eventsForEach(x, B = {}, A = !1) {
+    B = { ...this.eventDfo, ...B };
+    for (let F = Math.max(B.track - 1, 0), C = B.eventId + 1; F < this.parsedSMF.m_listTrack.length; F++) {
+      for (let D = B.trackDataIndex, e = B.trackCurrentTick; D < this.parsedSMF.m_listTrack[F].m_listData.length; D++) {
+        let t = this.parsedSMF.m_listTrack[F].m_listData[D].m_eMEvt, r = this.parsedSMF.m_listTrack[F].m_listData[D].m_eMMsg, l = this.parsedSMF.m_listTrack[F].m_listData[D].m_nStep, i = this.parsedSMF.m_listTrack[F].m_listData[D].m_numValue, f = this.parsedSMF.m_listTrack[F].m_listData[D].m_aryValue, p = (f[0] & 15) + 1, M = { ...this.eventDfo };
+        if (e += l, M = {
+          ...M,
+          evt: t,
+          msg: r,
+          step: l,
+          value: i,
+          aryValue: f,
+          track: F + 1,
+          trackDataIndex: D,
+          channel: p,
+          eventId: C,
+          trackCurrentTick: e
+        }, x(M))
+          return M;
+        C++;
+      }
+      if (A)
+        return !1;
+    }
+  }
+  /**
+   * 指定の位置から後のMIDIイベントを参照していき、指定の条件に一致したMIDIイベントを返します。
+   * 次のtrackへは進みません。
+   * 
+   * @param {EventObj} dataObj MIDIイベントオブジェクト
+   * @param {Function} callback 条件を指定した関数 return は boolean型 にします。
+   * 
+   * @return {*} false または EventObj
+   */
+  trackNextMatchEvent(x = {}, B) {
+    return x = { ...this.eventDfo, ...x }, x.trackDataIndex++, this.eventsForEach(B, x, !0);
+  }
+  async setTempos() {
+    this.eventsForEach((x) => {
+      if (x.msg === 255 && x.evt === 81) {
+        let B = 0;
+        this.tempos.length && (B = x.trackCurrentTick - this.tempos[this.tempos.length - 1].trackCurrentTick), this.tempos.push({
+          tempo: this.toTempo(x.value),
+          ms: 0,
+          ...x,
+          step: B
+        });
+      }
+    }), this.tempos.sort((x, B) => x.trackCurrentTick < B.trackCurrentTick ? -1 : x.trackCurrentTick > B.trackCurrentTick ? 1 : 0);
+    for (let x = 0; x < this.tempos.length; x++)
+      x === 0 && (this.tempos[x].ms = 0), x + 1 < this.tempos.length && (this.tempos[x + 1].ms = this.tempos[x + 1].step * (this.tempos[x].value / this.resolution) / 1e3 + this.tempos[x].ms);
+  }
+  async setNotes() {
+    let x = [];
+    this.eventsForEach((B) => {
+      if (B.msg === a.music.E_MIDI_MSG.NOTE_ON && B.aryValue[2] > 0) {
+        let A = this.toTickMs(B.trackCurrentTick), F, C = this.trackNextMatchEvent(B, (D) => {
+          if (!x.includes(D.eventId) && (D.msg === a.music.E_MIDI_MSG.NOTE_ON || D.msg === a.music.E_MIDI_MSG.NOTE_OF) && (D.aryValue[2] === 0 || D.msg === a.music.E_MIDI_MSG.NOTE_OF) && D.aryValue[1] === B.aryValue[1])
+            return !0;
+        });
+        if (C)
+          x.push(C.eventId), F = this.toTickMs(C.trackCurrentTick);
+        else
+          return console.log({
+            message: "not find note off",
+            error: {
+              ...B,
+              onTime: A
+            }
+          }), !1;
+        this.notes.push({
+          type: "note",
+          eventId: B.eventId,
+          scale: B.aryValue[1],
+          velocity: B.aryValue[2],
+          onTime: A,
+          offTime: F,
+          track: B.track,
+          channel: B.channel,
+          act: -1,
+          // 音符の状態(0 = 鳴る前, 1 = 鳴っている最中, 2 = 鳴り終わった)
+          trackCurrentTick: B.trackCurrentTick
+        }), this.finishNoteOffTime < F && (this.finishNoteOffTime = F);
+      }
+    });
+  }
+  async setPitchs() {
+    this.eventsForEach((x) => {
+      x.msg === a.music.E_MIDI_MSG.PITCH && this.pitchs.push({
+        pitch: x.aryValue[1] + x.aryValue[2] * 128 - 8192,
+        // 最小 -8192, 最大 8191
+        ms: this.toTickMs(x.trackCurrentTick),
+        ...x
+      });
+    });
+  }
+  async setEndTime() {
+    let x = 0;
+    this.eventsForEach((B) => {
+      x < B.trackCurrentTick && (x = B.trackCurrentTick);
+    }), this.endTime = this.toTickMs(x);
+  }
+  getToMsPitch(x, B = null, A = null) {
+    let F = 0, C = null;
+    for (let D = 0; D < this.pitchs.length && !(B !== null && this.pitchs[D].track !== B || A !== null && this.pitchs[D].channel !== A); D++)
+      this.pitchs[D].ms <= x && F <= this.pitchs[D].ms && (F = this.pitchs[D].ms, C = D);
+    return C === null ? {
+      pitch: 0,
+      ms: 0,
+      ...this.eventDfo
+    } : this.pitchs[C];
+  }
+  getStartStepTempo() {
+    let x = 0;
+    if (this.tempos)
+      for (let B = 0; B < this.tempos.length; B++)
+        this.tempos[B].trackCurrentTick === this.tempos[0].trackCurrentTick && (x = this.tempos[B].value);
+    return x;
+  }
+  getStartTempo() {
+    return this.toTempo(this.getStartStepTempo());
+  }
+  isNextTempo(x, B) {
+    return x + 1 >= this.tempos.length || this.tempos[x + 1].trackCurrentTick > B ? 1 : 0;
+  }
+  isNextTempoMs(x, B) {
+    return x + 1 >= this.tempos.length || this.tempos[x + 1].ms > B ? 1 : 0;
+  }
+  toTempo(x) {
+    let B = Math.pow(10, 3);
+    return Math.round(60 * 1e3 * 1e3 / x * B) / B;
+  }
+  // tickからその時のステップテンポを取得
+  toTickStepTemop(x) {
+    return this.toTickTemopData(x).value;
+  }
+  toTickTemop(x) {
+    return this.toTempo(this.toTickStepTemop(x));
+  }
+  toTickTemopData(x) {
+    let B = !1;
+    for (let A = 0; A < this.tempos.length; A++)
+      if (this.tempos[A].trackCurrentTick <= x && this.isNextTempo(A, x)) {
+        for (let F = 0; F < this.tempos.length; F++)
+          this.tempos[F].trackCurrentTick === this.tempos[A].trackCurrentTick && (B = this.tempos[F]);
+        return B;
+      }
+  }
+  toMsStepTemop(x) {
+    let B = !1;
+    for (let A = 0; A < this.tempos.length; A++)
+      if (this.tempos[A].ms <= x && this.isNextTempoMs(A, x)) {
+        for (let F = 0; F < this.tempos.length; F++)
+          this.tempos[F].ms === this.tempos[A].ms && (B = this.tempos[F]);
+        return B;
+      }
+  }
+  toTickMs(x) {
+    return (x - this.toTickTemopData(x).trackCurrentTick) * (this.toTickStepTemop(x) / this.resolution) / 1e3 + this.toTickTemopData(x).ms;
+  }
+  toMsTick(x) {
+    return x < 0 && (x = 0), (x - this.toMsStepTemop(x).ms) / (this.toMsStepTemop(x).value / this.resolution / 1e3) + this.toMsStepTemop(x).trackCurrentTick;
+  }
+}
+class DE {
   constructor(x, B, A) {
     this.sets(x, B, A), this.loadfiles();
   }
@@ -15436,6 +15660,9 @@ class BE {
   setAudio(x) {
     this.Audio = x;
   }
+  async setAMC(x) {
+    this.AMC = new FE(), await this.AMC.setup(x);
+  }
   async loadfiles(x, B) {
     this.filePreparing(), await this.loadSMF(x), await this.loadAudio(B), this.fileReady();
   }
@@ -15456,7 +15683,12 @@ class BE {
         let A = await fetch(B);
         if (!A.ok)
           throw new Error(`HTTP error! status: ${A.status}`);
-        this.SMFSource = EE(await A.arrayBuffer()), this.setMidi(), this.fileReady();
+        try {
+          await this.setAMC(await A.arrayBuffer());
+        } catch (F) {
+          console.error(F);
+        }
+        this.fileReady();
       }
     } catch {
       this.options.audioSync = !1;
@@ -15500,123 +15732,10 @@ class BE {
     this.removeEventListener("render", "_this_NotesListener"), this.fileLoadingState.preparing += 1;
   }
   fileReady() {
-    this.fileLoadingState.ready += 1, this.fileLoadingState.ready === this.fileLoadingState.preparing && (this.actionEventListener("ready"), this.anime !== void 0 && cancelAnimationFrame(this.anime), this.MIDI !== void 0 && this.addEventListener("render", () => this.NotesListener(), "_this_NotesListener"), this.anime = requestAnimationFrame((x) => this.render(x)));
+    this.fileLoadingState.ready += 1, this.fileLoadingState.ready === this.fileLoadingState.preparing && (this.actionEventListener("ready"), this.anime !== void 0 && cancelAnimationFrame(this.anime), this.AMC !== void 0 && this.addEventListener("render", () => this.NotesListener(), "_this_NotesListener"), this.anime = requestAnimationFrame((x) => this.render(x)));
   }
   setupEventListener() {
     this.EventListeners = {};
-  }
-  setMidi() {
-    this.MIDI = {
-      resolution: this.SMFSource.m_nTimeDiv,
-      endTime: 0,
-      tempos: [],
-      track: []
-    }, this.setMidiTempos(), this.setMidiNots();
-  }
-  setMidiTempos() {
-    for (let x = 0; x < this.SMFSource.m_listTrack.length; x++)
-      for (let B = 0, A = 0, F = 0; B < this.SMFSource.m_listTrack[x].m_listData.length; B++)
-        A += this.SMFSource.m_listTrack[x].m_listData[B].m_nStep, F += this.SMFSource.m_listTrack[x].m_listData[B].m_nStep, this.SMFSource.m_listTrack[x].m_listData[B].m_eMMsg === 255 && this.SMFSource.m_listTrack[x].m_listData[B].m_eMEvt === 81 && (this.MIDI.tempos.push({
-          tempo: this.toTempo(this.SMFSource.m_listTrack[x].m_listData[B].m_numValue),
-          data: this.SMFSource.m_listTrack[x].m_listData[B].m_numValue,
-          tick: A,
-          step: F
-        }), F = 0);
-    this.MIDI.tempos.sort((x, B) => x.tick < B.tick ? -1 : x.tick > B.tick ? 1 : 0);
-    for (let x = 0; x < this.MIDI.tempos.length; x++)
-      x === 0 && (this.MIDI.tempos[x].ms = 0), x + 1 < this.MIDI.tempos.length && (this.MIDI.tempos[x + 1].ms = this.MIDI.tempos[x + 1].step * (this.MIDI.tempos[x].data / this.MIDI.resolution) / 1e3 + this.MIDI.tempos[x].ms);
-  }
-  setMidiNots() {
-    for (let x = 0, B = 0; x < this.SMFSource.m_listTrack.length; x++) {
-      this.MIDI.track.push([]);
-      for (let A = 0, F = 0; A < this.SMFSource.m_listTrack[x].m_listData.length; A++)
-        if (F += this.SMFSource.m_listTrack[x].m_listData[A].m_nStep, this.SMFSource.m_listTrack[x].m_listData[A].m_eMMsg === a.music.E_MIDI_MSG.NOTE_ON && this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[2] > 0) {
-          let C = this.toTickMs(F), D, t = 0;
-          for (let e = A + 1, r = F; e < this.SMFSource.m_listTrack[x].m_listData.length; e++)
-            if (t += this.SMFSource.m_listTrack[x].m_listData[e].m_nStep, r += this.SMFSource.m_listTrack[x].m_listData[e].m_nStep, this.SMFSource.m_listTrack[x].m_listData[e].get === void 0 && (this.SMFSource.m_listTrack[x].m_listData[e].m_eMMsg === a.music.E_MIDI_MSG.NOTE_ON || this.SMFSource.m_listTrack[x].m_listData[e].m_eMMsg === a.music.E_MIDI_MSG.NOTE_OF) && (this.SMFSource.m_listTrack[x].m_listData[e].m_aryValue[2] === 0 || this.SMFSource.m_listTrack[x].m_listData[e].m_eMMsg === a.music.E_MIDI_MSG.NOTE_OF) && this.SMFSource.m_listTrack[x].m_listData[e].m_aryValue[1] === this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[1]) {
-              this.SMFSource.m_listTrack[x].m_listData[e].get = !0, D = this.toTickMs(r);
-              break;
-            }
-          if (D === void 0) {
-            console.log({
-              message: "not find note off",
-              error: {
-                track: x,
-                channel: this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[0] & 15,
-                velocity: this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[2],
-                key: A,
-                onTime: C
-              }
-            });
-            break;
-          }
-          this.MIDI.track[x].push({
-            tick: F,
-            onTime: C,
-            offTime: D,
-            track: x,
-            channel: this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[0] & 15,
-            type: "note",
-            scale: this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[1],
-            velocity: this.SMFSource.m_listTrack[x].m_listData[A].m_aryValue[2],
-            step: t,
-            id: B,
-            act: -1
-            // 音符の状態(0 = 鳴る前, 1 = 鳴っている最中, 2 = 鳴り終わった)
-          }), this.MIDI.endTime < D && (this.MIDI.endTime = D), B++;
-        }
-    }
-  }
-  getStartStepTempo() {
-    let x = 0;
-    if (this.MIDI.tempos)
-      for (let B = 0; B < this.MIDI.tempos.length; B++)
-        this.MIDI.tempos[B].tick === this.MIDI.tempos[0].tick && (x = this.MIDI.tempos[B].data);
-    return x;
-  }
-  getStartTempo() {
-    return this.toTempo(this.getStartStepTempo());
-  }
-  isNextTempo(x, B) {
-    return x + 1 >= this.MIDI.tempos.length || this.MIDI.tempos[x + 1].tick > B ? 1 : 0;
-  }
-  isNextTempoMs(x, B) {
-    return x + 1 >= this.MIDI.tempos.length || this.MIDI.tempos[x + 1].ms > B ? 1 : 0;
-  }
-  toTempo(x) {
-    let B = Math.pow(10, 3);
-    return Math.round(60 * 1e3 * 1e3 / x * B) / B;
-  }
-  // tickからその時のステップテンポを取得
-  toTickStepTemop(x) {
-    return this.toTickTemopData(x).data;
-  }
-  toTickTemop(x) {
-    return this.toTempo(this.toTickStepTemop(x));
-  }
-  toTickTemopData(x) {
-    let B = !1;
-    for (let A = 0, F = 0; A < this.MIDI.tempos.length; A++)
-      if (this.MIDI.tempos[A].tick <= x && this.isNextTempo(A, x)) {
-        for (let C = 0; C < this.MIDI.tempos.length; C++)
-          this.MIDI.tempos[C].tick === this.MIDI.tempos[A].tick && (B = this.MIDI.tempos[C]);
-        return B;
-      }
-  }
-  toMsStepTemop(x) {
-    let B = !1;
-    for (let A = 0, F = 0; A < this.MIDI.tempos.length; A++)
-      if (this.MIDI.tempos[A].ms <= x && this.isNextTempoMs(A, x)) {
-        for (let C = 0; C < this.MIDI.tempos.length; C++)
-          this.MIDI.tempos[C].ms === this.MIDI.tempos[A].ms && (B = this.MIDI.tempos[C]);
-        return B;
-      }
-  }
-  toTickMs(x) {
-    return (x - this.toTickTemopData(x).tick) * (this.toTickStepTemop(x) / this.MIDI.resolution) / 1e3 + this.toTickTemopData(x).ms;
-  }
-  toMsTick(x) {
-    return x < 0 && (x = 0), (x - this.toMsStepTemop(x).ms) / (this.toMsStepTemop(x).data / this.MIDI.resolution / 1e3) + this.toMsStepTemop(x).tick;
   }
   actionEventListener(x, B) {
     if (this.EventListeners[x] !== void 0 && 0 < this.EventListeners[x].length) {
@@ -15626,9 +15745,8 @@ class BE {
     }
   }
   loopNotes(x) {
-    for (let B = 0; B < this.MIDI.track.length; B++)
-      for (let A = 0; A < this.MIDI.track[B].length; A++)
-        x(this.MIDI.track[B][A]);
+    for (let B = 0; B < this.AMC.notes.length; B++)
+      x(this.AMC.notes[B]);
   }
   NotesListener() {
     let x = this.player.currentTime;
@@ -15669,9 +15787,9 @@ class BE {
     return !1;
   }
 }
-const AE = {
-  Listener: BE
+const tE = {
+  Listener: DE
 };
 export {
-  AE as default
+  tE as default
 };

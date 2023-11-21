@@ -1,6 +1,6 @@
 {
   "name": "audio-midi-syncer",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": true,
   "author": "",
   "license": "MIT",
@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build -w -m development",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -63,13 +63,13 @@ instance.addEventListener(type, callback);
 ### 再生
 
 ```js
-instance.play();
+instance.play()
 ```
 
 ### 停止
 
 ```js
-instance.stop();
+instance.stop()
 ```
 
 ## License
