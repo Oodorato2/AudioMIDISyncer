@@ -21,7 +21,6 @@ export class Listener
             currentTime: -1,
             timeStamp: 0,
             startTimeStamp: 0,
-            pauseTime: 0,
             status: 'stop',
         }
     }
