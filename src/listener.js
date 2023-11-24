@@ -10,8 +10,7 @@ export class Listener
 
     sets (SMF, Audio, options)
     {
-        this.inOptions = options
-        this.setOptions(this.inOptions)
+        this.setOptions(options)
         this.setFiles(SMF, Audio)
         this.fileLoadingState = {
             preparing: 0,
@@ -29,6 +28,7 @@ export class Listener
 
     setOptions (options)
     {
+        this.inOptions = options
         this.options = {
             audioSync: true,
             renderTimeShift: 0,
@@ -82,6 +82,7 @@ export class Listener
         if (SMF === undefined) {
             SMF = this.SMF
         }
+        this.filePreparing()
         try {
 
             let
@@ -93,42 +94,39 @@ export class Listener
                 MIDIOriSource = URL.createObjectURL(SMF.files[0])
             } else if (SMF instanceof File && SMF) {
                 MIDIOriSource = URL.createObjectURL(SMF)
-            } else {
-                throw new Error(`error: MIDIOriSource`)
             }
 
             if (MIDIOriSource) {
-                this.filePreparing()
                 let response = await fetch(MIDIOriSource)
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
-                try {
-                    await this.setAMC(await response.arrayBuffer())
-                } catch (error) {
-                    console.error(error)
-                }
-                this.fileReady()
+                await this.setAMC(await response.arrayBuffer())
+            } else {
+                this.options.audioSync = false
             }
+            
         } catch (error) {
-            this.options.audioSync = false
+            console.error(error)
         }
+        this.fileReady()
     }
 
     async loadAudio (Audio)
     {
-        this.setOptions(this.inOptions)
         if (this.player.status === 'play' || this.player.status === 'pause') {
             this.stop()
         }
+        if (this.AudioContext) {
+            await this.AudioContext.close()
+        }
         this.AudioContext = new (window.AudioContext || window.webkitAudioContext || window.Audio)()
         this.AudioBuffer = undefined
-        if (!this.AudioContext.state) {
-            this.AudioContext.preload = 'none'
-        }
+        this.AudioSource = undefined
         if (Audio === undefined) {
             Audio = this.Audio
         }
+        this.filePreparing()
         try {
 
             let
@@ -140,44 +138,37 @@ export class Listener
                 AudioOriSource = URL.createObjectURL(Audio.files[0])
             } else if (Audio instanceof File && Audio) {
                 AudioOriSource = URL.createObjectURL(Audio)
-            } else {
-                throw new Error(`error: AudioOriSource`)
             }
 
-            if (AudioOriSource) {
-                this.filePreparing()
-                let response = await fetch(AudioOriSource)
-                if (this.AudioContext.state) {
-                    const arrayBuffer = await response.arrayBuffer()
-                    this.AudioContext.decodeAudioData(arrayBuffer, buffer => {
-                        this.AudioBuffer = buffer
-                        this.fileReady()
-                    })
-                } else {
-                    const blob = await response.blob()
-                    this.AudioContext.src = URL.createObjectURL(blob)
-                    this.AudioContext.addEventListener('loadeddata', event => {
-                        if (this.AudioContext.readyState < 2) {
-                            this.options.audioSync = false
-                        }
-                        this.fileReady()
-                    })
-                    this.AudioContext.load()
-                }
+            if (AudioOriSource)
+            {
+                let
+                    response,
+                    arrayBuffer
+
+                response = await fetch(AudioOriSource),
+                arrayBuffer = await response.arrayBuffer()
+                this.AudioBuffer = await this.AudioContext.decodeAudioData(arrayBuffer)
+            } else {
+                this.options.audioSync = false
             }
 
         } catch (error) {
-            this.options.audioSync = false
+            console.error(error)
         }
+        this.fileReady()
     }
 
-    createAudioSource ()
+    setAudioSource ()
     {
-        if (this.AudioContext.state) {
-            this.AudioSource = this.AudioContext.createBufferSource()
-            this.AudioSource.buffer = this.AudioBuffer
-            this.AudioSource.connect(this.AudioContext.destination)
-        }
+        this.AudioSource = this.AudioContext.createBufferSource()
+        this.AudioSource.buffer = this.AudioBuffer
+        this.setAudioNodeConnects()
+    }
+
+    setAudioNodeConnects ()
+    {
+        this.AudioSource.connect(this.AudioContext.destination)
     }
 
     filePreparing ()
@@ -190,6 +181,7 @@ export class Listener
     {
         this.fileLoadingState.ready += 1
         if (this.fileLoadingState.ready === this.fileLoadingState.preparing) {
+            this.setAudioSource()
             this.actionEventListener('ready')
             if(this.anime !== undefined) {
                 cancelAnimationFrame(this.anime)
@@ -306,11 +298,8 @@ export class Listener
         if (this.player.status === 'pause') {
             starttime = this.player.currentTime
         }
-        if (this.AudioContext.state && this.AudioBuffer) {
-            this.createAudioSource()
+        if (this.AudioSource) {
             this.AudioSource.start(this.AudioContext.currentTime, starttime/1000)
-        } else if (this.AudioContext.readyState >= 2) {
-            this.AudioContext.play()
         }
         this.player.status = 'play'
         this.player.startTimeStamp = this.player.timeStamp - starttime
@@ -320,24 +309,21 @@ export class Listener
     pause ()
     {
         if (this.player.status === 'play') {
-            if (this.AudioContext.state && this.AudioBuffer) {
+            if (this.AudioSource) {
                 this.AudioSource.stop()
-            } else if (this.AudioContext.readyState >= 2) {
-                this.AudioContext.pause()
-                this.AudioContext.currentTime = this.player.currentTime / 1000
+                this.setAudioSource()
             }
             this.player.status = 'pause'
+            this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp
             this.actionEventListener('playerPause')
         }
     }
 
     stop ()
     {
-        if (this.AudioContext.state && this.AudioBuffer) {
+        if (this.AudioSource && this.player.status === 'play') {
             this.AudioSource.stop()
-        } else if (this.AudioContext.readyState >= 2){
-            this.AudioContext.pause()
-            this.AudioContext.currentTime = 0
+            this.setAudioSource()
         }
         this.player.status = 'stop'
         this.player.startTimeStamp = 0
