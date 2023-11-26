@@ -53,17 +53,30 @@ instance.addEventListener(type, callback);
 
 - ready
 - render
+- playerPlay
+- playerPause
+- playerStop
 - onlyOnceNoteBeforeSounding
 - onlyOnceNoteSounding
 - onlyOnceNoteAfterSounding
 - noteBeforeSounding
 - noteSounding
 - noteAfterSounding
+- onlyOnceBeforePitchEvent
+- onlyOnceAfterPitchEvent
+- beforePitchEvent
+- afterPitchEvent
 
 ### 再生
 
 ```js
 instance.play()
+```
+
+### 一時停止
+
+```js
+instance.pause()
 ```
 
 ### 停止

@@ -2,86 +2,109 @@ import { AMC } from './amc'
 
 export class Listener
 {
+    /**
+     * @type {{
+     *  audioSync: Boolean,
+     *  renderTimeShift: Number,
+     * }}
+     */
+    #options = {
+        audioSync: true,
+        renderTimeShift: 0,
+    }
+
+    #inOptions = {}
+
+    #fileLoadingState = {
+        preparing: 0,
+        ready: 0,
+    }
+
+    #player = {
+        currentTime: -1,
+        timeStamp: 0,
+        startTimeStamp: 0,
+        status: 'stop',
+    }
+
+    #eventListeners = {}
+
+    #SMF
+    AMC
+
+    #Audio
+    #AudioContext
+    #AudioBuffer
+    #AudioSource
+
+    #Anime
+
     constructor (SMF, Audio, options)
     {
-        this.sets(SMF, Audio, options)
-        this.loadfiles()
+        this.#sets(SMF, Audio, options)
+        this.#loadfiles()
     }
 
-    sets (SMF, Audio, options)
+    #sets (SMF, Audio, options)
     {
-        this.setOptions(options)
-        this.setFiles(SMF, Audio)
-        this.fileLoadingState = {
-            preparing: 0,
-            ready: 0,
-        }
-        this.setupEventListener()
-        this.player = {
-            currentTime: -1,
-            timeStamp: 0,
-            startTimeStamp: 0,
-            status: 'stop',
-        }
+        this.#setOptions(options)
+        this.#setFiles(SMF, Audio)
+        this.#setupEventListener()
     }
 
-    setOptions (options)
+    #setOptions (options)
     {
-        this.inOptions = options
-        this.options = {
-            audioSync: true,
-            renderTimeShift: 0,
-        }
+        this.#inOptions = options
         if (options !== undefined) {
             if (typeof(options) === 'object' && options !== null) {
                 for (let option in options) {
-                    if (this.options[option] !== undefined) {
-                        this.options[option] = options[option]
+                    if (this.#options[option] !== undefined) {
+                        this.#options[option] = options[option]
                     }
                 }
             }
         }
     }
 
-    setFiles (SMF, Audio)
+    #setFiles (SMF, Audio)
     {
-        this.setSMF(SMF)
-        this.setAudio(Audio)
+        this.#setSMF(SMF)
+        this.#setAudio(Audio)
     }
 
-    setSMF (SMF)
+    #setSMF (SMF)
     {
-        this.SMF = SMF
+        this.#SMF = SMF
     }
 
-    setAudio (Audio)
+    #setAudio (Audio)
     {
-        this.Audio = Audio
+        this.#Audio = Audio
     }
 
-    async setAMC (arrayBuffer)
+    async #setAMC (arrayBuffer)
     {
         this.AMC = new AMC()
         await this.AMC.setup(arrayBuffer)
     }
  
-    async loadfiles (SMF, Audio)
+    async #loadfiles (SMF, Audio)
     {
-        this.filePreparing()
-        await this.loadSMF(SMF)
-        await this.loadAudio(Audio)
-        this.fileReady()
+        this.#filePreparing()
+        await this.#loadSMF(SMF)
+        await this.#loadAudio(Audio)
+        this.#fileReady()
     }
 
-    async loadSMF (SMF)
+    async #loadSMF (SMF)
     {
-        if (this.player.status === 'play' || this.player.status === 'pause') {
+        if (this.#player.status === 'play' || this.#player.status === 'pause') {
             this.stop()
         }
         if (SMF === undefined) {
-            SMF = this.SMF
+            SMF = this.#SMF
         }
-        this.filePreparing()
+        this.#filePreparing()
         try {
 
             let
@@ -100,32 +123,32 @@ export class Listener
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
-                await this.setAMC(await response.arrayBuffer())
+                await this.#setAMC(await response.arrayBuffer())
             } else {
-                this.options.audioSync = false
+                this.#options.audioSync = false
             }
             
         } catch (error) {
             console.error(error)
         }
-        this.fileReady()
+        this.#fileReady()
     }
 
-    async loadAudio (Audio)
+    async #loadAudio (Audio)
     {
-        if (this.player.status === 'play' || this.player.status === 'pause') {
+        if (this.#player.status === 'play' || this.#player.status === 'pause') {
             this.stop()
         }
-        if (this.AudioContext) {
-            await this.AudioContext.close()
+        if (this.#AudioContext) {
+            await this.#AudioContext.close()
         }
-        this.AudioContext = new (window.AudioContext || window.webkitAudioContext || window.Audio)()
-        this.AudioBuffer = undefined
-        this.AudioSource = undefined
+        this.#AudioContext = new (window.AudioContext || window.webkitAudioContext || window.Audio)()
+        this.#AudioBuffer = undefined
+        this.#AudioSource = undefined
         if (Audio === undefined) {
-            Audio = this.Audio
+            Audio = this.#Audio
         }
-        this.filePreparing()
+        this.#filePreparing()
         try {
 
             let
@@ -147,198 +170,284 @@ export class Listener
 
                 response = await fetch(AudioOriSource),
                 arrayBuffer = await response.arrayBuffer()
-                this.AudioBuffer = await this.AudioContext.decodeAudioData(arrayBuffer)
+                this.#AudioBuffer = await this.#AudioContext.decodeAudioData(arrayBuffer)
             } else {
-                this.options.audioSync = false
+                this.#options.audioSync = false
             }
 
         } catch (error) {
             console.error(error)
         }
-        this.fileReady()
+        this.#fileReady()
     }
 
-    setAudioSource ()
+    #setAudioSource ()
     {
-        this.AudioSource = this.AudioContext.createBufferSource()
-        this.AudioSource.buffer = this.AudioBuffer
-        this.setAudioNodeConnects()
-    }
-
-    setAudioNodeConnects ()
-    {
-        this.AudioSource.connect(this.AudioContext.destination)
-    }
-
-    filePreparing ()
-    {
-        this.removeEventListener('render', '_this_NotesListener')
-        this.fileLoadingState.preparing += 1
-    }
-
-    fileReady ()
-    {
-        this.fileLoadingState.ready += 1
-        if (this.fileLoadingState.ready === this.fileLoadingState.preparing) {
-            this.setAudioSource()
-            this.actionEventListener('ready')
-            if(this.anime !== undefined) {
-                cancelAnimationFrame(this.anime)
-            }
-            if(this.AMC !== undefined) {
-                this.addEventListener('render', () => this.NotesListener(), '_this_NotesListener')
-            }
-            this.anime = requestAnimationFrame((timeStamp) => this.render(timeStamp))
+        if (this.#AudioBuffer) {
+            this.#AudioSource = this.#AudioContext.createBufferSource()
+            this.#AudioSource.buffer = this.#AudioBuffer
+            this.audioNodeConnects(this.#AudioContext, this.#AudioSource)
         }
     }
 
-    setupEventListener ()
+    /**
+     * オーディオソースをオーディオコンテキストのデスティネーションに接続します。
+     * 
+     * @param {AudioContext} AudioContext 接続するオーディオコンテキスト。
+     * @param {AudioSourceNode} AudioSource 接続するオーディオソース。
+     * 
+     * @private
+     */
+    audioNodeConnects (AudioContext, AudioSource)
     {
-        this.EventListeners = {}
+        AudioSource.connect(AudioContext.destination)
     }
 
-    actionEventListener (eventname, _arguments)
+    #filePreparing ()
     {
-        if (this.EventListeners[eventname] !== undefined) {
-            if (0 < this.EventListeners[eventname].length) {
+        this.removeEventListener('render', '_this_midiEventlisteners')
+        this.#fileLoadingState.preparing += 1
+    }
+
+    #fileReady ()
+    {
+        this.#fileLoadingState.ready += 1
+        if (this.#fileLoadingState.ready === this.#fileLoadingState.preparing) {
+            this.#setAudioSource()
+            this.#actionEventListener('ready')
+            if(this.#Anime !== undefined) {
+                cancelAnimationFrame(this.#Anime)
+            }
+            if(this.AMC !== undefined) {
+                this.addEventListener('render', () => this.#midiEventlisteners(), '_this_midiEventlisteners')
+            }
+            this.#Anime = requestAnimationFrame((timeStamp) => this.#render(timeStamp))
+        }
+    }
+
+    #setupEventListener ()
+    {
+        this.#eventListeners = {}
+    }
+
+    #actionEventListener (eventname, _arguments)
+    {
+        if (this.#eventListeners[eventname] !== undefined) {
+            if (0 < this.#eventListeners[eventname].length) {
                 if (_arguments === undefined) {
                     _arguments = []
                 }
-                for (let i = 0; i < this.EventListeners[eventname].length; i++) {
-                    if (this.EventListeners[eventname][i] !== undefined) {
-                        this.EventListeners[eventname][i].func.apply(this, _arguments)
+                for (let i = 0; i < this.#eventListeners[eventname].length; i++) {
+                    if (this.#eventListeners[eventname][i] !== undefined) {
+                        try {
+                            this.#eventListeners[eventname][i].func.apply(this, _arguments)
+                        } catch (error) {
+                            console.error(error)
+                        }
                     }
                 }
             }
         }
     }
 
-    loopNotes (callback)
+    #listenerNoteEvent (event, time)
     {
+        // 音符イベント
+        if (event.onTime > time) {
+
+            // Before sounding a note.
+
+            if (event.act !== 0) {
+                this.#actionEventListener('onlyOnceNoteBeforeSounding', [event, time])// 1度のみ検知
+                event.act = 0
+            }
+
+            this.#actionEventListener('noteBeforeSounding', [event, time])// 常時検知
+
+        } else if (event.onTime <= time && event.offTime > time) {
+
+            // Sounding the note.
+
+            if (event.act !== 1) {
+                this.#actionEventListener('onlyOnceNoteSounding', [event, time])// 1度のみ検知
+                event.act = 1
+            }
+
+            this.#actionEventListener('noteSounding', [event, time])// 常時検知
+
+        } else if (event.offTime <= time) {
+
+            // After sounding a note.
+
+            if (event.act !== 2) {
+                this.#actionEventListener('onlyOnceNoteAfterSounding', [event, time])// 1度のみ検知
+                event.act = 2
+            }
+
+            this.#actionEventListener('noteAfterSounding', [event, time])// 常時検知
+
+        }
+    }
+
+    #listenerEvent (event, time, eventTypeName = 'Event')
+    {
+        // イベント
+        if (event.msTime > time) {
+
+            // Before event.
+
+            if (event.act !== 0) {
+                this.#actionEventListener('onlyOnceBefore'+eventTypeName, [event, time])// 1度のみ検知
+                event.act = 0
+            }
+
+            this.#actionEventListener('before'+eventTypeName, [event, time])// 常時検知
+
+        } else if (event.msTime <= time) {
+
+            // After event.
+
+            if (event.act !== 2) {
+                this.#actionEventListener('onlyOnceAfter'+eventTypeName, [event, time])// 1度のみ検知
+                event.act = 2
+            }
+
+            this.#actionEventListener('after'+eventTypeName, [event, time])// 常時検知
+
+        }
+    }
+
+    #midiEventlisteners ()
+    {
+        // NoteEventsListener
         for (let i = 0; i < this.AMC.notes.length; i++) {
-            callback(this.AMC.notes[i])
+            this.#listenerNoteEvent(this.AMC.notes[i], this.#player.currentTime)
+        }
+
+        // PitchEventsListener
+        for (let i = 0; i < this.AMC.pitchs.length; i++) {
+            this.#listenerEvent(this.AMC.pitchs[i], this.#player.currentTime, 'PitchEvent')
         }
     }
 
-    NotesListener ()
+    #render (timeStamp)
     {
-        let
-            time = this.player.currentTime
-
-        this.loopNotes(event => {
-
-            if (event.type === 'note') {
-
-                // 音符イベント
-                if (event.onTime > time) {
-
-                    // Before sounding a note.
-
-                    if (event.act !== 0) {
-                        this.actionEventListener('onlyOnceNoteBeforeSounding', [event, time])// 1度のみ検知
-                        event.act = 0
-                    }
-
-                    this.actionEventListener('noteBeforeSounding', [event, time])// 常時検知
-
-                } else if (event.onTime <= time && event.offTime > time) {
-
-                    // Sounding the note.
-
-                    if (event.act !== 1) {
-                        this.actionEventListener('onlyOnceNoteSounding', [event, time])// 1度のみ検知
-                        event.act = 1
-                    }
-
-                    this.actionEventListener('noteSounding', [event, time])// 常時検知
-
-                } else if (event.offTime <= time) {
-
-                    // After sounding a note.
-
-                    if (event.act !== 2) {
-                        this.actionEventListener('onlyOnceNoteAfterSounding', [event, time])// 1度のみ検知
-                        event.act = 2
-                    }
-
-                    this.actionEventListener('noteAfterSounding', [event, time])// 常時検知
-
-                }
-
-            }
-
-        })
-    }
-
-    render (timeStamp)
-    {
-        if (this.options.audioSync) {
-            this.player.timeStamp = this.AudioContext.currentTime * 1000
+        if (this.#options.audioSync) {
+            this.#player.timeStamp = this.#AudioContext.currentTime * 1000
         } else {
-            this.player.timeStamp = timeStamp
+            this.#player.timeStamp = timeStamp
         }
-        if (this.player.status === 'play') {
-            this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp + this.options.renderTimeShift
+        if (this.#player.status === 'play') {
+            this.#player.currentTime = this.#player.timeStamp - this.#player.startTimeStamp + this.#options.renderTimeShift
         }
-        this.actionEventListener('render', [timeStamp])
-        this.anime = requestAnimationFrame((timeStamp) => this.render(timeStamp))
+        this.#actionEventListener('render', [timeStamp])
+        this.#Anime = requestAnimationFrame((timeStamp) => this.#render(timeStamp))
+        if (this.#player.status === 'play' && this.getEndTime() < this.#player.currentTime) {
+            this.stop()
+        }
     }
 
-    getUniqueStr (strong = 1000)
+    #getUniqueStr (strong = 1000)
     {
         return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16)
     }
 
-    // 以下外部からのアクセス許可
+    // --------------------------------------------------------
+    // ---------- public methods ------------------------------
+    // --------------------------------------------------------
 
-    play ()
+    /**
+     * 再読み込みを行います。
+     * 
+     * @param {String|HTMLElement|File} SMF MIDIファイル
+     * @param {String|HTMLElement|File} Audio 音楽ファイル
+     * @param {Object} options 設定オブジェクト
+     * 
+     * @return {Promise}
+     */
+    async reload(SMF = null, Audio = null, options = {})
     {
-        let starttime = 0
-        if (this.player.status === 'pause') {
-            starttime = this.player.currentTime
+        options = {...this.#options, ...options}
+        this.#setOptions(options)
+
+        if (SMF === null) {
+            SMF = this.#SMF
         }
-        if (this.AudioSource) {
-            this.AudioSource.start(this.AudioContext.currentTime, starttime/1000)
+        if (Audio === null) {
+            Audio = this.#Audio
         }
-        this.player.status = 'play'
-        this.player.startTimeStamp = this.player.timeStamp - starttime
-        this.actionEventListener('playerPlay')
+        this.#setFiles(SMF, Audio)
+
+        await this.#loadfiles()
     }
 
+    /**
+     * 音楽・MIDIを再生します。player.statusをplayにします。
+     * player.statusがpause状態の場合、一時停止した位置から再生します。
+     * 
+     * @param {Number} startTime 再生開始秒数(Ms) pause状態の場合は無効です。
+     */
+    play (startTime = 0)
+    {
+        if (this.#player.status === 'pause') {
+            startTime = this.#player.currentTime
+        }
+        if (this.#AudioSource) {
+            this.#AudioSource.start(this.#AudioContext.currentTime, startTime/1000)
+        }
+        this.#player.status = 'play'
+        this.#player.startTimeStamp = this.#player.timeStamp - startTime
+        this.#actionEventListener('playerPlay')
+    }
+
+    /**
+     * 音楽・MIDIを一時停止します。player.statusをpauseにします。
+     */
     pause ()
     {
-        if (this.player.status === 'play') {
-            if (this.AudioSource) {
-                this.AudioSource.stop()
-                this.setAudioSource()
+        if (this.#player.status === 'play') {
+            if (this.#AudioSource) {
+                this.#AudioSource.stop()
+                this.#setAudioSource()
             }
-            this.player.status = 'pause'
-            this.player.currentTime = this.player.timeStamp - this.player.startTimeStamp
-            this.actionEventListener('playerPause')
+            this.#player.status = 'pause'
+            this.#player.currentTime = this.#player.timeStamp - this.#player.startTimeStamp
+            this.#actionEventListener('playerPause')
         }
     }
 
+    /**
+     * 音楽・MIDIを停止します。player.statusをstopにします。
+     */
     stop ()
     {
-        if (this.AudioSource && this.player.status === 'play') {
-            this.AudioSource.stop()
-            this.setAudioSource()
+        if (this.#AudioSource && this.#player.status === 'play') {
+            this.#AudioSource.stop()
+            this.#setAudioSource()
         }
-        this.player.status = 'stop'
-        this.player.startTimeStamp = 0
-        this.player.currentTime = -1
-        this.actionEventListener('playerStop')
+        this.#player.status = 'stop'
+        this.#player.startTimeStamp = 0
+        this.#actionEventListener('playerStop')
     }
 
+    /**
+     * イベントリスナーを追加します。
+     * 
+     * @param {String} eventname イベント名。
+     * @param {Function} _function イベントが発生したときに実行されるコールバック関数。
+     * @param {String} funcName イベントリスナー名。指定されない場合は、一意の名前が生成されます。
+     * 
+     * @return {String} イベントリスナー名。
+     */
     addEventListener (eventname, _function, funcName)
     {
-        if (this.EventListeners[eventname] === undefined) {
-            this.EventListeners[eventname] = []
+        if (this.#eventListeners[eventname] === undefined) {
+            this.#eventListeners[eventname] = []
         }
         if (!funcName) {
-            funcName = this.getUniqueStr()
+            funcName = this.#getUniqueStr()
         }
-        this.EventListeners[eventname].push({
+        this.#eventListeners[eventname].push({
             name: funcName,
             func: _function,
         })
@@ -346,20 +455,74 @@ export class Listener
         return funcName
     }
 
+    /**
+     * 指定されたイベントリスナーを削除します。
+     * 
+     * @param {String} eventname イベントの名前。
+     * @param {Function|String} _function 削除するイベントリスナー。関数そのものまたはリスナーの名前を指定します。
+     * 
+     * @returns {Boolean} リスナーが正常に削除された場合は true、そうでない場合は false。
+     */
     removeEventListener (eventname, _function)
     {
-        if (this.EventListeners[eventname] !== undefined && _function !== undefined) {
-            for (let i = 0; i < this.EventListeners[eventname].length; i++) {
-                if (this.EventListeners[eventname][i].func === _function || this.EventListeners[eventname][i].name === _function) {
-                    this.EventListeners[eventname].splice(i, 1)
+        if (this.#eventListeners[eventname] !== undefined && _function !== undefined) {
+            for (let i = 0; i < this.#eventListeners[eventname].length; i++) {
+                if (this.#eventListeners[eventname][i].func === _function || this.#eventListeners[eventname][i].name === _function) {
+                    this.#eventListeners[eventname].splice(i, 1)
                     return true
                 }
             }
-        } else if (this.EventListeners[eventname] !== undefined) {
-            this.EventListeners[eventname] = undefined
+        } else if (this.#eventListeners[eventname] !== undefined) {
+            this.#eventListeners[eventname] = undefined
             return true
         }
 
         return false
+    }
+
+    /**
+     * オーディオノード接続のためのカスタムコールバック関数を設定します。
+     * 
+     * @param {Function(AudioContext, AudioSourceNode):void} callback オーディオノード接続を処理するためのコールバック関数。
+     */
+    setAudioNodeConnects (callback)
+    {
+        this.audioNodeConnects = callback
+    }
+
+    getPlayerStatus ()
+    {
+        return this.#player.status
+    }
+
+    isPlayerStatus (status)
+    {
+        return (this.getPlayerStatus() === status)
+    }
+
+    getPlayerCurrentTime()
+    {
+        return this.#player.currentTime
+    }
+
+    getCurrentTempo()
+    {
+        return this.AMC.toMsStepTemop(Math.max(this.getPlayerCurrentTime(), 0)).tempo
+    }
+
+    getEndTime()
+    {
+        let
+            amcEndTime = 0,
+            audioEndTime = 0
+
+        if (this.AMC) {
+            amcEndTime = this.AMC.endTime
+        }
+        if (this.#AudioSource) {
+            audioEndTime = this.#AudioSource.buffer.duration * 1000
+        }
+
+        return Math.max(amcEndTime, audioEndTime)
     }
 }

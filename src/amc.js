@@ -7,6 +7,7 @@ export class AMC
 
     resolution = 0
     tempos = []
+    events = []
     notes = []
     pitchs = []
     finishNoteOffTime = 0
@@ -26,6 +27,8 @@ export class AMC
         channel: 0,// チャンネル
         eventId: 0,// MIDIイベントの独自ユニークID(連番)
         trackCurrentTick: 0,// トラック内のMIDIイベント絶対値tick
+        msTime: 0,
+        act: -1,
     }
 
     async setup (arrayBuffer)
@@ -35,6 +38,7 @@ export class AMC
         await this.setResolution(this.parsedSMF.m_nTimeDiv)
 
         await this.setTempos()
+        await this.setEvents()
         await this.setNotes()
         await this.setPitchs()
         await this.setEndTime()
@@ -76,9 +80,14 @@ export class AMC
                     value = this.parsedSMF.m_listTrack[track].m_listData[trackDataIndex].m_numValue,
                     aryValue = this.parsedSMF.m_listTrack[track].m_listData[trackDataIndex].m_aryValue,
                     channel = (aryValue[0] & 0x0F) + 1,
-                    resultObj = {...this.eventDfo}
+                    resultObj = {...this.eventDfo},
+                    msTime = 0
 
                 trackCurrentTick += step
+
+                if (this.tempos.length) {
+                    msTime = this.toTickMs(trackCurrentTick)
+                }
 
                 resultObj = {
                     ...resultObj,
@@ -92,6 +101,7 @@ export class AMC
                     channel,
                     eventId,
                     trackCurrentTick,
+                    msTime,
                 }
 
                 if (callback(resultObj)) {
@@ -132,9 +142,8 @@ export class AMC
                 }
                 this.tempos.push({
                     tempo: this.toTempo(event.value),
-                    ms: 0,
                     ...event,
-                    step
+                    step,
                 })
             }
         })
@@ -149,22 +158,29 @@ export class AMC
         })
         for (let i = 0; i < this.tempos.length; i++) {
             if (i === 0) {
-                this.tempos[i].ms = 0
+                this.tempos[i].msTime = 0
             }
             if (i+1 < this.tempos.length) {
-                this.tempos[i+1].ms = (((this.tempos[i+1].step) * (this.tempos[i].value / this.resolution))/1000) + this.tempos[i].ms
+                this.tempos[i+1].msTime = (((this.tempos[i+1].step) * (this.tempos[i].value / this.resolution))/1000) + this.tempos[i].msTime
             }
         }
+    }
+
+    async setEvents ()
+    {
+        this.eventsForEach(event => {
+            this.events.push(event)
+        })
     }
 
     async setNotes ()
     {
         let isGetEventIds = []
-        this.eventsForEach(event => {
+        this.events.forEach(event => {
             if (event.msg === miz.music.E_MIDI_MSG.NOTE_ON && event.aryValue[2] > 0)
             {
                 let
-                    onTime = this.toTickMs(event.trackCurrentTick),
+                    onTime = event.msTime,
                     offTime = undefined,
                     offNoteEvent = this.trackNextMatchEvent(event, nextEvent => {
                         if (!isGetEventIds.includes(nextEvent.eventId) && (nextEvent.msg === miz.music.E_MIDI_MSG.NOTE_ON || nextEvent.msg === miz.music.E_MIDI_MSG.NOTE_OF))
@@ -178,7 +194,7 @@ export class AMC
 
                 if (offNoteEvent) {
                     isGetEventIds.push(offNoteEvent.eventId)
-                    offTime = this.toTickMs(offNoteEvent.trackCurrentTick)
+                    offTime = offNoteEvent.msTime
                 } else {
                     console.log({
                         message: 'not find note off',
@@ -214,11 +230,10 @@ export class AMC
 
     async setPitchs ()
     {
-        this.eventsForEach(event => {
+        this.events.forEach(event => {
             if (event.msg === miz.music.E_MIDI_MSG.PITCH) {
                 this.pitchs.push({
                     pitch: (event.aryValue[1] + (event.aryValue[2] * 128)) - 8192,// 最小 -8192, 最大 8191
-                    ms: this.toTickMs(event.trackCurrentTick),
                     ...event
                 })
             }
@@ -228,7 +243,7 @@ export class AMC
     async setEndTime ()
     {
         let trackCurrentTick = 0
-        this.eventsForEach(event => {
+        this.events.forEach(event => {
             // 最終ノートの終了時間を取得
             if (trackCurrentTick < event.trackCurrentTick) {
                 trackCurrentTick = event.trackCurrentTick
@@ -250,8 +265,8 @@ export class AMC
             if (channel !== null && this.pitchs[i].channel !== channel) {
                 break
             }
-            if (this.pitchs[i].ms <= Ms && currentPitchMs <= this.pitchs[i].ms) {
-                currentPitchMs = this.pitchs[i].ms
+            if (this.pitchs[i].msTime <= Ms && currentPitchMs <= this.pitchs[i].msTime) {
+                currentPitchMs = this.pitchs[i].msTime
                 currentPitchIndex = i
             }
         }
@@ -259,7 +274,6 @@ export class AMC
         if (currentPitchIndex === null) {
             return {
                 pitch: 0,
-                ms: 0,
                 ...this.eventDfo,
             }
         }
@@ -300,7 +314,7 @@ export class AMC
     {
         if (i+1 >= this.tempos.length) {
             return 1
-        } else if (this.tempos[i+1].ms > Ms) {
+        } else if (this.tempos[i+1].msTime > Ms) {
             return 1
         } else {
             return 0
@@ -343,9 +357,9 @@ export class AMC
     {
         let result = false
         for (let i = 0; i < this.tempos.length; i++) {
-            if (this.tempos[i].ms <= Ms && this.isNextTempoMs(i, Ms)) {
+            if (this.tempos[i].msTime <= Ms && this.isNextTempoMs(i, Ms)) {
                 for (let p = 0; p < this.tempos.length; p++) {
-                    if (this.tempos[p].ms === this.tempos[i].ms) {
+                    if (this.tempos[p].msTime === this.tempos[i].msTime) {
                         result = this.tempos[p]
                     }
                 }
@@ -356,7 +370,7 @@ export class AMC
 
     toTickMs (tick)
     {
-        return (((tick - this.toTickTemopData(tick).trackCurrentTick) * (this.toTickStepTemop(tick) / this.resolution))/1000) + this.toTickTemopData(tick).ms
+        return (((tick - this.toTickTemopData(tick).trackCurrentTick) * (this.toTickStepTemop(tick) / this.resolution))/1000) + this.toTickTemopData(tick).msTime
     }
 
     toMsTick (Ms)
@@ -364,6 +378,6 @@ export class AMC
         if (Ms < 0) {
             Ms = 0
         }
-        return ((Ms - this.toMsStepTemop(Ms).ms) / ((this.toMsStepTemop(Ms).value / this.resolution)/1000)) + this.toMsStepTemop(Ms).trackCurrentTick
+        return ((Ms - this.toMsStepTemop(Ms).msTime) / ((this.toMsStepTemop(Ms).value / this.resolution)/1000)) + this.toMsStepTemop(Ms).trackCurrentTick
     }
 }
