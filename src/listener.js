@@ -365,7 +365,7 @@ export class Listener
      * 
      * @return {Promise}
      */
-    async reload(SMF = null, Audio = null, options = {})
+    async reload (SMF = null, Audio = null, options = {})
     {
         options = {...this.#options, ...options}
         this.#setOptions(options)

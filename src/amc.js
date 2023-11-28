@@ -190,11 +190,15 @@ export class AMC
                                 return true
                             }
                         }
-                    })
+                    }),
+                    gate = undefined,
+                    beat = undefined
 
                 if (offNoteEvent) {
                     isGetEventIds.push(offNoteEvent.eventId)
                     offTime = offNoteEvent.msTime
+                    gate = offNoteEvent.trackCurrentTick - event.trackCurrentTick
+                    beat = gate / this.resolution
                 } else {
                     console.log({
                         message: 'not find note off',
@@ -211,12 +215,14 @@ export class AMC
                     eventId: event.eventId,
                     scale: event.aryValue[1],
                     velocity: event.aryValue[2],
+                    beat: beat,// 四分音符を1とした値
                     onTime: onTime,
                     offTime: offTime,
                     track: event.track,
                     channel: event.channel,
                     act: -1,// 音符の状態(0 = 鳴る前, 1 = 鳴っている最中, 2 = 鳴り終わった)
                     trackCurrentTick: event.trackCurrentTick,
+                    gate: gate,
                 })
 
                 // 最終ノートの終了時間を取得
