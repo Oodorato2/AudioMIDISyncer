@@ -13,8 +13,8 @@ Chrome, Safari, Edge, Firefox
 
 ## DEMO
 
-[オーディオとMIDIのアニメーション同期Demo](https://demo.0db.jp/audio-midi-syncer/water-ripples/)
-[3D Demo2（動作重ため）](https://demo.0db.jp/audio-midi-syncer/3d-lines/)
+- [オーディオとMIDIのアニメーション同期Demo](https://demo.0db.jp/audio-midi-syncer/water-ripples/)
+- [3D Demo2（動作重ため）](https://demo.0db.jp/audio-midi-syncer/3d-lines/)
 
 ## 簡単な使い方
 
