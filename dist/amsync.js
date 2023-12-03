@@ -1,15 +1,15 @@
 var Ux = Object.defineProperty;
 var Mx = (E, x, B) => x in E ? Ux(E, x, { enumerable: !0, configurable: !0, writable: !0, value: B }) : E[x] = B;
-var H = (E, x, B) => (Mx(E, typeof x != "symbol" ? x + "" : x, B), B), d0 = (E, x, B) => {
+var H = (E, x, B) => (Mx(E, typeof x != "symbol" ? x + "" : x, B), B), X0 = (E, x, B) => {
   if (!x.has(E))
     throw TypeError("Cannot " + B);
 };
-var i = (E, x, B) => (d0(E, x, "read from private field"), B ? B.call(E) : x.get(E)), T = (E, x, B) => {
+var i = (E, x, B) => (X0(E, x, "read from private field"), B ? B.call(E) : x.get(E)), T = (E, x, B) => {
   if (x.has(E))
     throw TypeError("Cannot add the same private member more than once");
   x instanceof WeakSet ? x.add(E) : x.set(E, B);
-}, G = (E, x, B, A) => (d0(E, x, "write to private field"), A ? A.call(E, B) : x.set(E, B), B);
-var _ = (E, x, B) => (d0(E, x, "access private method"), B);
+}, G = (E, x, B, A) => (X0(E, x, "write to private field"), A ? A.call(E, B) : x.set(E, B), B);
+var _ = (E, x, B) => (X0(E, x, "access private method"), B);
 function bx(E) {
   return E && E.__esModule && Object.prototype.hasOwnProperty.call(E, "default") ? E.default : E;
 }
@@ -119,13 +119,13 @@ function xx() {
   }
   P.bufferToCode = L;
   function t0(l) {
-    for (var n = "", c = ("" + l).toUpperCase().replace(/[^A-Z0-9]+/g, ""), f = h(E.EncodingAliases), p = f.length, S = 0, I, R, d, X0 = 0; X0 < p; X0++) {
-      if (I = f[X0], I === c) {
+    for (var n = "", c = ("" + l).toUpperCase().replace(/[^A-Z0-9]+/g, ""), f = h(E.EncodingAliases), p = f.length, S = 0, I, R, X, d0 = 0; d0 < p; d0++) {
+      if (I = f[d0], I === c) {
         n = I;
         break;
       }
-      for (R = I.length, d = S; d < R; d++)
-        (I.slice(0, d) === c.slice(0, d) || I.slice(-d) === c.slice(-d)) && (n = I, S = d);
+      for (R = I.length, X = S; X < R; X++)
+        (I.slice(0, X) === c.slice(0, X) || I.slice(-X) === c.slice(-X)) && (n = I, S = X);
     }
     return F.call(E.EncodingAliases, n) ? E.EncodingAliases[n] : n;
   }
@@ -14060,7 +14060,7 @@ function Vx(E) {
   return !1;
 }
 J.isUTF16 = Vx;
-function Xx(E) {
+function dx(E) {
   var x = 0, B = E && E.length, A = null, F, C;
   if (B < 2) {
     if (E[0] > 255)
@@ -14082,8 +14082,8 @@ function Xx(E) {
   }
   return !1;
 }
-J.isUTF16BE = Xx;
-function dx(E) {
+J.isUTF16BE = dx;
+function Xx(E) {
   var x = 0, B = E && E.length, A = null, F, C;
   if (B < 2) {
     if (E[0] > 255)
@@ -14105,7 +14105,7 @@ function dx(E) {
   }
   return !1;
 }
-J.isUTF16LE = dx;
+J.isUTF16LE = Xx;
 function qx(E) {
   var x = 0, B = E && E.length, A = null, F, C, D, t, e, r;
   if (B < 4) {
@@ -14140,7 +14140,7 @@ function Zx(E) {
   return !0;
 }
 J.isUNICODE = Zx;
-var o = {}, w = Ex(), Bx = xx(), Ax = J, X = D0;
+var o = {}, w = Ex(), Bx = xx(), Ax = J, d = D0;
 function $x(E) {
   for (var x = [], B = 0, A = 0, F = E && E.length, C, D; A < F; A++) {
     for (; E[A] === 27; )
@@ -14212,14 +14212,14 @@ o.EUCJPToSJIS = EE;
 function l0(E) {
   w.init_JIS_TO_UTF8_TABLE();
   for (var x = [], B = 0, A = E && E.length, F, C, D, t, e, r, h; B < A; B++)
-    F = E[B], F >= 161 && F <= 223 ? (D = F - 64, t = 188 | D >> 6 & 3, e = 128 | D & 63, x[x.length] = 239, x[x.length] = t & 255, x[x.length] = e & 255) : F >= 128 ? (C = F << 1, D = E[++B], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), C &= 255, r = (C << 8) + D, h = X.JIS_TO_UTF8_TABLE[r], h === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : h < 65535 ? (x[x.length] = h >> 8 & 255, x[x.length] = h & 255) : (x[x.length] = h >> 16 & 255, x[x.length] = h >> 8 & 255, x[x.length] = h & 255)) : x[x.length] = E[B] & 255;
+    F = E[B], F >= 161 && F <= 223 ? (D = F - 64, t = 188 | D >> 6 & 3, e = 128 | D & 63, x[x.length] = 239, x[x.length] = t & 255, x[x.length] = e & 255) : F >= 128 ? (C = F << 1, D = E[++B], D < 159 ? (C < 319 ? C -= 225 : C -= 97, D > 126 ? D -= 32 : D -= 31) : (C < 319 ? C -= 224 : C -= 96, D -= 126), C &= 255, r = (C << 8) + D, h = d.JIS_TO_UTF8_TABLE[r], h === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : h < 65535 ? (x[x.length] = h >> 8 & 255, x[x.length] = h & 255) : (x[x.length] = h >> 16 & 255, x[x.length] = h >> 8 & 255, x[x.length] = h & 255)) : x[x.length] = E[B] & 255;
   return x;
 }
 o.SJISToUTF8 = l0;
 function o0(E) {
   w.init_JIS_TO_UTF8_TABLE();
   for (var x = [], B = 0, A = E && E.length, F, C, D, t, e, r, h, s; B < A; B++)
-    F = E[B], F === 142 ? (C = E[++B] - 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : F === 143 ? (e = E[++B] - 128, r = E[++B] - 128, h = (e << 8) + r, s = X.JISX0212_TO_UTF8_TABLE[h], s === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : s < 65535 ? (x[x.length] = s >> 8 & 255, x[x.length] = s & 255) : (x[x.length] = s >> 16 & 255, x[x.length] = s >> 8 & 255, x[x.length] = s & 255)) : F >= 128 ? (h = (F - 128 << 8) + (E[++B] - 128), s = X.JIS_TO_UTF8_TABLE[h], s === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : s < 65535 ? (x[x.length] = s >> 8 & 255, x[x.length] = s & 255) : (x[x.length] = s >> 16 & 255, x[x.length] = s >> 8 & 255, x[x.length] = s & 255)) : x[x.length] = E[B] & 255;
+    F = E[B], F === 142 ? (C = E[++B] - 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : F === 143 ? (e = E[++B] - 128, r = E[++B] - 128, h = (e << 8) + r, s = d.JISX0212_TO_UTF8_TABLE[h], s === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : s < 65535 ? (x[x.length] = s >> 8 & 255, x[x.length] = s & 255) : (x[x.length] = s >> 16 & 255, x[x.length] = s >> 8 & 255, x[x.length] = s & 255)) : F >= 128 ? (h = (F - 128 << 8) + (E[++B] - 128), s = d.JIS_TO_UTF8_TABLE[h], s === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : s < 65535 ? (x[x.length] = s >> 8 & 255, x[x.length] = s & 255) : (x[x.length] = s >> 16 & 255, x[x.length] = s >> 8 & 255, x[x.length] = s & 255)) : x[x.length] = E[B] & 255;
   return x;
 }
 o.EUCJPToUTF8 = o0;
@@ -14229,20 +14229,20 @@ function h0(E) {
     for (; E[A] === 27; )
       if (E[A + 1] === 36 && E[A + 2] === 66 || E[A + 1] === 36 && E[A + 2] === 64 ? B = 1 : E[A + 1] === 40 && E[A + 2] === 73 ? B = 2 : E[A + 1] === 36 && E[A + 2] === 40 && E[A + 3] === 68 ? (B = 3, A++) : B = 0, A += 3, E[A] === void 0)
         return x;
-    B === 1 ? (e = (E[A] << 8) + E[++A], r = X.JIS_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : B === 2 ? (C = E[A] + 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : B === 3 ? (e = (E[A] << 8) + E[++A], r = X.JISX0212_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : x[x.length] = E[A] & 255;
+    B === 1 ? (e = (E[A] << 8) + E[++A], r = d.JIS_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : B === 2 ? (C = E[A] + 64, D = 188 | C >> 6 & 3, t = 128 | C & 63, x[x.length] = 239, x[x.length] = D & 255, x[x.length] = t & 255) : B === 3 ? (e = (E[A] << 8) + E[++A], r = d.JISX0212_TO_UTF8_TABLE[e], r === void 0 ? x[x.length] = w.FALLBACK_CHARACTER : r < 65535 ? (x[x.length] = r >> 8 & 255, x[x.length] = r & 255) : (x[x.length] = r >> 16 & 255, x[x.length] = r >> 8 & 255, x[x.length] = r & 255)) : x[x.length] = E[A] & 255;
   }
   return x;
 }
 o.JISToUTF8 = h0;
 function a0(E, x) {
   for (var B = [], A = 0, F = E && E.length, C, D, t, e, r, h, s = x && x.fallback; A < F; A++)
-    C = E[A], C >= 128 ? (C <= 223 ? (e = [C, E[A + 1]], r = (C << 8) + E[++A]) : C <= 239 ? (e = [C, E[A + 1], E[A + 2]], r = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (e = [C, E[A + 1], E[A + 2], E[A + 3]], r = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), h = X.UTF8_TO_JIS_TABLE[r], h == null ? s ? Fx(B, e, s) : B[B.length] = w.FALLBACK_CHARACTER : h < 255 ? B[B.length] = h + 128 : (h > 65536 && (h -= 65536), D = h >> 8, t = h & 255, D & 1 ? (D >>= 1, D < 47 ? D += 113 : D -= 79, t > 95 ? t += 32 : t += 31) : (D >>= 1, D <= 47 ? D += 112 : D -= 80, t += 126), B[B.length] = D & 255, B[B.length] = t & 255)) : B[B.length] = E[A] & 255;
+    C = E[A], C >= 128 ? (C <= 223 ? (e = [C, E[A + 1]], r = (C << 8) + E[++A]) : C <= 239 ? (e = [C, E[A + 1], E[A + 2]], r = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (e = [C, E[A + 1], E[A + 2], E[A + 3]], r = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), h = d.UTF8_TO_JIS_TABLE[r], h == null ? s ? Fx(B, e, s) : B[B.length] = w.FALLBACK_CHARACTER : h < 255 ? B[B.length] = h + 128 : (h > 65536 && (h -= 65536), D = h >> 8, t = h & 255, D & 1 ? (D >>= 1, D < 47 ? D += 113 : D -= 79, t > 95 ? t += 32 : t += 31) : (D >>= 1, D <= 47 ? D += 112 : D -= 80, t += 126), B[B.length] = D & 255, B[B.length] = t & 255)) : B[B.length] = E[A] & 255;
   return B;
 }
 o.UTF8ToSJIS = a0;
 function u0(E, x) {
   for (var B = [], A = 0, F = E && E.length, C, D, t, e, r = x && x.fallback; A < F; A++)
-    C = E[A], C >= 128 ? (C <= 223 ? (D = [C, E[A + 1]], t = (C << 8) + E[++A]) : C <= 239 ? (D = [C, E[A + 1], E[A + 2]], t = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (D = [C, E[A + 1], E[A + 2], E[A + 3]], t = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), e = X.UTF8_TO_JIS_TABLE[t], e == null ? (e = X.UTF8_TO_JISX0212_TABLE[t], e == null ? r ? Fx(B, D, r) : B[B.length] = w.FALLBACK_CHARACTER : (B[B.length] = 143, B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255)) : (e > 65536 && (e -= 65536), e < 255 ? (B[B.length] = 142, B[B.length] = e - 128 & 255) : (B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255))) : B[B.length] = E[A] & 255;
+    C = E[A], C >= 128 ? (C <= 223 ? (D = [C, E[A + 1]], t = (C << 8) + E[++A]) : C <= 239 ? (D = [C, E[A + 1], E[A + 2]], t = (C << 16) + (E[++A] << 8) + (E[++A] & 255)) : (D = [C, E[A + 1], E[A + 2], E[A + 3]], t = (C << 24) + (E[++A] << 16) + (E[++A] << 8) + (E[++A] & 255)), e = d.UTF8_TO_JIS_TABLE[t], e == null ? (e = d.UTF8_TO_JISX0212_TABLE[t], e == null ? r ? Fx(B, D, r) : B[B.length] = w.FALLBACK_CHARACTER : (B[B.length] = 143, B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255)) : (e > 65536 && (e -= 65536), e < 255 ? (B[B.length] = 142, B[B.length] = e - 128 & 255) : (B[B.length] = (e >> 8) - 128 & 255, B[B.length] = (e & 255) - 128 & 255))) : B[B.length] = E[A] & 255;
   return B;
 }
 o.UTF8ToEUCJP = u0;
@@ -14262,7 +14262,7 @@ function _0(E, x) {
     40,
     68
   ]; C < F; C++)
-    D = E[C], D < 128 ? (A !== 0 && (A = 0, B[B.length] = s[0], B[B.length] = s[1], B[B.length] = s[2]), B[B.length] = D & 255) : (D <= 223 ? (t = [D, E[C + 1]], e = (D << 8) + E[++C]) : D <= 239 ? (t = [D, E[C + 1], E[C + 2]], e = (D << 16) + (E[++C] << 8) + (E[++C] & 255)) : (t = [D, E[C + 1], E[C + 2], E[C + 3]], e = (D << 24) + (E[++C] << 16) + (E[++C] << 8) + (E[++C] & 255)), r = X.UTF8_TO_JIS_TABLE[e], r == null ? (r = X.UTF8_TO_JISX0212_TABLE[e], r == null ? (A !== 0 && (A = 0, B[B.length] = s[0], B[B.length] = s[1], B[B.length] = s[2]), h ? Fx(B, t, h) : B[B.length] = w.FALLBACK_CHARACTER) : (A !== 3 && (A = 3, B[B.length] = s[9], B[B.length] = s[10], B[B.length] = s[11], B[B.length] = s[12]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)) : (r > 65536 && (r -= 65536), r < 255 ? (A !== 2 && (A = 2, B[B.length] = s[6], B[B.length] = s[7], B[B.length] = s[8]), B[B.length] = r & 255) : (A !== 1 && (A = 1, B[B.length] = s[3], B[B.length] = s[4], B[B.length] = s[5]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)));
+    D = E[C], D < 128 ? (A !== 0 && (A = 0, B[B.length] = s[0], B[B.length] = s[1], B[B.length] = s[2]), B[B.length] = D & 255) : (D <= 223 ? (t = [D, E[C + 1]], e = (D << 8) + E[++C]) : D <= 239 ? (t = [D, E[C + 1], E[C + 2]], e = (D << 16) + (E[++C] << 8) + (E[++C] & 255)) : (t = [D, E[C + 1], E[C + 2], E[C + 3]], e = (D << 24) + (E[++C] << 16) + (E[++C] << 8) + (E[++C] & 255)), r = d.UTF8_TO_JIS_TABLE[e], r == null ? (r = d.UTF8_TO_JISX0212_TABLE[e], r == null ? (A !== 0 && (A = 0, B[B.length] = s[0], B[B.length] = s[1], B[B.length] = s[2]), h ? Fx(B, t, h) : B[B.length] = w.FALLBACK_CHARACTER) : (A !== 3 && (A = 3, B[B.length] = s[9], B[B.length] = s[10], B[B.length] = s[11], B[B.length] = s[12]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)) : (r > 65536 && (r -= 65536), r < 255 ? (A !== 2 && (A = 2, B[B.length] = s[6], B[B.length] = s[7], B[B.length] = s[8]), B[B.length] = r & 255) : (A !== 1 && (A = 1, B[B.length] = s[3], B[B.length] = s[4], B[B.length] = s[5]), B[B.length] = r >> 8 & 255, B[B.length] = r & 255)));
   return A !== 0 && (B[B.length] = s[0], B[B.length] = s[1], B[B.length] = s[2]), B;
 }
 o.UTF8ToJIS = _0;
@@ -14708,11 +14708,11 @@ const ME = "encoding-japanese", bE = "2.0.0", kE = "Convert or detect character 
   "uglify-js": "^3.15.3",
   uglifyify: "^5.0.2",
   watchify: "^4.0.0"
-}, XE = {
+}, dE = {
   transform: [
     "package-json-versionify"
   ]
-}, dE = {
+}, XE = {
   name: ME,
   version: bE,
   description: kE,
@@ -14728,9 +14728,9 @@ const ME = "encoding-japanese", bE = "2.0.0", kE = "Convert or detect character 
   keywords: jE,
   dependencies: KE,
   devDependencies: VE,
-  browserify: XE
+  browserify: dE
 };
-var qE = Ex(), u = xx(), tx = J, rx = o, x0 = f0, ZE = dE.version, ix = Object.prototype.hasOwnProperty, m0 = {
+var qE = Ex(), u = xx(), tx = J, rx = o, x0 = f0, ZE = XE.version, ix = Object.prototype.hasOwnProperty, m0 = {
   version: ZE,
   /**
    * Encoding orders
@@ -15849,9 +15849,9 @@ V = new WeakMap(), I0 = new WeakMap(), Z = new WeakMap(), m = new WeakMap(), v =
 }, A0 = new WeakSet(), g0 = function() {
   i(this, $) && (G(this, b, i(this, K).createBufferSource()), i(this, b).buffer = i(this, $), this.audioNodeConnects(i(this, K), i(this, b)));
 }, C0 = new WeakSet(), p0 = function() {
-  this.removeEventListener("render", "_this_midiEventlisteners"), i(this, Z).preparing += 1;
+  i(this, m).status = "loading", this.removeEventListener("render", "_this_midiEventlisteners"), i(this, Z).preparing += 1;
 }, F0 = new WeakSet(), S0 = function() {
-  i(this, Z).ready += 1, i(this, Z).ready === i(this, Z).preparing && (_(this, A0, g0).call(this), _(this, y, U).call(this, "ready"), i(this, z) !== void 0 && cancelAnimationFrame(i(this, z)), this.AMC !== void 0 && this.addEventListener("render", () => _(this, R0, vx).call(this), "_this_midiEventlisteners"), G(this, z, requestAnimationFrame((x) => _(this, n0, W0).call(this, x))));
+  i(this, Z).ready += 1, i(this, Z).ready === i(this, Z).preparing && (_(this, A0, g0).call(this), _(this, y, U).call(this, "ready"), i(this, m).status = "stop", i(this, z) !== void 0 && cancelAnimationFrame(i(this, z)), this.AMC !== void 0 && this.addEventListener("render", () => _(this, R0, vx).call(this), "_this_midiEventlisteners"), G(this, z, requestAnimationFrame((x) => _(this, n0, W0).call(this, x))));
 }, O0 = new WeakSet(), gx = function() {
   G(this, v, {});
 }, y = new WeakSet(), U = function(x, B) {

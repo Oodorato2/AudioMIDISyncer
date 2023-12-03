@@ -205,6 +205,7 @@ export class Listener
 
     #filePreparing ()
     {
+        this.#player.status = 'loading'
         this.removeEventListener('render', '_this_midiEventlisteners')
         this.#fileLoadingState.preparing += 1
     }
@@ -215,6 +216,7 @@ export class Listener
         if (this.#fileLoadingState.ready === this.#fileLoadingState.preparing) {
             this.#setAudioSource()
             this.#actionEventListener('ready')
+            this.#player.status = 'stop'
             if(this.#Anime !== undefined) {
                 cancelAnimationFrame(this.#Anime)
             }
