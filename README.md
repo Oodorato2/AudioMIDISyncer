@@ -12,7 +12,7 @@ MIDIイベントの検出には``requestAnimationFrame``を使用し、再生開
 - onlyOnceNoteSounding
 - noteSounding
 
-※ 各イベントタイプの説明は下記にある[イベントタイプの項目](#イベントタイプ)で確認できます。
+※ 各イベントタイプの説明は下記にある[イベントリスナーの種類](#イベントリスナーの種類(type))で確認できます。
 
 ## 動いてくれるはずのブラウザ
 
@@ -57,7 +57,7 @@ Chrome, Safari, Edge, Firefox
 instance.addEventListener(type, callback);
 ```
 
-#### イベントタイプ
+#### イベントリスナーの種類(type)
 
 ##### 基本
 
