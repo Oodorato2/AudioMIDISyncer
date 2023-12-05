@@ -15415,6 +15415,12 @@ function C8(E) {
   var x = new zE(E), B = new A8(x), A = new B8(x), F = null;
   return (F = B.parse()) == null && (F = A.parse()), F;
 }
+/*!
+ * AudioMIDISyncer
+ * Copyright (c) Oodorato2
+ * https://github.com/Oodorato2/AudioMIDISyncer
+ * license MIT
+ */
 class F8 {
   constructor() {
     H(this, "SMFArrayBuffer", null);

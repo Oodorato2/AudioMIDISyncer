@@ -1,3 +1,10 @@
+/*!
+ * AudioMIDISyncer
+ * Copyright (c) Oodorato2
+ * https://github.com/Oodorato2/AudioMIDISyncer
+ * license MIT
+ */
+
 import { miz, music_reader } from './lib/miz_music.min.js'
 
 export class AMC
