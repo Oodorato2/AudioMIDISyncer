@@ -21,7 +21,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^4.4.5"
+    "vite": "^5.0.6"
   },
   "dependencies": {
     "encoding-japanese": "^2.0.0",
