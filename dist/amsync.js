@@ -324,7 +324,7 @@ function xx() {
     -1,
     -1,
     -1
-  ], V0 = "=".charCodeAt(0);
+  ], V0 = 61;
   function yx(l) {
     var n, c, f, p, S, I;
     for (f = l && l.length, c = 0, n = []; c < f; ) {
@@ -15019,19 +15019,19 @@ let a;
     })(x.E_MIDI_MSG || (x.E_MIDI_MSG = {})), x.E_MIDI_MSG, function(C) {
       C[C.SEQUENCE_NUMBER = 0] = "SEQUENCE_NUMBER", C[C.TEXT = 1] = "TEXT", C[C.COPYRIGHT = 2] = "COPYRIGHT", C[C.TRACK_NAME = 3] = "TRACK_NAME", C[C.INSTRUMENT_NAME = 4] = "INSTRUMENT_NAME", C[C.LYRIC = 5] = "LYRIC", C[C.MARKER = 6] = "MARKER", C[C.CUE = 7] = "CUE", C[C.END_OF_TRACK = 47] = "END_OF_TRACK", C[C.TEMPO = 81] = "TEMPO", C[C.SMPTE_OFFSET = 84] = "SMPTE_OFFSET", C[C.TIME_SIGNATURE = 88] = "TIME_SIGNATURE", C[C.KEY_SIGNATURE = 89] = "KEY_SIGNATURE", C[C.SEQUENCER_SPECIFIC_META_EVT = 127] = "SEQUENCER_SPECIFIC_META_EVT";
     }(x.E_META_EVT || (x.E_META_EVT = {})), x.E_META_EVT;
-    var B = function() {
+    var B = /* @__PURE__ */ function() {
       return function() {
         this.m_nStep = 0, this.m_eMMsg = 0, this.m_eMEvt = 0, this.m_aryValue = [], this.m_numValue = 0, this.m_strValue = "";
       };
     }();
     x.CMIDIData = B;
-    var A = function() {
+    var A = /* @__PURE__ */ function() {
       return function() {
         this.m_listData = [];
       };
     }();
     x.CMIDITrack = A;
-    var F = function() {
+    var F = /* @__PURE__ */ function() {
       return function() {
         this.m_nTimeDiv = 480, this.m_strTitle = "", this.m_listTrack = [];
       };
@@ -15069,7 +15069,7 @@ var zE = function() {
     return A;
   }, E;
 }();
-let QE = globalThis && globalThis.__extends || function(E, x) {
+let QE = function(E, x) {
   for (var B in x)
     x.hasOwnProperty(B) && (E[B] = x[B]);
   function A() {
@@ -15134,7 +15134,7 @@ let QE = globalThis && globalThis.__extends || function(E, x) {
     for (var x = 0; x < this.m_oCMIDIData.m_aryValue.length; x++)
       "" + this.m_oCMIDIData.m_aryValue[x].toString(16);
   }, E;
-}(), E8 = function() {
+}(), E8 = /* @__PURE__ */ function() {
   return function() {
     this.m_nPos = 0, this.m_nCount = 0;
   };
